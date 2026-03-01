@@ -73,6 +73,26 @@ def parse_optional_torch_dtype(value: str | None) -> torch.dtype | None:
     return mapping[normalized]
 
 
+def resolve_model_load_dtype(args: argparse.Namespace) -> torch.dtype | None:
+    if args.torch_dtype is not None:
+        return args.torch_dtype
+    if args.bf16:
+        return torch.bfloat16
+    if args.fp16:
+        return torch.float16
+    return None
+
+
+def resolve_kbit_compute_dtype(args: argparse.Namespace) -> torch.dtype:
+    if args.bnb_4bit_compute_dtype is not None:
+        return args.bnb_4bit_compute_dtype
+    if args.bf16:
+        return torch.bfloat16
+    if args.fp16:
+        return torch.float16
+    return torch.float32
+
+
 def maybe_import_peft() -> tuple[Any, Any, Any]:
     try:
         from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
@@ -99,7 +119,7 @@ def maybe_make_quantization_config(args: argparse.Namespace) -> BitsAndBytesConf
         load_in_4bit=True,
         bnb_4bit_quant_type=args.bnb_4bit_quant_type,
         bnb_4bit_use_double_quant=args.bnb_4bit_use_double_quant,
-        bnb_4bit_compute_dtype=args.bnb_4bit_compute_dtype,
+        bnb_4bit_compute_dtype=resolve_kbit_compute_dtype(args),
     )
 
 
@@ -116,13 +136,14 @@ def load_tokenizer(args: argparse.Namespace):
 
 def load_base_model(args: argparse.Namespace):
     quantization_config = maybe_make_quantization_config(args)
+    model_load_dtype = resolve_model_load_dtype(args)
     model_kwargs: dict[str, Any] = {
         "attn_implementation": args.attn_implementation,
         "device_map": args.device_map,
         "low_cpu_mem_usage": True,
     }
-    if args.torch_dtype is not None:
-        model_kwargs["torch_dtype"] = args.torch_dtype
+    if model_load_dtype is not None:
+        model_kwargs["dtype"] = model_load_dtype
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
 
@@ -206,7 +227,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--lora-modules-to-save", type=parse_list, default=None)
     parser.add_argument("--bnb-4bit-quant-type", type=str, default="nf4")
     parser.add_argument("--bnb-4bit-use-double-quant", type=parse_bool, default=True)
-    parser.add_argument("--bnb-4bit-compute-dtype", type=parse_optional_torch_dtype, default=torch.bfloat16)
+    parser.add_argument("--bnb-4bit-compute-dtype", type=parse_optional_torch_dtype, default=None)
     parser.add_argument("--wandb-project", type=str, default="deep-past-challenge")
     parser.add_argument("--wandb-run-name", type=str, default=None)
     parser.add_argument("--wandb-entity", type=str, default=None)
@@ -220,21 +241,21 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_messages(source_text: str, target_text: str | None, args: argparse.Namespace) -> list[dict[str, Any]]:
+    user_prompt = args.user_prompt_template.format(source=source_text)
+    if args.system_prompt:
+        user_prompt = f"{args.system_prompt}\n\n{user_prompt}"
+
     messages: list[dict[str, Any]] = [
         {
-            "role": "system",
-            "content": [{"type": "text", "text": args.system_prompt}],
-        },
-        {
             "role": "user",
-            "content": [{"type": "text", "text": args.user_prompt_template.format(source=source_text)}],
+            "content": user_prompt,
         },
     ]
     if target_text is not None:
         messages.append(
             {
                 "role": "assistant",
-                "content": [{"type": "text", "text": target_text}],
+                "content": target_text,
             }
         )
     return messages
@@ -355,9 +376,9 @@ def main() -> None:
         desc="Formatting eval dataset",
     )
 
+    args.output_dir.mkdir(parents=True, exist_ok=True)
     training_args = TrainingArguments(
         output_dir=str(args.output_dir),
-        overwrite_output_dir=True,
         per_device_train_batch_size=args.per_device_train_batch_size,
         per_device_eval_batch_size=args.per_device_eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
