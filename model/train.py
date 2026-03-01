@@ -21,9 +21,8 @@ from transformers import (
 
 from model.common import DATA_DIR, ROOT_DIR, read_train_frame, seed_everything
 
-
-DEFAULT_MODEL_NAME = "google/gemma-3-27b-it"
-DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "gemma-3-27b-it"
+DEFAULT_MODEL_NAME = "google/gemma-2-27b-it"
+DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "gemma-2-27b-it"
 DEFAULT_SYSTEM_PROMPT = "You are an expert translator from Akkadian transliteration to English."
 DEFAULT_USER_PROMPT_TEMPLATE = (
     "Translate the following Akkadian transliteration into English.\n"
