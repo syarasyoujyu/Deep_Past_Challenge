@@ -9,23 +9,21 @@ os.environ.setdefault("USE_TF", "0")
 
 import numpy as np
 import sacrebleu
+import torch
 from datasets import Dataset, DatasetDict
 from sklearn.model_selection import train_test_split
 from transformers import (
-    AutoModelForSeq2SeqLM,
     DataCollatorForSeq2Seq,
+    MarianMTModel,
+    MarianTokenizer,
     Seq2SeqTrainer,
     Seq2SeqTrainingArguments,
 )
 
-from model.common import (
-    DATA_DIR,
-    ROOT_DIR,
-    build_generation_config,
-    load_tokenizer,
-    read_train_frame,
-    seed_everything,
-)
+from model.common import DATA_DIR, ROOT_DIR, build_generation_config, read_train_frame, seed_everything
+
+
+DEFAULT_MODEL_NAME = "Helsinki-NLP/opus-mt-ar-en"
 
 
 def parse_bool(value: str | bool) -> bool:
@@ -40,38 +38,60 @@ def parse_bool(value: str | bool) -> bool:
     raise argparse.ArgumentTypeError(f"invalid boolean value: {value}")
 
 
+def parse_optional_torch_dtype(value: str | None) -> torch.dtype | None:
+    if value is None:
+        return None
+
+    normalized = value.strip().lower()
+    mapping = {
+        "auto": None,
+        "float32": torch.float32,
+        "float16": torch.float16,
+        "bfloat16": torch.bfloat16,
+    }
+    if normalized not in mapping:
+        raise argparse.ArgumentTypeError(
+            f"invalid torch dtype: {value}. expected one of auto, float32, float16, bfloat16"
+        )
+    return mapping[normalized]
+
+
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train a Hugging Face seq2seq model for Akkadian translation.")
+    parser = argparse.ArgumentParser(
+        description="Fine-tune Helsinki-NLP/opus-mt-ar-en on Akkadian transliteration to English."
+    )
     parser.add_argument("--train-path", type=Path, default=DATA_DIR / "train.csv")
-    parser.add_argument("--model-name", type=str, default="google/byt5-small")
-    parser.add_argument("--output-dir", type=Path, default=ROOT_DIR / "artifacts" / "byt5-small")
-    parser.add_argument("--source-prefix", type=str, default="translate Akkadian to English: ")
+    parser.add_argument("--model-name", type=str, default=DEFAULT_MODEL_NAME)
+    parser.add_argument("--output-dir", type=Path, default=ROOT_DIR / "artifacts" / "opus-mt-ar-en")
+    parser.add_argument("--source-prefix", type=str, default="")
     parser.add_argument("--val-size", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-source-length", type=int, default=256)
     parser.add_argument("--max-target-length", type=int, default=256)
-    parser.add_argument("--per-device-train-batch-size", type=int, default=4)
-    parser.add_argument("--per-device-eval-batch-size", type=int, default=4)
-    parser.add_argument("--gradient-accumulation-steps", type=int, default=4)
-    parser.add_argument("--learning-rate", type=float, default=2e-4)
-    parser.add_argument("--weight-decay", type=float, default=0.01)
-    parser.add_argument("--num-train-epochs", type=float, default=8.0)
+    parser.add_argument("--per-device-train-batch-size", type=int, default=8)
+    parser.add_argument("--per-device-eval-batch-size", type=int, default=8)
+    parser.add_argument("--gradient-accumulation-steps", type=int, default=1)
+    parser.add_argument("--learning-rate", type=float, default=2e-5)
+    parser.add_argument("--weight-decay", type=float, default=0.0)
+    parser.add_argument("--num-train-epochs", type=float, default=15.0)
     parser.add_argument("--warmup-ratio", type=float, default=0.05)
     parser.add_argument("--logging-steps", type=int, default=10)
-    parser.add_argument("--eval-steps", type=int, default=50)
-    parser.add_argument("--save-steps", type=int, default=50)
+    parser.add_argument("--eval-steps", type=int, default=100)
+    parser.add_argument("--save-steps", type=int, default=100)
     parser.add_argument("--save-total-limit", type=int, default=2)
     parser.add_argument("--num-beams", type=int, default=4)
     parser.add_argument("--length-penalty", type=float, default=1.0)
-    parser.add_argument("--gradient-checkpointing", type=parse_bool, default=True)
-    parser.add_argument("--bf16", type=parse_bool, default=True)
+    parser.add_argument("--gradient-checkpointing", type=parse_bool, default=False)
+    parser.add_argument("--bf16", type=parse_bool, default=False)
     parser.add_argument("--fp16", type=parse_bool, default=True)
+    parser.add_argument("--torch-dtype", type=parse_optional_torch_dtype, default=None)
+    parser.add_argument("--attn-implementation", type=str, default="sdpa")
     parser.add_argument("--wandb-project", type=str, default="deep-past-challenge")
     parser.add_argument("--wandb-run-name", type=str, default=None)
     parser.add_argument("--wandb-entity", type=str, default=None)
     parser.add_argument("--report-to", type=str, default="wandb")
     parser.add_argument("--disable-wandb", type=parse_bool, default=True)
-    parser.add_argument("--push-to-hub", type=parse_bool, default=True)
+    parser.add_argument("--push-to-hub", type=parse_bool, default=False)
     parser.add_argument("--hub-model-id", type=str, default=None)
     parser.add_argument("--hub-private-repo", type=parse_bool, default=True)
     parser.add_argument("--hub-strategy", type=str, default="end")
@@ -108,8 +128,13 @@ def main() -> None:
         }
     )
 
-    tokenizer = load_tokenizer(args.model_name)
-    model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name)
+    tokenizer = MarianTokenizer.from_pretrained(args.model_name)
+    model_kwargs = {
+        "attn_implementation": args.attn_implementation,
+    }
+    if args.torch_dtype is not None:
+        model_kwargs["torch_dtype"] = args.torch_dtype
+    model = MarianMTModel.from_pretrained(args.model_name, **model_kwargs)
     if args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
 
@@ -153,7 +178,6 @@ def main() -> None:
 
         bleu_score = sacrebleu.corpus_bleu(decoded_predictions, [decoded_labels]).score
         chrf_score = sacrebleu.corpus_chrf(decoded_predictions, [decoded_labels]).score
-
         prediction_lengths = [
             np.count_nonzero(prediction != tokenizer.pad_token_id) for prediction in predictions
         ]
@@ -201,13 +225,13 @@ def main() -> None:
         args=training_args,
         train_dataset=tokenized["train"],
         eval_dataset=tokenized["validation"],
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
     )
 
     trainer.train()
-    eval_metrics = trainer.evaluate(max_length=args.max_target_length, **generation_config)
+    eval_metrics = trainer.evaluate(**generation_config)
     trainer.save_model()
     tokenizer.save_pretrained(args.output_dir)
     trainer.log_metrics("eval", eval_metrics)

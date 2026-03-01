@@ -3,7 +3,7 @@ name = "deep-past-challenge"
 version = "0.1.0"
 description = "Training and inference pipeline for Akkadian transliteration to translation."
 readme = "README.md"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "accelerate>=1.4.0,<2.0.0",
     "datasets>=3.4.0,<5.0.0",
@@ -36,4 +36,4 @@ include = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py312"
