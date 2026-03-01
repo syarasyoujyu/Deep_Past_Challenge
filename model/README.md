@@ -4,15 +4,44 @@
 
 ```bash
 uv run python -m model.train \
-  --model-name google/byt5-small \
-  --output-dir artifacts/byt5-small \
-  --fp16 true \
+  --model-name google/gemma-3-27b-it \
+  --output-dir artifacts/gemma-3-27b-it \
+  --per-device-train-batch-size 1 \
+  --gradient-accumulation-steps 16 \
+  --learning-rate 2e-4 \
+  --num-train-epochs 3 \
+  --bf16 true \
+  --fp16 false \
+  --use-lora true \
+  --use-qlora true \
   --disable-wandb false \
   --wandb-project deep-past-challenge \
-  --wandb-run-name byt5-small-baseline
+  --wandb-run-name gemma-3-27b-it-qlora
 ```
 
-Python は 3.12 以上を前提にしています。`transformers` の TensorFlow backend は無効化しているため、PyTorch + `Seq2SeqTrainer` ベースで学習します。
+Python は 3.12 以上を前提にしています。`transformers` の TensorFlow backend は無効化しており、Gemma 3 の instruction-tuning を PyTorch + `Trainer` ベースで行います。
+
+`train.py` は `google/gemma-3-27b-it` 向けに切り替えてあり、チャットテンプレート経由で
+
+- system: 翻訳器としての役割
+- user: アッカド語転写文
+- assistant: 英訳
+
+の形式で supervised fine-tuning します。既定では LoRA + QLoRA を有効にしています。
+
+LoRA / QLoRA の主要引数:
+
+- `--use-lora true|false`
+- `--use-qlora true|false`
+- `--lora-r 64`
+- `--lora-alpha 128`
+- `--lora-dropout 0.05`
+- `--lora-target-modules q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj`
+- `--bnb-4bit-quant-type nf4`
+- `--bnb-4bit-use-double-quant true`
+- `--bnb-4bit-compute-dtype bfloat16`
+
+Gemma 3 は `transformers>=4.50.0` が必要です。QLoRA を使う場合は `bitsandbytes` も別途必要です。
 
 `WANDB_API_KEY` を環境変数で渡すと `wandb` に自動で記録します。
 
