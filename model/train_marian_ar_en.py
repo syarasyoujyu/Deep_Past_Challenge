@@ -20,8 +20,13 @@ from transformers import (
     Seq2SeqTrainingArguments,
 )
 
-from model.common import DATA_DIR, ROOT_DIR, build_generation_config, read_train_frame, seed_everything
-
+from model.common import (
+    DATA_DIR,
+    ROOT_DIR,
+    build_generation_config,
+    read_train_frame,
+    seed_everything,
+)
 
 DEFAULT_MODEL_NAME = "Helsinki-NLP/opus-mt-ar-en"
 
