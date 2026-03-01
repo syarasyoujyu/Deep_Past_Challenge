@@ -47,6 +47,14 @@ def parse_list(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
+def parse_auto_int(value: str) -> int:
+    normalized = value.strip().lower()
+    if normalized == "auto":
+        cpu_count = os.cpu_count() or 1
+        return max(cpu_count - 1, 1)
+    return int(value)
+
+
 def parse_optional_torch_dtype(value: str | None) -> torch.dtype | None:
     if value is None:
         return None
@@ -131,6 +139,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--val-size", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-seq-length", type=int, default=1024)
+    parser.add_argument("--preprocess-num-proc", type=parse_auto_int, default=1)
+    parser.add_argument("--dataloader-num-workers", type=parse_auto_int, default=0)
     parser.add_argument("--per-device-train-batch-size", type=int, default=1)
     parser.add_argument("--per-device-eval-batch-size", type=int, default=1)
     parser.add_argument("--gradient-accumulation-steps", type=int, default=16)
@@ -326,11 +336,13 @@ def main() -> None:
     train_dataset = train_dataset.map(
         preprocess,
         remove_columns=train_dataset.column_names,
+        num_proc=args.preprocess_num_proc,
         desc="Formatting train dataset",
     )
     eval_dataset = eval_dataset.map(
         preprocess,
         remove_columns=eval_dataset.column_names,
+        num_proc=args.preprocess_num_proc,
         desc="Formatting eval dataset",
     )
 
@@ -340,6 +352,7 @@ def main() -> None:
         per_device_train_batch_size=args.per_device_train_batch_size,
         per_device_eval_batch_size=args.per_device_eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
+        dataloader_num_workers=args.dataloader_num_workers,
         learning_rate=args.learning_rate,
         weight_decay=args.weight_decay,
         num_train_epochs=args.num_train_epochs,

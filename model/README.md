@@ -6,6 +6,8 @@
 uv run python -m model.train \
   --model-name google/gemma-2-27b-it \
   --output-dir artifacts/gemma-2-27b-it \
+  --preprocess-num-proc auto \
+  --dataloader-num-workers auto \
   --per-device-train-batch-size 1 \
   --gradient-accumulation-steps 16 \
   --learning-rate 2e-4 \
@@ -44,6 +46,8 @@ LoRA / QLoRA の主要引数:
 Gemma 2 / 3 系を扱うため `transformers>=4.50.0` を前提にしています。QLoRA を使う場合は `bitsandbytes` も別途必要です。
 
 T4 15GB では `gemma-2-27b-it` はかなり厳しいので、まずは `--per-device-train-batch-size 1` を維持したまま `google/gemma-2-9b-it` や `google/gemma-2-2b-it` で動作確認するのが安全です。
+
+前処理を速くしたい場合は `--preprocess-num-proc`、学習時の DataLoader 並列度は `--dataloader-num-workers` で調整できます。`auto` を渡すと `os.cpu_count() - 1` を使います。
 
 `WANDB_API_KEY` を環境変数で渡すと `wandb` に自動で記録します。
 
