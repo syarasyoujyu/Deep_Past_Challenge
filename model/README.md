@@ -4,24 +4,24 @@
 
 ```bash
 uv run python -m model.train \
-  --model-name google/gemma-3-27b-it \
-  --output-dir artifacts/gemma-3-27b-it \
+  --model-name google/gemma-2-27b-it \
+  --output-dir artifacts/gemma-2-27b-it \
   --per-device-train-batch-size 1 \
   --gradient-accumulation-steps 16 \
   --learning-rate 2e-4 \
   --num-train-epochs 3 \
-  --bf16 true \
-  --fp16 false \
+  --bf16 false \
+  --fp16 true \
   --use-lora true \
   --use-qlora true \
   --disable-wandb false \
   --wandb-project deep-past-challenge \
-  --wandb-run-name gemma-3-27b-it-qlora
+  --wandb-run-name gemma-2-27b-it-qlora
 ```
 
-Python は 3.12 以上を前提にしています。`transformers` の TensorFlow backend は無効化しており、Gemma 3 の instruction-tuning を PyTorch + `Trainer` ベースで行います。
+Python は 3.12 以上を前提にしています。`transformers` の TensorFlow backend は無効化しており、Gemma instruction-tuned causal LM の supervised fine-tuning を PyTorch + `Trainer` ベースで行います。
 
-`train.py` は `google/gemma-3-27b-it` 向けに切り替えてあり、チャットテンプレート経由で
+`train.py` は `google/gemma-2-27b-it` のような instruction-tuned Gemma を、モデルカードどおり `AutoTokenizer` と `AutoModelForCausalLM` で読み込み、チャットテンプレート経由で
 
 - system: 翻訳器としての役割
 - user: アッカド語転写文
@@ -41,7 +41,9 @@ LoRA / QLoRA の主要引数:
 - `--bnb-4bit-use-double-quant true`
 - `--bnb-4bit-compute-dtype bfloat16`
 
-Gemma 3 は `transformers>=4.50.0` が必要です。QLoRA を使う場合は `bitsandbytes` も別途必要です。
+Gemma 2 / 3 系を扱うため `transformers>=4.50.0` を前提にしています。QLoRA を使う場合は `bitsandbytes` も別途必要です。
+
+T4 15GB では `gemma-2-27b-it` はかなり厳しいので、まずは `--per-device-train-batch-size 1` を維持したまま `google/gemma-2-9b-it` や `google/gemma-2-2b-it` で動作確認するのが安全です。
 
 `WANDB_API_KEY` を環境変数で渡すと `wandb` に自動で記録します。
 

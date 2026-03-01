@@ -12,9 +12,9 @@ import torch
 from datasets import Dataset
 from sklearn.model_selection import train_test_split
 from transformers import (
-    AutoProcessor,
+    AutoModelForCausalLM,
+    AutoTokenizer,
     BitsAndBytesConfig,
-    Gemma3ForConditionalGeneration,
     Trainer,
     TrainingArguments,
 )
@@ -96,9 +96,8 @@ def maybe_make_quantization_config(args: argparse.Namespace) -> BitsAndBytesConf
 
 
 class SupervisedDataCollator:
-    def __init__(self, processor) -> None:
-        self.processor = processor
-        self.tokenizer = processor.tokenizer if hasattr(processor, "tokenizer") else processor
+    def __init__(self, tokenizer) -> None:
+        self.tokenizer = tokenizer
 
     def __call__(self, features: list[dict[str, list[int]]]) -> dict[str, torch.Tensor]:
         input_features = [
@@ -122,7 +121,7 @@ class SupervisedDataCollator:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Fine-tune google/gemma-3-27b-it for Akkadian transliteration to English."
+        description="Fine-tune Gemma instruction-tuned causal LMs for Akkadian transliteration to English."
     )
     parser.add_argument("--train-path", type=Path, default=DATA_DIR / "train.csv")
     parser.add_argument("--model-name", type=str, default=DEFAULT_MODEL_NAME)
@@ -150,6 +149,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--torch-dtype", type=parse_optional_torch_dtype, default=None)
     parser.add_argument("--attn-implementation", type=str, default="sdpa")
     parser.add_argument("--device-map", type=str, default="auto")
+    parser.add_argument("--use-fast-tokenizer", type=parse_bool, default=True)
     parser.add_argument("--train-on-inputs", type=parse_bool, default=False)
     parser.add_argument("--optim", type=str, default="paged_adamw_8bit")
     parser.add_argument("--lr-scheduler-type", type=str, default="cosine")
@@ -234,8 +234,10 @@ def main() -> None:
     train_dataset = Dataset.from_pandas(train_frame.reset_index(drop=True), preserve_index=False)
     eval_dataset = Dataset.from_pandas(val_frame.reset_index(drop=True), preserve_index=False)
 
-    processor = AutoProcessor.from_pretrained(args.model_name)
-    tokenizer = processor.tokenizer if hasattr(processor, "tokenizer") else processor
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.model_name,
+        use_fast=args.use_fast_tokenizer,
+    )
     tokenizer.padding_side = "right"
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -251,7 +253,7 @@ def main() -> None:
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
 
-    model = Gemma3ForConditionalGeneration.from_pretrained(args.model_name, **model_kwargs)
+    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     model.config.use_cache = False
     model.config.pad_token_id = tokenizer.pad_token_id
 
@@ -283,12 +285,12 @@ def main() -> None:
         source_text = example["transliteration"]
         target_text = example["translation"]
 
-        prompt_text = processor.apply_chat_template(
+        prompt_text = tokenizer.apply_chat_template(
             build_messages(source_text, None, args),
             tokenize=False,
             add_generation_prompt=True,
         )
-        full_text = processor.apply_chat_template(
+        full_text = tokenizer.apply_chat_template(
             build_messages(source_text, target_text, args),
             tokenize=False,
             add_generation_prompt=False,
@@ -372,12 +374,12 @@ def main() -> None:
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
         processing_class=tokenizer,
-        data_collator=SupervisedDataCollator(processor),
+        data_collator=SupervisedDataCollator(tokenizer),
     )
 
     trainer.train()
     trainer.save_model()
-    processor.save_pretrained(args.output_dir)
+    tokenizer.save_pretrained(args.output_dir)
     trainer.save_state()
 
     if args.push_to_hub:
