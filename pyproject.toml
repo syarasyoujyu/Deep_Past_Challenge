@@ -24,6 +24,16 @@ build-backend = "hatchling.build"
 [tool.uv]
 package = false
 
+[tool.hatch.build.targets.wheel]
+packages = ["model"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "model",
+    "README.md",
+    "pyproject.toml",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
