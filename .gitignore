@@ -1,0 +1,6 @@
+.venv/
+artifacts/
+wandb/
+submission.csv
+__pycache__/
+data/*
