@@ -103,6 +103,33 @@ def maybe_make_quantization_config(args: argparse.Namespace) -> BitsAndBytesConf
     )
 
 
+def load_tokenizer(args: argparse.Namespace):
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.model_name,
+        use_fast=args.use_fast_tokenizer,
+    )
+    tokenizer.padding_side = "right"
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    return tokenizer
+
+
+def load_base_model(args: argparse.Namespace):
+    quantization_config = maybe_make_quantization_config(args)
+    model_kwargs: dict[str, Any] = {
+        "attn_implementation": args.attn_implementation,
+        "device_map": args.device_map,
+        "low_cpu_mem_usage": True,
+    }
+    if args.torch_dtype is not None:
+        model_kwargs["torch_dtype"] = args.torch_dtype
+    if quantization_config is not None:
+        model_kwargs["quantization_config"] = quantization_config
+
+    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
+    return model, quantization_config
+
+
 class SupervisedDataCollator:
     def __init__(self, tokenizer) -> None:
         self.tokenizer = tokenizer
@@ -244,26 +271,8 @@ def main() -> None:
     train_dataset = Dataset.from_pandas(train_frame.reset_index(drop=True), preserve_index=False)
     eval_dataset = Dataset.from_pandas(val_frame.reset_index(drop=True), preserve_index=False)
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name,
-        use_fast=args.use_fast_tokenizer,
-    )
-    tokenizer.padding_side = "right"
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
-    quantization_config = maybe_make_quantization_config(args)
-    model_kwargs: dict[str, Any] = {
-        "attn_implementation": args.attn_implementation,
-        "device_map": args.device_map,
-        "low_cpu_mem_usage": True,
-    }
-    if args.torch_dtype is not None:
-        model_kwargs["torch_dtype"] = args.torch_dtype
-    if quantization_config is not None:
-        model_kwargs["quantization_config"] = quantization_config
-
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
+    tokenizer = load_tokenizer(args)
+    model, _ = load_base_model(args)
     model.config.use_cache = False
     model.config.pad_token_id = tokenizer.pad_token_id
 
