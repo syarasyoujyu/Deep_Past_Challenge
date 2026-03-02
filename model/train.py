@@ -274,9 +274,9 @@ def main() -> None:
         os.environ["WANDB_DISABLED"] = "true"
         report_to: list[str] = []
     else:
-        os.environ["WANDB_PROJECT"] = args.wandb_project
+        os.environ["WANDB_PROJECT"] = os.environ.get("WANDB_PROJECT",args.wandb_project) # type: ignore
         if args.wandb_entity:
-            os.environ["WANDB_ENTITY"] = args.wandb_entity
+            os.environ["WANDB_ENTITY"] = os.environ.get("WANDB_ENTITY",args.wandb_entity) # type: ignore
         report_to = [value for value in args.report_to.split(",") if value]
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
