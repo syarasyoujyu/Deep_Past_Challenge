@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import math
 import os
 from functools import partial
 from pathlib import Path
@@ -8,6 +9,8 @@ from pathlib import Path
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ.setdefault("USE_TF", "0")
 
+import numpy as np
+import sacrebleu
 import torch
 from datasets import Dataset
 from sklearn.model_selection import train_test_split
@@ -96,6 +99,24 @@ def maybe_import_trl():
     return SFTConfig, SFTTrainer
 
 
+def maybe_import_generation_metrics():
+    try:
+        from bert_score import score as bert_score
+    except ImportError as exc:
+        raise ImportError(
+            "Generation metrics require `bert-score`. Install it with `pip install bert-score`."
+        ) from exc
+
+    try:
+        from rouge_score import rouge_scorer
+    except ImportError as exc:
+        raise ImportError(
+            "Generation metrics require `rouge-score`. Install it with `pip install rouge-score`."
+        ) from exc
+
+    return bert_score, rouge_scorer
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fine-tune instruction-tuned causal LMs for Akkadian transliteration to English with Unsloth."
@@ -132,6 +153,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-grad-norm", type=float, default=1.0)
     parser.add_argument("--remove-unused-columns", type=parse_bool, default=False)
     parser.add_argument("--packing", type=parse_bool, default=False)
+    parser.add_argument("--eval-max-new-tokens", type=int, default=256)
+    parser.add_argument("--bertscore-model-type", type=str, default=None)
+    parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--use-lora", type=parse_bool, default=True)
     parser.add_argument("--use-qlora", type=parse_bool, default=True)
     parser.add_argument("--lora-r", type=int, default=16)
@@ -238,6 +262,102 @@ def build_dataset(frame, args: argparse.Namespace, tokenizer, desc: str) -> Data
     )
 
 
+def maybe_enable_fast_inference(model) -> None:
+    try:
+        FastLanguageModel = maybe_import_unsloth()
+    except ImportError:
+        return
+    FastLanguageModel.for_inference(model)
+
+
+def generate_validation_predictions(model, tokenizer, frame, args: argparse.Namespace) -> list[str]:
+    maybe_enable_fast_inference(model)
+    original_padding_side = tokenizer.padding_side
+    tokenizer.padding_side = "left"
+
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    batch_size = args.per_device_eval_batch_size
+    device = next(model.parameters()).device
+    predictions: list[str] = []
+
+    for start in range(0, len(frame), batch_size):
+        batch = frame.iloc[start : start + batch_size]
+        prompts = [build_prompt(text, args) for text in batch["transliteration"].tolist()]
+        encoded = tokenizer(
+            prompts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=args.max_seq_length,
+        )
+        encoded = {key: value.to(device) for key, value in encoded.items()}
+
+        with torch.inference_mode():
+            generated = model.generate(
+                **encoded,
+                max_new_tokens=args.eval_max_new_tokens,
+                do_sample=False,
+                use_cache=True,
+            )
+
+        prompt_length = encoded["input_ids"].shape[1]
+        continuations = generated[:, prompt_length:]
+        decoded = tokenizer.batch_decode(continuations, skip_special_tokens=True)
+        predictions.extend(prediction.strip() for prediction in decoded)
+
+    tokenizer.padding_side = original_padding_side
+    return predictions
+
+
+def compute_generation_metrics(
+    predictions: list[str],
+    references: list[str],
+    args: argparse.Namespace,
+) -> dict[str, float]:
+    bert_score, rouge_scorer = maybe_import_generation_metrics()
+
+    cleaned_predictions = [prediction.strip() for prediction in predictions]
+    cleaned_references = [reference.strip() for reference in references]
+
+    bleu = float(sacrebleu.corpus_bleu(cleaned_predictions, [cleaned_references]).score)
+    chrfpp = float(
+        sacrebleu.corpus_chrf(cleaned_predictions, [cleaned_references], word_order=2).score
+    )
+
+    scorer = rouge_scorer.RougeScorer(["rouge2"], use_stemmer=False)
+    rouge2_precision: list[float] = []
+    rouge2_recall: list[float] = []
+    rouge2_f1: list[float] = []
+    for prediction, reference in zip(cleaned_predictions, cleaned_references):
+        rouge2 = scorer.score(reference, prediction)["rouge2"]
+        rouge2_precision.append(float(rouge2.precision))
+        rouge2_recall.append(float(rouge2.recall))
+        rouge2_f1.append(float(rouge2.fmeasure))
+
+    _, _, bertscore_f1 = bert_score(
+        cleaned_predictions,
+        cleaned_references,
+        lang="en",
+        model_type=args.bertscore_model_type,
+        batch_size=args.bertscore_batch_size,
+        device="cuda" if torch.cuda.is_available() else "cpu",
+        verbose=False,
+    )
+
+    geometric_mean = math.sqrt((bleu / 100.0) * (chrfpp / 100.0)) * 100.0
+    return {
+        "eval_bleu": round(bleu, 4),
+        "eval_rouge2_precision": round(float(np.mean(rouge2_precision)), 4),
+        "eval_rouge2_recall": round(float(np.mean(rouge2_recall)), 4),
+        "eval_rouge2_f1": round(float(np.mean(rouge2_f1)), 4),
+        "eval_bertscore": round(float(bertscore_f1.mean().item()), 4),
+        "eval_chrfpp": round(chrfpp, 4),
+        "eval_bleu_chrfpp_geometric_mean": round(geometric_mean, 4),
+    }
+
+
 def main() -> None:
     args = parse_args()
     seed_everything(args.seed)
@@ -312,6 +432,14 @@ def main() -> None:
     )
 
     trainer.train()
+    if val_frame is not None and not val_frame.empty:
+        metrics = compute_generation_metrics(
+            predictions=generate_validation_predictions(model, tokenizer, val_frame, args),
+            references=val_frame["translation"].tolist(),
+            args=args,
+        )
+        trainer.log_metrics("eval", metrics)
+        trainer.save_metrics("eval", metrics)
     trainer.save_state()
     model.save_pretrained(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)

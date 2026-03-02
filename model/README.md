@@ -31,6 +31,16 @@ Python は 3.12 以上を前提にしています。`transformers` の TensorFlo
 
 の形式で学習します。既定では LoRA + QLoRA を有効にしており、`train_on_inputs=false` のときは completion 部分だけで loss を計算します。
 
+学習後の validation 生成では、次の指標を保存します。
+
+- `BLEU`
+- `ROUGE-2 Precision`
+- `ROUGE-2 Recall`
+- `ROUGE-2 F1`
+- `BERTScore`
+- `chrF++`
+- `Geometric Mean of BLEU and chrF++`
+
 Unsloth / LoRA の主要引数:
 
 - `--use-lora true|false`
@@ -41,6 +51,8 @@ Unsloth / LoRA の主要引数:
 - `--lora-target-modules q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj`
 - `--packing true|false`
 - `--train-on-inputs true|false`
+- `--eval-max-new-tokens 256`
+- `--bertscore-model-type <optional>`
 
 Notebook 相当の環境として `unsloth` と `trl>=0.22.2` を前提にしています。Colab では Unsloth 側の推奨 install 手順に合わせて依存を入れる方が安定します。
 
