@@ -12,8 +12,12 @@ os.environ.setdefault("USE_TF", "0")
 import numpy as np
 import sacrebleu
 import torch
+from bert_score import score as bert_score
 from datasets import Dataset
+from rouge_score import rouge_scorer
 from sklearn.model_selection import train_test_split
+from trl import SFTConfig, SFTTrainer
+from unsloth import FastLanguageModel
 
 from model.common import DATA_DIR, ROOT_DIR, read_train_frame, seed_everything
 
@@ -79,44 +83,6 @@ def resolve_model_load_dtype(args: argparse.Namespace) -> torch.dtype | None:
     return None
 
 
-def maybe_import_unsloth():
-    try:
-        from unsloth import FastLanguageModel
-    except ImportError as exc:
-        raise ImportError(
-            "Unsloth training requires `unsloth`. Install it with `pip install unsloth`."
-        ) from exc
-    return FastLanguageModel
-
-
-def maybe_import_trl():
-    try:
-        from trl import SFTConfig, SFTTrainer
-    except ImportError as exc:
-        raise ImportError(
-            "Unsloth training requires `trl`. Install it with `pip install 'trl>=0.22.2,<0.23.0'`."
-        ) from exc
-    return SFTConfig, SFTTrainer
-
-
-def maybe_import_generation_metrics():
-    try:
-        from bert_score import score as bert_score
-    except ImportError as exc:
-        raise ImportError(
-            "Generation metrics require `bert-score`. Install it with `pip install bert-score`."
-        ) from exc
-
-    try:
-        from rouge_score import rouge_scorer
-    except ImportError as exc:
-        raise ImportError(
-            "Generation metrics require `rouge-score`. Install it with `pip install rouge-score`."
-        ) from exc
-
-    return bert_score, rouge_scorer
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fine-tune instruction-tuned causal LMs for Akkadian transliteration to English with Unsloth."
@@ -142,7 +108,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--eval-steps", type=int, default=50)
     parser.add_argument("--save-steps", type=int, default=50)
     parser.add_argument("--save-total-limit", type=int, default=2)
-    parser.add_argument("--gradient-checkpointing", type=parse_bool, default=True)
     parser.add_argument("--bf16", type=parse_bool, default=True)
     parser.add_argument("--fp16", type=parse_bool, default=False)
     parser.add_argument("--tf32", type=parse_bool, default=True)
@@ -199,8 +164,6 @@ def format_prompt_completion_batch(
 
 
 def load_model_and_tokenizer(args: argparse.Namespace):
-    FastLanguageModel = maybe_import_unsloth()
-
     if args.lora_modules_to_save is not None:
         raise ValueError("`--lora-modules-to-save` is not supported in the current Unsloth path.")
 
@@ -223,7 +186,7 @@ def load_model_and_tokenizer(args: argparse.Namespace):
             lora_alpha=args.lora_alpha,
             lora_dropout=args.lora_dropout,
             bias=args.lora_bias,
-            use_gradient_checkpointing="unsloth" if args.gradient_checkpointing else False,
+            use_gradient_checkpointing="unsloth",
             random_state=args.seed,
             max_seq_length=args.max_seq_length,
             use_rslora=False,
@@ -262,16 +225,8 @@ def build_dataset(frame, args: argparse.Namespace, tokenizer, desc: str) -> Data
     )
 
 
-def maybe_enable_fast_inference(model) -> None:
-    try:
-        FastLanguageModel = maybe_import_unsloth()
-    except ImportError:
-        return
-    FastLanguageModel.for_inference(model)
-
-
 def generate_validation_predictions(model, tokenizer, frame, args: argparse.Namespace) -> list[str]:
-    maybe_enable_fast_inference(model)
+    FastLanguageModel.for_inference(model)
     original_padding_side = tokenizer.padding_side
     tokenizer.padding_side = "left"
 
@@ -316,8 +271,6 @@ def compute_generation_metrics(
     references: list[str],
     args: argparse.Namespace,
 ) -> dict[str, float]:
-    bert_score, rouge_scorer = maybe_import_generation_metrics()
-
     cleaned_predictions = [prediction.strip() for prediction in predictions]
     cleaned_references = [reference.strip() for reference in references]
 
@@ -388,7 +341,6 @@ def main() -> None:
     if val_frame is not None:
         eval_dataset = build_dataset(val_frame, args, tokenizer, desc="Formatting eval dataset")
 
-    SFTConfig, SFTTrainer = maybe_import_trl()
     sft_args = SFTConfig(
         output_dir=str(args.output_dir),
         max_seq_length=args.max_seq_length,
