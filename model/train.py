@@ -3,12 +3,10 @@ from __future__ import annotations
 import argparse
 import math
 import os
-from functools import partial
 from pathlib import Path
 
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ.setdefault("USE_TF", "0")
-
 import numpy as np
 import sacrebleu
 import torch
@@ -16,6 +14,7 @@ from bert_score import score as bert_score
 from datasets import Dataset
 from rouge_score import rouge_scorer
 from sklearn.model_selection import train_test_split
+from transformers import EvalPrediction
 from trl import SFTConfig, SFTTrainer
 from unsloth import FastLanguageModel
 
@@ -215,15 +214,50 @@ def split_frame(frame, val_size: float, seed: int):
 
 def build_dataset(frame, args: argparse.Namespace, tokenizer, desc: str) -> Dataset:
     dataset = Dataset.from_pandas(frame.reset_index(drop=True), preserve_index=False)
-    eos_token = tokenizer.eos_token or ""
+    
+    def tokenize_function(examples):
+        texts = [
+            f"{build_prompt(s, args)}\n\n{t.rstrip()}{tokenizer.eos_token}"
+            for s, t in zip(examples["transliteration"], examples["translation"])
+        ]
+        # ここでトークナイズを完結させる
+        return tokenizer(
+            texts,
+            truncation=True,
+            max_length=args.max_seq_length,
+            padding=False, # Trainer側のデータコレーターに任せる
+        )
+
     return dataset.map(
-        partial(format_prompt_completion_batch, args=args, eos_token=eos_token),
+        tokenize_function,
         batched=True,
         remove_columns=dataset.column_names,
-        num_proc=args.preprocess_num_proc,
+        num_proc=1, # ここは必ず 1
         desc=desc,
     )
 
+def preprocess_logits_for_metrics(logits, labels):
+    """
+    メモリ節約のための最重要関数。
+    全語彙の確率(Logits)を保持せず、最大値のインデックス(Token ID)のみを返します。
+    """
+    if isinstance(logits, tuple):
+        logits = logits[0]
+    return logits.argmax(dim=-1)
+
+def compute_metrics_wrapper(eval_preds:EvalPrediction,tokenizer,args):
+        """SFTTrainerから渡されるEvalPredictionを分解して計算関数に渡す"""
+        # eval_preds.predictions: モデルの出力（通常はロジット。生成タスクではデコード済みの場合も）
+        # eval_preds.label_ids: 正解ラベル
+        preds, labels = eval_preds.predictions,eval_preds.label_ids
+        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+        labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+        decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+        
+        # ※SFT（生成）の場合、ここでは単純なLoss計算以外が難しいことが多いため
+        # 後の generate_validation_predictions で一括計算する流れが一般的です。
+        # ひとまずエラーを消すには、型を合わせる必要があります。
+        return compute_generation_metrics(decoded_preds, decoded_labels, args=args)
 
 def generate_validation_predictions(model, tokenizer, frame, args: argparse.Namespace) -> list[str]:
     FastLanguageModel.for_inference(model)
@@ -343,7 +377,7 @@ def main() -> None:
 
     sft_args = SFTConfig(
         output_dir=str(args.output_dir),
-        max_seq_length=args.max_seq_length,
+        max_length=args.max_seq_length,
         per_device_train_batch_size=args.per_device_train_batch_size,
         per_device_eval_batch_size=args.per_device_eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
@@ -372,17 +406,22 @@ def main() -> None:
         seed=args.seed,
         completion_only_loss=not args.train_on_inputs,
         packing=args.packing,
-        dataset_text_field="text",
+        dataset_num_proc=1,
+        metric_for_best_model="eval_bleu",
+        greater_is_better=True,
+        load_best_model_at_end=True, # 学習終了時に最強モデルをロード
     )
 
     trainer = SFTTrainer(
         model=model,
-        tokenizer=tokenizer,
         train_dataset=train_dataset,
+        processing_class=tokenizer,
         eval_dataset=eval_dataset,
+        compute_metrics=lambda x:compute_metrics_wrapper(x,tokenizer=tokenizer,args=args),
+        preprocess_logits_for_metrics=preprocess_logits_for_metrics,
         args=sft_args,
     )
-
+    os.environ["UNSLOTH_RETURN_LOGITS"] = "1"
     trainer.train()
     if val_frame is not None and not val_frame.empty:
         metrics = compute_generation_metrics(
