@@ -284,6 +284,10 @@ def compute_generation_metrics(
         "eval_bleu_chrfpp_geometric_mean": round(geometric_mean, 4),
     }
 
+def warp_metric(p,args):
+  preds = np.argmax(p.predictions, axis=1)
+  return compute_generation_metrics(preds,p.label_ids,args)
+
 
 def build_dataset(frame, args, tokenizer, desc):
     """データセットをテキスト形式で作成（SFTTrainerの標準方式）"""
@@ -364,7 +368,7 @@ def main():
         tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        # processing_class=tokenizer, # 必要に応じて
+        compute_metrics=lambda p:warp_metric(p,args),
         args=sft_args,
     )
 
