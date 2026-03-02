@@ -104,9 +104,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--weight-decay", type=float, default=0.0)
     parser.add_argument("--num-train-epochs", type=float, default=3.0)
     parser.add_argument("--warmup-ratio", type=float, default=0.03)
-    parser.add_argument("--logging-steps", type=int, default=10)
-    parser.add_argument("--eval-steps", type=int, default=50)
-    parser.add_argument("--save-steps", type=int, default=50)
+    parser.add_argument("--logging-steps", type=int, default=1)
+    parser.add_argument("--eval-steps", type=int, default=1)
+    parser.add_argument("--save-steps", type=int, default=1)
     parser.add_argument("--save-total-limit", type=int, default=2)
     parser.add_argument("--bf16", type=parse_bool, default=True)
     parser.add_argument("--fp16", type=parse_bool, default=False)
@@ -177,13 +177,11 @@ def split_frame(frame, val_size: float, seed: int):
 
 
 def preprocess_logits_for_metrics(logits, labels):
-    """
-    メモリ節約のための最重要関数。
-    全語彙の確率(Logits)を保持せず、最大値のインデックス(Token ID)のみを返します。
-    """
+    """VRAM節約のため、評価時に確率分布(Logits)からToken ID(argmax)へ即座に変換する"""
     if isinstance(logits, tuple):
         logits = logits[0]
-    return logits.argmax(dim=-1)
+    # argmaxを取り、整数型(int32)に変換して返す
+    return logits.argmax(dim=-1).to(torch.int32)
 
 def compute_metrics_wrapper(eval_preds:EvalPrediction,tokenizer,args):
         """SFTTrainerから渡されるEvalPredictionを分解して計算関数に渡す"""
@@ -274,7 +272,7 @@ def compute_generation_metrics(
     )
 
     geometric_mean = math.sqrt((bleu / 100.0) * (chrfpp / 100.0)) * 100.0
-    return {
+    logs={
         "eval_bleu": round(bleu, 4),
         "eval_rouge2_precision": round(float(np.mean(rouge2_precision)), 4),
         "eval_rouge2_recall": round(float(np.mean(rouge2_recall)), 4),
@@ -283,11 +281,27 @@ def compute_generation_metrics(
         "eval_chrfpp": round(chrfpp, 4),
         "eval_bleu_chrfpp_geometric_mean": round(geometric_mean, 4),
     }
+    return logs
 
-def warp_metric(p,args):
-  preds = np.argmax(p.predictions, axis=1)
-  return compute_generation_metrics(preds,p.label_ids,args)
+def warp_metric(p, tokenizer, args):
+    """SFTTrainerから渡される数値をテキストに変換し、メトリクス計算へ橋渡しする"""
+    preds, labels = p.predictions, p.label_ids
 
+    # 1. 予測値の次元調整 (安全策)
+    # [batch, seq, 1] のような形であれば最後の1を消す
+    if preds.ndim == 3 and preds.shape[-1] == 1:
+        preds = np.squeeze(preds, axis=-1)
+    
+    # 2. 正解ラベルの調整 (-100 を Pad ID に変換)
+    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+
+    # 3. デコード処理
+    # Unsloth環境では numpy 配列がそのまま渡されるため、整数であることを確認してデコード
+    decoded_preds = tokenizer.batch_decode(preds.astype(np.int32), skip_special_tokens=True)
+    decoded_labels = tokenizer.batch_decode(labels.astype(np.int32), skip_special_tokens=True)
+
+    print(f"Evaluation: Decoded {len(decoded_preds)} samples.")
+    return compute_generation_metrics(decoded_preds, decoded_labels, args)
 
 def build_dataset(frame, args, tokenizer, desc):
     """データセットをテキスト形式で作成（SFTTrainerの標準方式）"""
@@ -344,18 +358,18 @@ def main():
     sft_args = SFTConfig(
         output_dir=str(args.output_dir),
         max_seq_length=args.max_seq_length,
-        # --- 修正箇所 ---
         dataset_text_field="text",         # text列を使用することを明示
         remove_unused_columns=False,       # モデルが知らない列(text等)を消さないようにする
-        # ----------------
         per_device_train_batch_size=args.per_device_train_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         learning_rate=args.learning_rate,
         num_train_epochs=args.num_train_epochs,
         logging_steps=args.logging_steps,
-        eval_strategy="no", 
+        eval_strategy="steps", 
         save_strategy="steps",
         save_steps=args.save_steps,
+        eval_steps=args.eval_steps,
+        save_total_limit=args.save_total_limit,
         fp16=False, # Gemma 3 のログに従い float32/bf16 を優先
         bf16=torch.cuda.is_bf16_supported(),
         optim="adamw_8bit",
@@ -368,7 +382,8 @@ def main():
         tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        compute_metrics=lambda p:warp_metric(p,args),
+        compute_metrics=lambda p: warp_metric(p, tokenizer, args),
+        preprocess_logits_for_metrics=preprocess_logits_for_metrics,
         args=sft_args,
     )
 
