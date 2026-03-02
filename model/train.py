@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import argparse
 import os
+from functools import partial
 from pathlib import Path
-from typing import Any
 
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ.setdefault("USE_TF", "0")
@@ -11,18 +11,11 @@ os.environ.setdefault("USE_TF", "0")
 import torch
 from datasets import Dataset
 from sklearn.model_selection import train_test_split
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    BitsAndBytesConfig,
-    Trainer,
-    TrainingArguments,
-)
 
 from model.common import DATA_DIR, ROOT_DIR, read_train_frame, seed_everything
 
-DEFAULT_MODEL_NAME = "google/gemma-2-27b-it"
-DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "gemma-2-27b-it"
+DEFAULT_MODEL_NAME = "unsloth/gemma-2-9b-bnb-4bit"
+DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "gemma-2-9b-unsloth"
 DEFAULT_SYSTEM_PROMPT = "You are an expert translator from Akkadian transliteration to English."
 DEFAULT_USER_PROMPT_TEMPLATE = (
     "Translate the following Akkadian transliteration into English.\n"
@@ -83,101 +76,29 @@ def resolve_model_load_dtype(args: argparse.Namespace) -> torch.dtype | None:
     return None
 
 
-def resolve_kbit_compute_dtype(args: argparse.Namespace) -> torch.dtype:
-    if args.bnb_4bit_compute_dtype is not None:
-        return args.bnb_4bit_compute_dtype
-    if args.bf16:
-        return torch.bfloat16
-    if args.fp16:
-        return torch.float16
-    return torch.float32
-
-
-def maybe_import_peft() -> tuple[Any, Any, Any]:
+def maybe_import_unsloth():
     try:
-        from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+        from unsloth import FastLanguageModel
     except ImportError as exc:
         raise ImportError(
-            "LoRA/QLoRA training requires `peft`. Install it with `pip install peft`."
+            "Unsloth training requires `unsloth`. Install it with `pip install unsloth`."
         ) from exc
+    return FastLanguageModel
 
-    return LoraConfig, get_peft_model, prepare_model_for_kbit_training
 
-
-def maybe_make_quantization_config(args: argparse.Namespace) -> BitsAndBytesConfig | None:
-    if not args.use_qlora:
-        return None
-
+def maybe_import_trl():
     try:
-        import bitsandbytes  # noqa: F401
+        from trl import SFTConfig, SFTTrainer
     except ImportError as exc:
         raise ImportError(
-            "QLoRA training requires `bitsandbytes`. Install it with `pip install bitsandbytes`."
+            "Unsloth training requires `trl`. Install it with `pip install 'trl>=0.22.2,<0.23.0'`."
         ) from exc
-
-    return BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type=args.bnb_4bit_quant_type,
-        bnb_4bit_use_double_quant=args.bnb_4bit_use_double_quant,
-        bnb_4bit_compute_dtype=resolve_kbit_compute_dtype(args),
-    )
-
-
-def load_tokenizer(args: argparse.Namespace):
-    tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name,
-        use_fast=args.use_fast_tokenizer,
-    )
-    tokenizer.padding_side = "right"
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-    return tokenizer
-
-
-def load_base_model(args: argparse.Namespace):
-    quantization_config = maybe_make_quantization_config(args)
-    model_load_dtype = resolve_model_load_dtype(args)
-    model_kwargs: dict[str, Any] = {
-        "attn_implementation": args.attn_implementation,
-        "device_map": args.device_map,
-        "low_cpu_mem_usage": True,
-    }
-    if model_load_dtype is not None:
-        model_kwargs["dtype"] = model_load_dtype
-    if quantization_config is not None:
-        model_kwargs["quantization_config"] = quantization_config
-
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-    return model, quantization_config
-
-
-class SupervisedDataCollator:
-    def __init__(self, tokenizer) -> None:
-        self.tokenizer = tokenizer
-
-    def __call__(self, features: list[dict[str, list[int]]]) -> dict[str, torch.Tensor]:
-        input_features = [
-            {
-                "input_ids": feature["input_ids"],
-                "attention_mask": feature["attention_mask"],
-            }
-            for feature in features
-        ]
-        labels = [feature["labels"] for feature in features]
-
-        batch = self.tokenizer.pad(input_features, padding=True, return_tensors="pt")
-        max_length = batch["input_ids"].shape[1]
-        padded_labels = [
-            label + [-100] * (max_length - len(label))
-            for label in labels
-        ]
-        batch["labels"] = torch.tensor(padded_labels, dtype=torch.long)
-        return batch
+    return SFTConfig, SFTTrainer
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Fine-tune Gemma instruction-tuned causal LMs for Akkadian transliteration to English."
+        description="Fine-tune instruction-tuned causal LMs for Akkadian transliteration to English with Unsloth."
     )
     parser.add_argument("--train-path", type=Path, default=DATA_DIR / "train.csv")
     parser.add_argument("--model-name", type=str, default=DEFAULT_MODEL_NAME)
@@ -205,29 +126,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fp16", type=parse_bool, default=False)
     parser.add_argument("--tf32", type=parse_bool, default=True)
     parser.add_argument("--torch-dtype", type=parse_optional_torch_dtype, default=None)
-    parser.add_argument("--attn-implementation", type=str, default="sdpa")
-    parser.add_argument("--device-map", type=str, default="auto")
-    parser.add_argument("--use-fast-tokenizer", type=parse_bool, default=True)
     parser.add_argument("--train-on-inputs", type=parse_bool, default=False)
-    parser.add_argument("--optim", type=str, default="paged_adamw_8bit")
-    parser.add_argument("--lr-scheduler-type", type=str, default="cosine")
+    parser.add_argument("--optim", type=str, default="adamw_8bit")
+    parser.add_argument("--lr-scheduler-type", type=str, default="linear")
     parser.add_argument("--max-grad-norm", type=float, default=1.0)
     parser.add_argument("--remove-unused-columns", type=parse_bool, default=False)
+    parser.add_argument("--packing", type=parse_bool, default=False)
     parser.add_argument("--use-lora", type=parse_bool, default=True)
     parser.add_argument("--use-qlora", type=parse_bool, default=True)
     parser.add_argument("--lora-r", type=int, default=16)
-    parser.add_argument("--lora-alpha", type=int, default=32)
-    parser.add_argument("--lora-dropout", type=float, default=0.05)
+    parser.add_argument("--lora-alpha", type=int, default=16)
+    parser.add_argument("--lora-dropout", type=float, default=0.0)
     parser.add_argument(
         "--lora-target-modules",
         type=parse_list,
-        default=parse_list("q_proj,k_proj,v_proj,o_proj"),
+        default=parse_list("q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj"),
     )
     parser.add_argument("--lora-bias", type=str, default="none")
     parser.add_argument("--lora-modules-to-save", type=parse_list, default=None)
-    parser.add_argument("--bnb-4bit-quant-type", type=str, default="nf4")
-    parser.add_argument("--bnb-4bit-use-double-quant", type=parse_bool, default=True)
-    parser.add_argument("--bnb-4bit-compute-dtype", type=parse_optional_torch_dtype, default=None)
     parser.add_argument("--wandb-project", type=str, default="deep-past-challenge")
     parser.add_argument("--wandb-run-name", type=str, default=None)
     parser.add_argument("--wandb-entity", type=str, default=None)
@@ -236,149 +152,126 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--push-to-hub", type=parse_bool, default=False)
     parser.add_argument("--hub-model-id", type=str, default=None)
     parser.add_argument("--hub-private-repo", type=parse_bool, default=True)
-    parser.add_argument("--hub-strategy", type=str, default="end")
     return parser.parse_args()
 
 
-def build_messages(source_text: str, target_text: str | None, args: argparse.Namespace) -> list[dict[str, Any]]:
+def build_prompt(source_text: str, args: argparse.Namespace) -> str:
     user_prompt = args.user_prompt_template.format(source=source_text)
     if args.system_prompt:
-        user_prompt = f"{args.system_prompt}\n\n{user_prompt}"
+        return f"{args.system_prompt}\n\n{user_prompt}"
+    return user_prompt
 
-    messages: list[dict[str, Any]] = [
-        {
-            "role": "user",
-            "content": user_prompt,
-        },
-    ]
-    if target_text is not None:
-        messages.append(
-            {
-                "role": "assistant",
-                "content": target_text,
-            }
+def format_prompt_completion_batch(
+    examples: dict[str, list[str]],
+    args: argparse.Namespace,
+    eos_token: str,
+) -> dict[str, list[str]]:
+    texts: list[str] = []
+    for source_text, target_text in zip(examples["transliteration"], examples["translation"]):
+        # プロンプトと回答を結合し、最後にEOSトークンを付与
+        full_text = f"{build_prompt(source_text, args)}\n\n{target_text.rstrip()}{eos_token}"
+        texts.append(full_text)
+    return {"text": texts}
+
+
+def load_model_and_tokenizer(args: argparse.Namespace):
+    FastLanguageModel = maybe_import_unsloth()
+
+    if args.lora_modules_to_save is not None:
+        raise ValueError("`--lora-modules-to-save` is not supported in the current Unsloth path.")
+
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=args.model_name,
+        max_seq_length=args.max_seq_length,
+        dtype=resolve_model_load_dtype(args),
+        load_in_4bit=args.use_qlora,
+        load_in_8bit=False,
+        load_in_16bit=args.use_lora and not args.use_qlora,
+        full_finetuning=not (args.use_lora or args.use_qlora),
+        token=os.environ.get("HF_TOKEN"),
+    )
+
+    if args.use_lora or args.use_qlora:
+        model = FastLanguageModel.get_peft_model(
+            model,
+            r=args.lora_r,
+            target_modules=args.lora_target_modules,
+            lora_alpha=args.lora_alpha,
+            lora_dropout=args.lora_dropout,
+            bias=args.lora_bias,
+            use_gradient_checkpointing="unsloth" if args.gradient_checkpointing else False,
+            random_state=args.seed,
+            max_seq_length=args.max_seq_length,
+            use_rslora=False,
+            loftq_config=None,
         )
-    return messages
+        model.print_trainable_parameters()
+
+    model.config.use_cache = False
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "right"
+    return model, tokenizer
+
+
+def split_frame(frame, val_size: float, seed: int):
+    if val_size <= 0:
+        return frame, None
+    train_frame, val_frame = train_test_split(
+        frame,
+        test_size=val_size,
+        random_state=seed,
+        shuffle=True,
+    )
+    return train_frame, val_frame
+
+
+def build_dataset(frame, args: argparse.Namespace, tokenizer, desc: str) -> Dataset:
+    dataset = Dataset.from_pandas(frame.reset_index(drop=True), preserve_index=False)
+    eos_token = tokenizer.eos_token or ""
+    return dataset.map(
+        partial(format_prompt_completion_batch, args=args, eos_token=eos_token),
+        batched=True,
+        remove_columns=dataset.column_names,
+        num_proc=args.preprocess_num_proc,
+        desc=desc,
+    )
 
 
 def main() -> None:
     args = parse_args()
-    if args.use_qlora:
-        args.use_lora = True
     seed_everything(args.seed)
 
     if args.tf32 and torch.cuda.is_available():
         torch.backends.cuda.matmul.allow_tf32 = True
 
+    if args.push_to_hub and not args.hub_model_id:
+        raise ValueError("`--hub-model-id` is required when `--push-to-hub true`.")
+
     if args.disable_wandb:
         os.environ["WANDB_DISABLED"] = "true"
-        report_to: list[str] = []
+        report_to: str | list[str] = "none"
     else:
-        os.environ["WANDB_PROJECT"] = os.environ.get("WANDB_PROJECT",args.wandb_project) # type: ignore
+        os.environ["WANDB_PROJECT"] = os.environ.get("WANDB_PROJECT", args.wandb_project)
         if args.wandb_entity:
-            os.environ["WANDB_ENTITY"] = os.environ.get("WANDB_ENTITY",args.wandb_entity) # type: ignore
+            os.environ["WANDB_ENTITY"] = os.environ.get("WANDB_ENTITY", args.wandb_entity)
         report_to = [value for value in args.report_to.split(",") if value]
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     frame = read_train_frame(args.train_path)
-    train_frame, val_frame = train_test_split(
-        frame,
-        test_size=args.val_size,
-        random_state=args.seed,
-        shuffle=True,
-    )
+    train_frame, val_frame = split_frame(frame, args.val_size, args.seed)
 
-    train_dataset = Dataset.from_pandas(train_frame.reset_index(drop=True), preserve_index=False)
-    eval_dataset = Dataset.from_pandas(val_frame.reset_index(drop=True), preserve_index=False)
+    model, tokenizer = load_model_and_tokenizer(args)
+    train_dataset = build_dataset(train_frame, args, tokenizer, desc="Formatting train dataset")
+    eval_dataset = None
+    if val_frame is not None:
+        eval_dataset = build_dataset(val_frame, args, tokenizer, desc="Formatting eval dataset")
 
-    tokenizer = load_tokenizer(args)
-    model, _ = load_base_model(args)
-    model.config.use_cache = False
-    model.config.pad_token_id = tokenizer.pad_token_id
-
-    if args.use_lora or args.use_qlora:
-        LoraConfig, get_peft_model, prepare_model_for_kbit_training = maybe_import_peft()
-        if args.use_qlora:
-            model = prepare_model_for_kbit_training(
-                model,
-                use_gradient_checkpointing=args.gradient_checkpointing,
-            )
-        elif args.gradient_checkpointing:
-            model.gradient_checkpointing_enable()
-            model.enable_input_require_grads()
-        lora_config = LoraConfig(
-            r=args.lora_r,
-            lora_alpha=args.lora_alpha,
-            lora_dropout=args.lora_dropout,
-            bias=args.lora_bias,
-            task_type="CAUSAL_LM",
-            target_modules=args.lora_target_modules,
-            modules_to_save=args.lora_modules_to_save,
-        )
-        model = get_peft_model(model, lora_config)
-        model.print_trainable_parameters()
-    elif args.gradient_checkpointing:
-        model.gradient_checkpointing_enable()
-
-    def preprocess(example: dict[str, str]) -> dict[str, list[int]]:
-        source_text = example["transliteration"]
-        target_text = example["translation"]
-
-        prompt_text = tokenizer.apply_chat_template(
-            build_messages(source_text, None, args),
-            tokenize=False,
-            add_generation_prompt=True,
-        )
-        full_text = tokenizer.apply_chat_template(
-            build_messages(source_text, target_text, args),
-            tokenize=False,
-            add_generation_prompt=False,
-        )
-
-        prompt_tokens = tokenizer(
-            prompt_text,
-            truncation=True,
-            max_length=args.max_seq_length,
-            add_special_tokens=False,
-        )
-        full_tokens = tokenizer(
-            full_text,
-            truncation=True,
-            max_length=args.max_seq_length,
-            add_special_tokens=False,
-        )
-
-        input_ids = full_tokens["input_ids"]
-        attention_mask = full_tokens["attention_mask"]
-        labels = input_ids.copy()
-
-        if not args.train_on_inputs:
-            prompt_length = min(len(prompt_tokens["input_ids"]), len(labels))
-            labels[:prompt_length] = [-100] * prompt_length
-
-        return {
-            "input_ids": input_ids,
-            "attention_mask": attention_mask,
-            "labels": labels,
-        }
-
-    train_dataset = train_dataset.map(
-        preprocess,
-        remove_columns=train_dataset.column_names,
-        num_proc=args.preprocess_num_proc,
-        desc="Formatting train dataset",
-    )
-    eval_dataset = eval_dataset.map(
-        preprocess,
-        remove_columns=eval_dataset.column_names,
-        num_proc=args.preprocess_num_proc,
-        desc="Formatting eval dataset",
-    )
-
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    training_args = TrainingArguments(
+    SFTConfig, SFTTrainer = maybe_import_trl()
+    sft_args = SFTConfig(
         output_dir=str(args.output_dir),
+        max_seq_length=args.max_seq_length,
         per_device_train_batch_size=args.per_device_train_batch_size,
         per_device_eval_batch_size=args.per_device_eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
@@ -388,7 +281,7 @@ def main() -> None:
         num_train_epochs=args.num_train_epochs,
         warmup_ratio=args.warmup_ratio,
         logging_steps=args.logging_steps,
-        eval_strategy="steps",
+        eval_strategy="steps" if eval_dataset is not None else "no",
         save_strategy="steps",
         eval_steps=args.eval_steps,
         save_steps=args.save_steps,
@@ -397,7 +290,6 @@ def main() -> None:
         run_name=args.wandb_run_name,
         bf16=args.bf16,
         fp16=args.fp16,
-        gradient_checkpointing=args.gradient_checkpointing,
         lr_scheduler_type=args.lr_scheduler_type,
         optim=args.optim,
         max_grad_norm=args.max_grad_norm,
@@ -405,27 +297,28 @@ def main() -> None:
         push_to_hub=args.push_to_hub,
         hub_model_id=args.hub_model_id,
         hub_private_repo=args.hub_private_repo,
-        hub_strategy=args.hub_strategy,
         seed=args.seed,
-        label_names=["labels"],
+        completion_only_loss=not args.train_on_inputs,
+        packing=args.packing,
+        dataset_text_field="text",
     )
 
-    trainer = Trainer(
+    trainer = SFTTrainer(
         model=model,
-        args=training_args,
+        tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        processing_class=tokenizer,
-        data_collator=SupervisedDataCollator(tokenizer),
+        args=sft_args,
     )
 
     trainer.train()
-    trainer.save_model()
-    tokenizer.save_pretrained(args.output_dir)
     trainer.save_state()
+    model.save_pretrained(args.output_dir)
+    tokenizer.save_pretrained(args.output_dir)
 
     if args.push_to_hub:
-        trainer.push_to_hub()
+        model.push_to_hub(args.hub_model_id, token=os.environ.get("HF_TOKEN"))
+        tokenizer.push_to_hub(args.hub_model_id, token=os.environ.get("HF_TOKEN"))
 
 
 if __name__ == "__main__":

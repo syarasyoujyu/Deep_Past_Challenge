@@ -4,10 +4,10 @@
 
 ```bash
 uv run python -m model.train \
-  --model-name google/gemma-2-27b-it \
-  --output-dir artifacts/gemma-2-27b-it \
+  --model-name unsloth/gemma-2-9b-bnb-4bit \
+  --output-dir artifacts/gemma-2-9b-unsloth \
   --preprocess-num-proc auto \
-  --dataloader-num-workers auto \
+  --dataloader-num-workers 2 \
   --per-device-train-batch-size 1 \
   --gradient-accumulation-steps 16 \
   --learning-rate 2e-4 \
@@ -16,42 +16,41 @@ uv run python -m model.train \
   --fp16 true \
   --use-lora true \
   --use-qlora true \
+  --max-seq-length 512 \
   --disable-wandb false \
   --wandb-project deep-past-challenge \
-  --wandb-run-name gemma-2-27b-it-qlora
+  --wandb-run-name gemma-2-9b-unsloth
 ```
 
-Python は 3.12 以上を前提にしています。`transformers` の TensorFlow backend は無効化しており、Gemma instruction-tuned causal LM の supervised fine-tuning を PyTorch + `Trainer` ベースで行います。
+Python は 3.12 以上を前提にしています。`transformers` の TensorFlow backend は無効化しており、Unsloth の `FastLanguageModel` と `trl.SFTTrainer` ベースで supervised fine-tuning を行います。
 
-`train.py` は `google/gemma-2-27b-it` のような instruction-tuned Gemma を、モデルカードどおり `AutoTokenizer` と `AutoModelForCausalLM` で読み込み、チャットテンプレート経由で
+`train.py` は `unsloth/gemma-2-9b-bnb-4bit` のような Unsloth の事前量子化モデルを読み込み、prompt-completion 形式で
 
-- system: 翻訳器としての役割
-- user: アッカド語転写文
-- assistant: 英訳
+- prompt: 翻訳器としての役割 + アッカド語転写文
+- completion: 英訳
 
-の形式で supervised fine-tuning します。既定では LoRA + QLoRA を有効にしています。
+の形式で学習します。既定では LoRA + QLoRA を有効にしており、`train_on_inputs=false` のときは completion 部分だけで loss を計算します。
 
-LoRA / QLoRA の主要引数:
+Unsloth / LoRA の主要引数:
 
 - `--use-lora true|false`
 - `--use-qlora true|false`
-- `--lora-r 64`
-- `--lora-alpha 128`
-- `--lora-dropout 0.05`
+- `--lora-r 16`
+- `--lora-alpha 16`
+- `--lora-dropout 0.0`
 - `--lora-target-modules q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj`
-- `--bnb-4bit-quant-type nf4`
-- `--bnb-4bit-use-double-quant true`
-- `--bnb-4bit-compute-dtype bfloat16`
+- `--packing true|false`
+- `--train-on-inputs true|false`
 
-Gemma 2 / 3 系を扱うため `transformers>=4.50.0` を前提にしています。QLoRA を使う場合は `bitsandbytes` も別途必要です。
+Notebook 相当の環境として `unsloth` と `trl>=0.22.2` を前提にしています。Colab では Unsloth 側の推奨 install 手順に合わせて依存を入れる方が安定します。
 
-T4 15GB では `gemma-2-27b-it` はかなり厳しいので、まずは `--per-device-train-batch-size 1` を維持したまま `google/gemma-2-9b-it` や `google/gemma-2-2b-it` で動作確認するのが安全です。
+T4 15GB では `unsloth/gemma-2-9b-bnb-4bit` でも `max_seq_length` を大きくすると厳しくなります。まずは `--per-device-train-batch-size 1` と `--max-seq-length 512` から始めるのが安全です。
 
 前処理を速くしたい場合は `--preprocess-num-proc`、学習時の DataLoader 並列度は `--dataloader-num-workers` で調整できます。`auto` を渡すと `os.cpu_count() - 1` を使います。
 
 `WANDB_API_KEY` を環境変数で渡すと `wandb` に自動で記録します。
 
-Hugging Face Hub に push したい場合は `HF_TOKEN` を設定したうえで `--push-to-hub true --hub-model-id <user>/<repo>` を付けてください。
+Hugging Face Hub に push したい場合は `HF_TOKEN` を設定したうえで `--push-to-hub true --hub-model-id <user>/<repo>` を付けてください。保存されるのは Unsloth/PEFT の学習済みモデルです。
 
 ## Train MarianMT Arabic-English
 
