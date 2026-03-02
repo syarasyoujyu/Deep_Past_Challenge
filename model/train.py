@@ -5,6 +5,8 @@ import math
 import os
 from pathlib import Path
 
+from unsloth import FastLanguageModel
+
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ.setdefault("USE_TF", "0")
 import numpy as np
@@ -16,7 +18,6 @@ from rouge_score import rouge_scorer
 from sklearn.model_selection import train_test_split
 from transformers import EvalPrediction
 from trl import SFTConfig, SFTTrainer
-from unsloth import FastLanguageModel
 
 from model.common import DATA_DIR, ROOT_DIR, read_train_frame, seed_everything
 
@@ -162,43 +163,6 @@ def format_prompt_completion_batch(
     return {"text": texts}
 
 
-def load_model_and_tokenizer(args: argparse.Namespace):
-    if args.lora_modules_to_save is not None:
-        raise ValueError("`--lora-modules-to-save` is not supported in the current Unsloth path.")
-
-    model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name=args.model_name,
-        max_seq_length=args.max_seq_length,
-        dtype=resolve_model_load_dtype(args),
-        load_in_4bit=args.use_qlora,
-        load_in_8bit=False,
-        load_in_16bit=args.use_lora and not args.use_qlora,
-        full_finetuning=not (args.use_lora or args.use_qlora),
-        token=os.environ.get("HF_TOKEN"),
-    )
-
-    if args.use_lora or args.use_qlora:
-        model = FastLanguageModel.get_peft_model(
-            model,
-            r=args.lora_r,
-            target_modules=args.lora_target_modules,
-            lora_alpha=args.lora_alpha,
-            lora_dropout=args.lora_dropout,
-            bias=args.lora_bias,
-            use_gradient_checkpointing="unsloth",
-            random_state=args.seed,
-            max_seq_length=args.max_seq_length,
-            use_rslora=False,
-            loftq_config=None,
-        )
-        model.print_trainable_parameters()
-
-    model.config.use_cache = False
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
-    return model, tokenizer
-
 
 def split_frame(frame, val_size: float, seed: int):
     if val_size <= 0:
@@ -211,30 +175,6 @@ def split_frame(frame, val_size: float, seed: int):
     )
     return train_frame, val_frame
 
-
-def build_dataset(frame, args: argparse.Namespace, tokenizer, desc: str) -> Dataset:
-    dataset = Dataset.from_pandas(frame.reset_index(drop=True), preserve_index=False)
-    
-    def tokenize_function(examples):
-        texts = [
-            f"{build_prompt(s, args)}\n\n{t.rstrip()}{tokenizer.eos_token}"
-            for s, t in zip(examples["transliteration"], examples["translation"])
-        ]
-        # ここでトークナイズを完結させる
-        return tokenizer(
-            texts,
-            truncation=True,
-            max_length=args.max_seq_length,
-            padding=False, # Trainer側のデータコレーターに任せる
-        )
-
-    return dataset.map(
-        tokenize_function,
-        batched=True,
-        remove_columns=dataset.column_names,
-        num_proc=1, # ここは必ず 1
-        desc=desc,
-    )
 
 def preprocess_logits_for_metrics(logits, labels):
     """
@@ -345,93 +285,107 @@ def compute_generation_metrics(
     }
 
 
-def main() -> None:
-    args = parse_args()
+def build_dataset(frame, args, tokenizer, desc):
+    """データセットをテキスト形式で作成（SFTTrainerの標準方式）"""
+    dataset = Dataset.from_pandas(frame.reset_index(drop=True), preserve_index=False)
+    eos_token = tokenizer.eos_token or ""
+
+    def format_func(examples):
+        texts = []
+        for s, t in zip(examples["transliteration"], examples["translation"]):
+            user_prompt = args.user_prompt_template.format(source=s)
+            full_text = f"{args.system_prompt}\n\n{user_prompt}\n\n{t.rstrip()}{eos_token}"
+            texts.append(full_text)
+        return {"text": texts}
+
+    return dataset.map(format_func, batched=True, desc=desc)
+
+def load_model_and_tokenizer(args):
+    """UnslothモデルのロードとLoRA設定"""
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=args.model_name,
+        max_seq_length=args.max_seq_length,
+        dtype=None, # 自動検出
+        load_in_4bit=True,
+    )
+
+    model = FastLanguageModel.get_peft_model(
+        model,
+        r=args.lora_r,
+        target_modules=args.lora_target_modules,
+        lora_alpha=args.lora_alpha,
+        lora_dropout=0, # 最適化のため0
+        bias="none",
+        use_gradient_checkpointing="unsloth",
+        random_state=args.seed,
+        max_seq_length=args.max_seq_length,
+    )
+    # 学習可能パラメータが0でないか確認
+    model.print_trainable_parameters()
+    return model, tokenizer
+
+def main():
+    args = parse_args() # 既存の引数パース関数
     seed_everything(args.seed)
 
-    if args.tf32 and torch.cuda.is_available():
-        torch.backends.cuda.matmul.allow_tf32 = True
-
-    if args.push_to_hub and not args.hub_model_id:
-        raise ValueError("`--hub-model-id` is required when `--push-to-hub true`.")
-
-    if args.disable_wandb:
-        os.environ["WANDB_DISABLED"] = "true"
-        report_to: str | list[str] = "none"
-    else:
-        os.environ["WANDB_PROJECT"] = os.environ.get("WANDB_PROJECT", args.wandb_project)
-        if args.wandb_entity:
-            os.environ["WANDB_ENTITY"] = os.environ.get("WANDB_ENTITY", args.wandb_entity)
-        report_to = [value for value in args.report_to.split(",") if value]
-
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-
+    model, tokenizer = load_model_and_tokenizer(args)
+    
     frame = read_train_frame(args.train_path)
     train_frame, val_frame = split_frame(frame, args.val_size, args.seed)
+    
+    train_dataset = build_dataset(train_frame, args, tokenizer, "Formatting train dataset")
+    eval_dataset = build_dataset(val_frame, args, tokenizer, "Formatting eval dataset")
 
-    model, tokenizer = load_model_and_tokenizer(args)
-    train_dataset = build_dataset(train_frame, args, tokenizer, desc="Formatting train dataset")
-    eval_dataset = None
-    if val_frame is not None:
-        eval_dataset = build_dataset(val_frame, args, tokenizer, desc="Formatting eval dataset")
-
+    # 公式ノートブックに準拠したシンプルな設定
     sft_args = SFTConfig(
         output_dir=str(args.output_dir),
-        max_length=args.max_seq_length,
+        max_seq_length=args.max_seq_length,
+        # --- 修正箇所 ---
+        dataset_text_field="text",         # text列を使用することを明示
+        remove_unused_columns=False,       # モデルが知らない列(text等)を消さないようにする
+        # ----------------
         per_device_train_batch_size=args.per_device_train_batch_size,
-        per_device_eval_batch_size=args.per_device_eval_batch_size,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
-        dataloader_num_workers=args.dataloader_num_workers,
         learning_rate=args.learning_rate,
-        weight_decay=args.weight_decay,
         num_train_epochs=args.num_train_epochs,
-        warmup_ratio=args.warmup_ratio,
         logging_steps=args.logging_steps,
-        eval_strategy="steps" if eval_dataset is not None else "no",
+        eval_strategy="no", 
         save_strategy="steps",
-        eval_steps=args.eval_steps,
         save_steps=args.save_steps,
-        save_total_limit=args.save_total_limit,
-        report_to=report_to,
-        run_name=args.wandb_run_name,
-        bf16=args.bf16,
-        fp16=args.fp16,
-        lr_scheduler_type=args.lr_scheduler_type,
-        optim=args.optim,
-        max_grad_norm=args.max_grad_norm,
-        remove_unused_columns=args.remove_unused_columns,
-        push_to_hub=args.push_to_hub,
-        hub_model_id=args.hub_model_id,
-        hub_private_repo=args.hub_private_repo,
+        fp16=False, # Gemma 3 のログに従い float32/bf16 を優先
+        bf16=torch.cuda.is_bf16_supported(),
+        optim="adamw_8bit",
+        report_to="wandb",
         seed=args.seed,
-        completion_only_loss=not args.train_on_inputs,
-        packing=args.packing,
-        dataset_num_proc=1,
-        metric_for_best_model="eval_bleu",
-        greater_is_better=True,
-        load_best_model_at_end=True, # 学習終了時に最強モデルをロード
     )
 
     trainer = SFTTrainer(
         model=model,
+        tokenizer=tokenizer,
         train_dataset=train_dataset,
-        processing_class=tokenizer,
         eval_dataset=eval_dataset,
-        compute_metrics=lambda x:compute_metrics_wrapper(x,tokenizer=tokenizer,args=args),
-        preprocess_logits_for_metrics=preprocess_logits_for_metrics,
+        # processing_class=tokenizer, # 必要に応じて
         args=sft_args,
     )
-    os.environ["UNSLOTH_RETURN_LOGITS"] = "1"
+
+    # ログにある警告に基づき、trainの直前に環境変数をセット
+    os.environ["UNSLOTH_RETURN_LOGITS"] = "1" 
+    
     trainer.train()
-    if val_frame is not None and not val_frame.empty:
+
+    # --- 学習完了後の一括評価（VRAMを節約しつつ正確な指標を出す） ---
+    if val_frame is not None:
+        print("Calculating final evaluation metrics...")
+        predictions = generate_validation_predictions(model, tokenizer, val_frame, args)
         metrics = compute_generation_metrics(
-            predictions=generate_validation_predictions(model, tokenizer, val_frame, args),
+            predictions=predictions,
             references=val_frame["translation"].tolist(),
-            args=args,
+            args=args
         )
         trainer.log_metrics("eval", metrics)
-        trainer.save_metrics("eval", metrics)
-    trainer.save_state()
+        print(metrics)
+
+    # 保存
     model.save_pretrained(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
 
