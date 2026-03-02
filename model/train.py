@@ -385,6 +385,7 @@ def main():
         compute_metrics=lambda p: warp_metric(p, tokenizer, args),
         preprocess_logits_for_metrics=preprocess_logits_for_metrics,
         args=sft_args,
+        load_best_model_at_end=True,
     )
 
     # ログにある警告に基づき、trainの直前に環境変数をセット
