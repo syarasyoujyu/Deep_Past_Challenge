@@ -186,7 +186,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--user-prompt-template", type=str, default=DEFAULT_USER_PROMPT_TEMPLATE)
     parser.add_argument("--val-size", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--max-seq-length", type=int, default=1024)
+    parser.add_argument("--max-seq-length", type=int, default=512)
     parser.add_argument("--preprocess-num-proc", type=parse_auto_int, default=1)
     parser.add_argument("--dataloader-num-workers", type=parse_auto_int, default=0)
     parser.add_argument("--per-device-train-batch-size", type=int, default=1)
@@ -215,13 +215,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--remove-unused-columns", type=parse_bool, default=False)
     parser.add_argument("--use-lora", type=parse_bool, default=True)
     parser.add_argument("--use-qlora", type=parse_bool, default=True)
-    parser.add_argument("--lora-r", type=int, default=64)
-    parser.add_argument("--lora-alpha", type=int, default=128)
+    parser.add_argument("--lora-r", type=int, default=16)
+    parser.add_argument("--lora-alpha", type=int, default=32)
     parser.add_argument("--lora-dropout", type=float, default=0.05)
     parser.add_argument(
         "--lora-target-modules",
         type=parse_list,
-        default=parse_list("q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj"),
+        default=parse_list("q_proj,k_proj,v_proj,o_proj"),
     )
     parser.add_argument("--lora-bias", type=str, default="none")
     parser.add_argument("--lora-modules-to-save", type=parse_list, default=None)
@@ -406,7 +406,6 @@ def main() -> None:
         hub_model_id=args.hub_model_id,
         hub_private_repo=args.hub_private_repo,
         hub_strategy=args.hub_strategy,
-        save_safetensors=True,
         seed=args.seed,
         label_names=["labels"],
     )
