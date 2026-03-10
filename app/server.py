@@ -10,12 +10,14 @@ from wsgiref.simple_server import make_server
 
 try:
     from .lexicon_lookup import extract_lexicon_matches
+    from .sentence_lookup import count_texts_with_same_no, extract_sentence_matches
 except ImportError:
     from lexicon_lookup import extract_lexicon_matches
+    from sentence_lookup import count_texts_with_same_no, extract_sentence_matches
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_PATH = PROJECT_ROOT / "data" / "train_refined.csv"
+DATA_PATH = PROJECT_ROOT / "data" / "train_truncated.csv"
 HOST = os.environ.get("APP_HOST", "127.0.0.1")
 PORT = int(os.environ.get("APP_PORT", "8000"))
 
@@ -104,10 +106,13 @@ def get_request_data(environ: dict[str, object]) -> dict[str, str]:
 
 def render_page(
     oare_options_html: str,
+    same_no_text_count: int,
     oare_id: str = "",
     transliteration: str = "",
     translation: str = "",
     lexicon_matches: list[dict[str, str]] | None = None,
+    sentence_matches: list[dict[str, str]] | None = None,
+    current_same_no_count: int = 0,
     message: str = "",
     message_type: str = "info",
     not_found: bool = False,
@@ -119,6 +124,19 @@ def render_page(
         message_html = (
             f'<div class="message {html.escape(message_type)}">{html.escape(message)}</div>'
         )
+
+    summary_html = f"""
+      <section class="card summary-card">
+        <p><strong>Same=No を含む文章数:</strong> {same_no_text_count}</p>
+      </section>
+    """
+    if oare_id and not not_found:
+        summary_html = f"""
+          <section class="card summary-card">
+            <p><strong>Same=No を含む文章数:</strong> {same_no_text_count}</p>
+            <p><strong>選択中レコードの Same=No 件数:</strong> {current_same_no_count}</p>
+          </section>
+        """
 
     details_html = ""
     if oare_id and not not_found:
@@ -165,6 +183,48 @@ def render_page(
             </div>
             """
 
+        sentence_rows = ""
+        for entry in sentence_matches or []:
+            same_class = "same-no" if entry["same"] == "No" else "same-yes"
+            sentence_rows += f"""
+            <tr>
+              <td>{html.escape(entry["sentence_obj_in_text"])}</td>
+              <td>{html.escape(entry["first_word_number"])}</td>
+              <td>{html.escape(entry["first_word_spelling"])}</td>
+              <td>{html.escape(entry["train_word"])}</td>
+              <td class="{same_class}">{html.escape(entry["same"])}</td>
+              <td>{html.escape(entry["translation"])}</td>
+            </tr>
+            """
+
+        sentence_html = """
+          <div class="dictionary-block">
+            <h3>Sentence Matches</h3>
+            <p class="empty">対応する sentence 情報は見つかりませんでした。</p>
+          </div>
+        """
+        if sentence_rows:
+            sentence_html = f"""
+            <div class="dictionary-block">
+              <h3>Sentence Matches</h3>
+              <table class="dictionary-table">
+                <thead>
+                  <tr>
+                    <th>Sentence Obj</th>
+                    <th>First Word #</th>
+                    <th>First Word Spelling</th>
+                    <th>Train Word</th>
+                    <th>Same</th>
+                    <th>Translation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sentence_rows}
+                </tbody>
+              </table>
+            </div>
+            """
+
         navigation_html = ""
         if previous_oare_id or next_oare_id:
             previous_link = (
@@ -198,6 +258,7 @@ def render_page(
             <button type="submit">Save</button>
           </form>
           {lexicon_html}
+          {sentence_html}
         </section>
         """
     elif not_found:
@@ -257,6 +318,18 @@ def render_page(
       .lead {{
         margin: 0 0 24px;
         color: var(--muted);
+      }}
+
+      .summary-card {{
+        margin-bottom: 20px;
+      }}
+
+      .summary-card p {{
+        margin: 0;
+      }}
+
+      .summary-card p + p {{
+        margin-top: 8px;
       }}
 
       .card {{
@@ -397,6 +470,16 @@ def render_page(
         color: var(--muted);
       }}
 
+      .same-yes {{
+        color: var(--ok-text);
+        font-weight: 600;
+      }}
+
+      .same-no {{
+        color: var(--warn-text);
+        font-weight: 600;
+      }}
+
       .message.success {{
         background: var(--ok-bg);
         color: var(--ok-text);
@@ -463,6 +546,7 @@ def render_page(
       <h1>Translation Editor</h1>
       <p class="lead">`data/train_refined.csv` の `translation` を `oare_id` ごとに編集して保存します。</p>
       {message_html}
+      {summary_html}
       <section class="card">
         <form method="get" class="search">
           <div>
@@ -496,6 +580,8 @@ def app(environ: dict[str, object], start_response):
     transliteration = ""
     translation = ""
     lexicon_matches: list[dict[str, str]] = []
+    sentence_matches: list[dict[str, str]] = []
+    current_same_no_count = 0
     previous_oare_id = None
     next_oare_id = None
 
@@ -520,6 +606,8 @@ def app(environ: dict[str, object], start_response):
             transliteration = row["transliteration"]
             translation = row["translation"]
             lexicon_matches = extract_lexicon_matches(transliteration)
+            sentence_matches = extract_sentence_matches(oare_id)
+            current_same_no_count = sum(1 for match in sentence_matches if match["same"] == "No")
             not_found = False
             previous_oare_id, next_oare_id = get_neighbor_oare_ids(rows, oare_id)
         elif method == "GET":
@@ -529,10 +617,13 @@ def app(environ: dict[str, object], start_response):
 
     body = render_page(
         oare_options_html=build_oare_options(rows, oare_id),
+        same_no_text_count=count_texts_with_same_no(),
         oare_id=oare_id,
         transliteration=transliteration,
         translation=translation,
         lexicon_matches=lexicon_matches,
+        sentence_matches=sentence_matches,
+        current_same_no_count=current_same_no_count,
         message=message,
         message_type=message_type,
         not_found=not_found,
