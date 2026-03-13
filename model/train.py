@@ -22,6 +22,7 @@ from transformers import EvalPrediction
 from trl import SFTConfig, SFTTrainer
 
 from model.common import DATA_DIR, ROOT_DIR, read_train_frame, seed_everything
+from refine.refine_train_v2 import postprocessor as translation_postprocessor
 
 DEFAULT_MODEL_NAME = "unsloth/gemma-2-9b-bnb-4bit"
 DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "gemma-2-9b-unsloth"
@@ -91,6 +92,12 @@ def setup_wandb(args: argparse.Namespace) -> list[str]:
     if args.wandb_entity:
         os.environ["WANDB_ENTITY"] = args.wandb_entity
     return [value.strip() for value in args.report_to.split(",") if value.strip()]
+
+
+def postprocess_translations(texts: list[str]) -> list[str]:
+    if not texts:
+        return []
+    return translation_postprocessor.postprocess_batch(texts)
 
 def parse_bool(value: str | bool) -> bool:
     if isinstance(value, bool):
@@ -307,44 +314,52 @@ def build_validation_prediction_records(
 ) -> tuple[list[dict[str, Any]], list[str], list[str]]:
     transliterations = frame["transliteration"].fillna("").astype(str).tolist()
     references = frame["translation"].fillna("").astype(str).tolist()
-    plain_predictions = generate_predictions_for_texts(model, tokenizer, transliterations, args)
+    raw_plain_predictions = generate_predictions_for_texts(model, tokenizer, transliterations, args)
+    plain_predictions = postprocess_translations(raw_plain_predictions)
 
     split_inputs_per_sample = [simple_sentence_splitter(text) for text in transliterations]
     flat_split_inputs = [segment for segments in split_inputs_per_sample for segment in segments]
-    flat_split_predictions = (
+    raw_flat_split_predictions = (
         generate_predictions_for_texts(model, tokenizer, flat_split_inputs, args)
         if flat_split_inputs
         else []
     )
+    flat_split_predictions = postprocess_translations(raw_flat_split_predictions)
 
     records: list[dict[str, Any]] = []
     merged_split_predictions: list[str] = []
     split_cursor = 0
 
-    for transliteration, reference, plain_prediction, split_inputs in zip(
+    for transliteration, reference, raw_plain_prediction, plain_prediction, split_inputs in zip(
         transliterations,
         references,
+        raw_plain_predictions,
         plain_predictions,
         split_inputs_per_sample,
     ):
         split_count = len(split_inputs)
+        raw_split_predictions = raw_flat_split_predictions[split_cursor : split_cursor + split_count]
         split_predictions = flat_split_predictions[split_cursor : split_cursor + split_count]
         split_cursor += split_count
 
-        merged_split_prediction = " ".join(
-            prediction.strip() for prediction in split_predictions if prediction.strip()
+        raw_merged_split_prediction = " ".join(
+            prediction.strip() for prediction in raw_split_predictions if prediction.strip()
         ).strip()
+        merged_split_prediction = postprocess_translations([raw_merged_split_prediction])[0]
         merged_split_predictions.append(merged_split_prediction)
 
         records.append(
             {
                 "transliteration": transliteration,
                 "translation_reference": reference,
+                "raw_prediction_without_split": raw_plain_prediction,
                 "prediction_without_split": plain_prediction,
                 "split_applied": split_count > 1,
                 "split_segment_count": split_count,
                 "split_transliterations": " || ".join(split_inputs),
+                "raw_split_predictions": " || ".join(raw_split_predictions),
                 "split_predictions": " || ".join(split_predictions),
+                "raw_prediction_with_split": raw_merged_split_prediction,
                 "prediction_with_split": merged_split_prediction,
             }
         )
@@ -440,6 +455,7 @@ def warp_metric(p, tokenizer, args):
     # Unsloth環境では numpy 配列がそのまま渡されるため、整数であることを確認してデコード
     decoded_preds = tokenizer.batch_decode(preds.astype(np.int32), skip_special_tokens=True)
     decoded_labels = tokenizer.batch_decode(labels.astype(np.int32), skip_special_tokens=True)
+    decoded_preds = postprocess_translations([pred.strip() for pred in decoded_preds])
 
     print(f"Evaluation: Decoded {len(decoded_preds)} samples.")
     return compute_generation_metrics(decoded_preds, decoded_labels, args)
