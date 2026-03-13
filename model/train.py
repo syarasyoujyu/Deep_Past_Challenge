@@ -545,8 +545,6 @@ def main():
         tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        compute_metrics=lambda p: warp_metric(p, tokenizer, args),
-        preprocess_logits_for_metrics=preprocess_logits_for_metrics,
         args=sft_args,
         load_best_model_at_end=True,
     )
