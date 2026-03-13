@@ -241,19 +241,52 @@ def preprocess_logits_for_metrics(logits, labels):
     # argmaxを取り、整数型(int32)に変換して返す
     return logits.argmax(dim=-1).to(torch.int32)
 
-def compute_metrics_wrapper(eval_preds:EvalPrediction,tokenizer,args):
-        """SFTTrainerから渡されるEvalPredictionを分解して計算関数に渡す"""
-        # eval_preds.predictions: モデルの出力（通常はロジット。生成タスクではデコード済みの場合も）
-        # eval_preds.label_ids: 正解ラベル
-        preds, labels = eval_preds.predictions,eval_preds.label_ids
-        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
-        labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-        decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-        
-        # ※SFT（生成）の場合、ここでは単純なLoss計算以外が難しいことが多いため
-        # 後の generate_validation_predictions で一括計算する流れが一般的です。
-        # ひとまずエラーを消すには、型を合わせる必要があります。
-        return compute_generation_metrics(decoded_preds, decoded_labels, args=args)
+def _sanitize_token_ids(
+    token_ids: np.ndarray,
+    tokenizer,
+    fallback_token_id: int,
+) -> np.ndarray:
+    vocab_size = getattr(tokenizer, "vocab_size", None) or len(tokenizer)
+    sanitized = np.nan_to_num(token_ids, nan=fallback_token_id, posinf=fallback_token_id, neginf=0)
+    sanitized = np.clip(sanitized, 0, max(vocab_size - 1, 0))
+    return sanitized.astype(np.int64)
+
+
+def compute_metrics_wrapper(eval_preds: EvalPrediction, tokenizer, args):
+    """評価時の予測 token id を completion 部分だけ decode して生成系メトリクスを計算する。"""
+    preds, labels = eval_preds.predictions, eval_preds.label_ids
+
+    if isinstance(preds, tuple):
+        preds = preds[0]
+
+    preds = np.asarray(preds)
+    labels = np.asarray(labels)
+
+    if preds.ndim == 3:
+        if preds.shape[-1] == 1:
+            preds = np.squeeze(preds, axis=-1)
+        else:
+            preds = preds.argmax(axis=-1)
+
+    pad_token_id = tokenizer.pad_token_id
+    if pad_token_id is None:
+        pad_token_id = tokenizer.eos_token_id
+    if pad_token_id is None:
+        pad_token_id = 0
+
+    valid_label_mask = labels != -100
+    preds = np.where(valid_label_mask, preds, pad_token_id)
+    labels = np.where(valid_label_mask, labels, pad_token_id)
+
+    preds = _sanitize_token_ids(preds, tokenizer, pad_token_id)
+    labels = _sanitize_token_ids(labels, tokenizer, pad_token_id)
+
+    decoded_preds = tokenizer.batch_decode(preds.tolist(), skip_special_tokens=True)
+    decoded_labels = tokenizer.batch_decode(labels.tolist(), skip_special_tokens=True)
+    decoded_preds = postprocess_translations([pred.strip() for pred in decoded_preds])
+    decoded_labels = [label.strip() for label in decoded_labels]
+
+    return compute_generation_metrics(decoded_preds, decoded_labels, args=args)
 
 def generate_predictions_for_texts(
     model,
@@ -439,27 +472,6 @@ def log_validation_prediction_records(
 
     wandb.log({"eval/prediction_table": wandb.Table(dataframe=log_frame)})
 
-def warp_metric(p, tokenizer, args):
-    """SFTTrainerから渡される数値をテキストに変換し、メトリクス計算へ橋渡しする"""
-    preds, labels = p.predictions, p.label_ids
-
-    # 1. 予測値の次元調整 (安全策)
-    # [batch, seq, 1] のような形であれば最後の1を消す
-    if preds.ndim == 3 and preds.shape[-1] == 1:
-        preds = np.squeeze(preds, axis=-1)
-    
-    # 2. 正解ラベルの調整 (-100 を Pad ID に変換)
-    labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-
-    # 3. デコード処理
-    # Unsloth環境では numpy 配列がそのまま渡されるため、整数であることを確認してデコード
-    decoded_preds = tokenizer.batch_decode(preds.astype(np.int32), skip_special_tokens=True)
-    decoded_labels = tokenizer.batch_decode(labels.astype(np.int32), skip_special_tokens=True)
-    decoded_preds = postprocess_translations([pred.strip() for pred in decoded_preds])
-
-    print(f"Evaluation: Decoded {len(decoded_preds)} samples.")
-    return compute_generation_metrics(decoded_preds, decoded_labels, args)
-
 def build_dataset(frame, args, tokenizer, desc):
     """データセットをテキスト形式で作成（SFTTrainerの標準方式）"""
     dataset = Dataset.from_pandas(frame.reset_index(drop=True), preserve_index=False)
@@ -545,6 +557,8 @@ def main():
         tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
+        compute_metrics=lambda p: compute_metrics_wrapper(p, tokenizer, args),
+        preprocess_logits_for_metrics=preprocess_logits_for_metrics,
         args=sft_args,
         load_best_model_at_end=True,
     )
