@@ -4,12 +4,14 @@ import argparse
 import math
 import os
 from pathlib import Path
+from typing import Any
 
 from unsloth import FastLanguageModel
 
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ.setdefault("USE_TF", "0")
 import numpy as np
+import pandas as pd
 import sacrebleu
 import torch
 from bert_score import score as bert_score
@@ -23,13 +25,72 @@ from model.common import DATA_DIR, ROOT_DIR, read_train_frame, seed_everything
 
 DEFAULT_MODEL_NAME = "unsloth/gemma-2-9b-bnb-4bit"
 DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "gemma-2-9b-unsloth"
-DEFAULT_SYSTEM_PROMPT = "You are an expert translator from Akkadian transliteration to English."
+DEFAULT_SYSTEM_PROMPT = "You are a professional Akkadian translation expert skilled in functional equivalence translation."
 DEFAULT_USER_PROMPT_TEMPLATE = (
-    "Translate the following Akkadian transliteration into English.\n"
-    "Return only the English translation.\n\n"
-    "Akkadian transliteration:\n{source}"
+    "As an Akkadian translation expert, please translate the following text into English "
+    "following functional equivalence principles:\n\n"
+    "Translation requirements:\n"
+    "1. Accurately convey the semantic content of the original text\n"
+    "2. Consider cultural adaptation (convert unfamiliar concepts to target-culture "
+    "understandable concepts)\n"
+    "3. Maintain natural and fluent language\n\n"
+    "Original text: \"{source_text}\"\n\n"
+    "Please only provide the translation:\n"
 )
 
+def simple_sentence_splitter(text, max_length=200):
+    """
+    古代テキストの特徴を考慮したシンプルな文分割関数。
+    - 改行や複数スペースで分割
+    - 長すぎる文はスペースで分割して複数の文にする
+    """
+    if pd.isna(text):
+        return []
+
+    separators = [
+        '\n',
+        "  ", # 半角スペース×2
+    ]
+    
+    sentences = [text]
+    for sep in separators:
+        new_sentences = []
+        for sent in sentences:
+            new_sentences.extend(sent.split(sep))
+        sentences = new_sentences
+    
+    # Clean and filter
+    sentences = [s.strip() for s in sentences if s.strip()]
+    
+    # Split overly long sentences at logical break points
+    final_sentences = []
+    for sent in sentences:
+        if len(sent) <= max_length:
+            final_sentences.append(sent)
+        else:
+            # Split long sentences at spaces
+            words = sent.split()
+            current = []
+            for word in words:
+                current.append(word)
+                if len(' '.join(current)) > max_length:
+                    final_sentences.append(' '.join(current[:-1]))
+                    current = [word]
+            if current:
+                final_sentences.append(' '.join(current))
+    
+    return final_sentences
+
+
+def setup_wandb(args: argparse.Namespace) -> list[str]:
+    if args.disable_wandb:
+        os.environ["WANDB_DISABLED"] = "true"
+        return []
+
+    os.environ["WANDB_PROJECT"] = args.wandb_project
+    if args.wandb_entity:
+        os.environ["WANDB_ENTITY"] = args.wandb_entity
+    return [value.strip() for value in args.report_to.split(",") if value.strip()]
 
 def parse_bool(value: str | bool) -> bool:
     if isinstance(value, bool):
@@ -145,23 +206,13 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_prompt(source_text: str, args: argparse.Namespace) -> str:
-    user_prompt = args.user_prompt_template.format(source=source_text)
+    user_prompt = args.user_prompt_template.format(
+        source=source_text,
+        source_text=source_text,
+    )
     if args.system_prompt:
         return f"{args.system_prompt}\n\n{user_prompt}"
     return user_prompt
-
-def format_prompt_completion_batch(
-    examples: dict[str, list[str]],
-    args: argparse.Namespace,
-    eos_token: str,
-) -> dict[str, list[str]]:
-    texts: list[str] = []
-    for source_text, target_text in zip(examples["transliteration"], examples["translation"]):
-        # プロンプトと回答を結合し、最後にEOSトークンを付与
-        full_text = f"{build_prompt(source_text, args)}\n\n{target_text.rstrip()}{eos_token}"
-        texts.append(full_text)
-    return {"text": texts}
-
 
 
 def split_frame(frame, val_size: float, seed: int):
@@ -197,7 +248,12 @@ def compute_metrics_wrapper(eval_preds:EvalPrediction,tokenizer,args):
         # ひとまずエラーを消すには、型を合わせる必要があります。
         return compute_generation_metrics(decoded_preds, decoded_labels, args=args)
 
-def generate_validation_predictions(model, tokenizer, frame, args: argparse.Namespace) -> list[str]:
+def generate_predictions_for_texts(
+    model,
+    tokenizer,
+    source_texts: list[str],
+    args: argparse.Namespace,
+) -> list[str]:
     FastLanguageModel.for_inference(model)
     original_padding_side = tokenizer.padding_side
     tokenizer.padding_side = "left"
@@ -209,9 +265,9 @@ def generate_validation_predictions(model, tokenizer, frame, args: argparse.Name
     device = next(model.parameters()).device
     predictions: list[str] = []
 
-    for start in range(0, len(frame), batch_size):
-        batch = frame.iloc[start : start + batch_size]
-        prompts = [build_prompt(text, args) for text in batch["transliteration"].tolist()]
+    for start in range(0, len(source_texts), batch_size):
+        batch_texts = source_texts[start : start + batch_size]
+        prompts = [build_prompt(text, args) for text in batch_texts]
         encoded = tokenizer(
             prompts,
             return_tensors="pt",
@@ -238,10 +294,69 @@ def generate_validation_predictions(model, tokenizer, frame, args: argparse.Name
     return predictions
 
 
+def generate_validation_predictions(model, tokenizer, frame, args: argparse.Namespace) -> list[str]:
+    source_texts = frame["transliteration"].fillna("").astype(str).tolist()
+    return generate_predictions_for_texts(model, tokenizer, source_texts, args)
+
+
+def build_validation_prediction_records(
+    model,
+    tokenizer,
+    frame,
+    args: argparse.Namespace,
+) -> tuple[list[dict[str, Any]], list[str], list[str]]:
+    transliterations = frame["transliteration"].fillna("").astype(str).tolist()
+    references = frame["translation"].fillna("").astype(str).tolist()
+    plain_predictions = generate_predictions_for_texts(model, tokenizer, transliterations, args)
+
+    split_inputs_per_sample = [simple_sentence_splitter(text) for text in transliterations]
+    flat_split_inputs = [segment for segments in split_inputs_per_sample for segment in segments]
+    flat_split_predictions = (
+        generate_predictions_for_texts(model, tokenizer, flat_split_inputs, args)
+        if flat_split_inputs
+        else []
+    )
+
+    records: list[dict[str, Any]] = []
+    merged_split_predictions: list[str] = []
+    split_cursor = 0
+
+    for transliteration, reference, plain_prediction, split_inputs in zip(
+        transliterations,
+        references,
+        plain_predictions,
+        split_inputs_per_sample,
+    ):
+        split_count = len(split_inputs)
+        split_predictions = flat_split_predictions[split_cursor : split_cursor + split_count]
+        split_cursor += split_count
+
+        merged_split_prediction = " ".join(
+            prediction.strip() for prediction in split_predictions if prediction.strip()
+        ).strip()
+        merged_split_predictions.append(merged_split_prediction)
+
+        records.append(
+            {
+                "transliteration": transliteration,
+                "translation_reference": reference,
+                "prediction_without_split": plain_prediction,
+                "split_applied": split_count > 1,
+                "split_segment_count": split_count,
+                "split_transliterations": " || ".join(split_inputs),
+                "split_predictions": " || ".join(split_predictions),
+                "prediction_with_split": merged_split_prediction,
+            }
+        )
+
+    return records, plain_predictions, merged_split_predictions
+
+
 def compute_generation_metrics(
     predictions: list[str],
     references: list[str],
     args: argparse.Namespace,
+    metric_prefix: str = "eval",
 ) -> dict[str, float]:
     cleaned_predictions = [prediction.strip() for prediction in predictions]
     cleaned_references = [reference.strip() for reference in references]
@@ -273,15 +388,41 @@ def compute_generation_metrics(
 
     geometric_mean = math.sqrt((bleu / 100.0) * (chrfpp / 100.0)) * 100.0
     logs={
-        "eval_bleu": round(bleu, 4),
-        "eval_rouge2_precision": round(float(np.mean(rouge2_precision)), 4),
-        "eval_rouge2_recall": round(float(np.mean(rouge2_recall)), 4),
-        "eval_rouge2_f1": round(float(np.mean(rouge2_f1)), 4),
-        "eval_bertscore": round(float(bertscore_f1.mean().item()), 4),
-        "eval_chrfpp": round(chrfpp, 4),
-        "eval_bleu_chrfpp_geometric_mean": round(geometric_mean, 4),
+        f"{metric_prefix}_bleu": round(bleu, 4),
+        f"{metric_prefix}_rouge2_precision": round(float(np.mean(rouge2_precision)), 4),
+        f"{metric_prefix}_rouge2_recall": round(float(np.mean(rouge2_recall)), 4),
+        f"{metric_prefix}_rouge2_f1": round(float(np.mean(rouge2_f1)), 4),
+        f"{metric_prefix}_bertscore": round(float(bertscore_f1.mean().item()), 4),
+        f"{metric_prefix}_chrfpp": round(chrfpp, 4),
+        f"{metric_prefix}_bleu_chrfpp_geometric_mean": round(geometric_mean, 4),
     }
     return logs
+
+
+def log_validation_prediction_records(
+    records: list[dict[str, Any]],
+    output_dir: Path,
+    disable_wandb: bool,
+) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    log_path = output_dir / "validation_prediction_logs.csv"
+    log_frame = pd.DataFrame(records)
+    log_frame.to_csv(log_path, index=False)
+    print(f"Saved validation prediction logs to {log_path}")
+
+    if disable_wandb:
+        return
+
+    try:
+        import wandb
+    except ImportError:
+        print("wandb is not installed; skipped validation prediction table logging.")
+        return
+
+    if wandb.run is None:
+        return
+
+    wandb.log({"eval/prediction_table": wandb.Table(dataframe=log_frame)})
 
 def warp_metric(p, tokenizer, args):
     """SFTTrainerから渡される数値をテキストに変換し、メトリクス計算へ橋渡しする"""
@@ -311,8 +452,7 @@ def build_dataset(frame, args, tokenizer, desc):
     def format_func(examples):
         texts = []
         for s, t in zip(examples["transliteration"], examples["translation"]):
-            user_prompt = args.user_prompt_template.format(source=s)
-            full_text = f"{args.system_prompt}\n\n{user_prompt}\n\n{t.rstrip()}{eos_token}"
+            full_text = f"{build_prompt(s, args)}\n\n{t.rstrip()}{eos_token}"
             texts.append(full_text)
         return {"text": texts}
 
@@ -345,6 +485,8 @@ def load_model_and_tokenizer(args):
 def main():
     args = parse_args() # 既存の引数パース関数
     seed_everything(args.seed)
+    report_to = setup_wandb(args)
+    args.output_dir.mkdir(parents=True, exist_ok=True)
 
     model, tokenizer = load_model_and_tokenizer(args)
     
@@ -352,7 +494,11 @@ def main():
     train_frame, val_frame = split_frame(frame, args.val_size, args.seed)
     
     train_dataset = build_dataset(train_frame, args, tokenizer, "Formatting train dataset")
-    eval_dataset = build_dataset(val_frame, args, tokenizer, "Formatting eval dataset")
+    eval_dataset = (
+        build_dataset(val_frame, args, tokenizer, "Formatting eval dataset")
+        if val_frame is not None
+        else None
+    )
 
     # 公式ノートブックに準拠したシンプルな設定
     sft_args = SFTConfig(
@@ -373,7 +519,8 @@ def main():
         fp16=False, # Gemma 3 のログに従い float32/bf16 を優先
         bf16=torch.cuda.is_bf16_supported(),
         optim="adamw_8bit",
-        report_to="wandb",
+        report_to=report_to,
+        run_name=args.wandb_run_name,
         seed=args.seed,
     )
 
@@ -396,13 +543,27 @@ def main():
     # --- 学習完了後の一括評価（VRAMを節約しつつ正確な指標を出す） ---
     if val_frame is not None:
         print("Calculating final evaluation metrics...")
-        predictions = generate_validation_predictions(model, tokenizer, val_frame, args)
-        metrics = compute_generation_metrics(
-            predictions=predictions,
-            references=val_frame["translation"].tolist(),
-            args=args
+        records, plain_predictions, split_predictions = build_validation_prediction_records(
+            model,
+            tokenizer,
+            val_frame,
+            args,
         )
+        metrics = compute_generation_metrics(
+            predictions=plain_predictions,
+            references=val_frame["translation"].tolist(),
+            args=args,
+        )
+        split_metrics = compute_generation_metrics(
+            predictions=split_predictions,
+            references=val_frame["translation"].tolist(),
+            args=args,
+            metric_prefix="eval_split",
+        )
+        metrics.update(split_metrics)
         trainer.log_metrics("eval", metrics)
+        trainer.save_metrics("eval", metrics)
+        log_validation_prediction_records(records, args.output_dir, args.disable_wandb)
         print(metrics)
 
     # 保存
