@@ -49,7 +49,7 @@ def extract_lexicon_matches(transliteration: str) -> list[dict[str, str]]:
     lexicon_index = load_lexicon_index()
     definition_index = load_dictionary_definition_index()
     matches: list[dict[str, str]] = []
-    seen: set[tuple[str, str, str, str]] = set()
+    seen: set[tuple[str, str, str, str, str]] = set()
 
     for index, token in enumerate(transliteration_tokens):
         for form_tokens, row in lexicon_index.get(token, []):
@@ -57,7 +57,13 @@ def extract_lexicon_matches(transliteration: str) -> list[dict[str, str]]:
             if transliteration_tokens[index : index + form_length] != form_tokens:
                 continue
 
-            key = (row["form"], row["type"], row["lexeme"], row["Female(f)"])
+            key = (
+                row["form"],
+                row["norm"],
+                row["type"],
+                row["lexeme"],
+                row["Female(f)"],
+            )
             if key in seen:
                 continue
             seen.add(key)
@@ -66,6 +72,7 @@ def extract_lexicon_matches(transliteration: str) -> list[dict[str, str]]:
             matches.append(
                 {
                     "form": row["form"],
+                    "norm": row["norm"],
                     "lexeme": row["lexeme"],
                     "type": row["type"],
                     "female": row["Female(f)"],

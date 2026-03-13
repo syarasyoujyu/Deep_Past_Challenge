@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import html
 import os
+import statistics
 import tempfile
 from pathlib import Path
 from urllib.parse import parse_qs
@@ -17,7 +18,7 @@ except ImportError:
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_PATH = PROJECT_ROOT / "data" / "train_truncated.csv"
+DATA_PATH = PROJECT_ROOT / "data" / "train_refined.csv"
 HOST = os.environ.get("APP_HOST", "127.0.0.1")
 PORT = int(os.environ.get("APP_PORT", "8000"))
 
@@ -25,6 +26,134 @@ PORT = int(os.environ.get("APP_PORT", "8000"))
 def load_rows() -> list[dict[str, str]]:
     with DATA_PATH.open("r", encoding="utf-8", newline="") as csv_file:
         return list(csv.DictReader(csv_file))
+
+
+def count_words(text: str) -> int:
+    return len([token for token in text.split(" ") if token])
+
+
+def compute_length_ratio_stats(rows: list[dict[str, str]]) -> dict[str, float]:
+    ratios: list[float] = []
+
+    for row in rows:
+        transliteration_word_count = count_words(row["transliteration"])
+        if transliteration_word_count == 0:
+            continue
+
+        translation_word_count = count_words(row["translation"])
+        ratios.append(translation_word_count / transliteration_word_count)
+
+    if not ratios:
+        return {
+            "mean": 0.0,
+            "median": 0.0,
+            "variance": 0.0,
+            "min": 0.0,
+            "q1": 0.0,
+            "q3": 0.0,
+            "max": 0.0,
+            "lower_whisker": 0.0,
+            "upper_whisker": 0.0,
+            "left_outliers": 0,
+            "right_outliers": 0,
+        }
+
+    sorted_ratios = sorted(ratios)
+    median = statistics.median(sorted_ratios)
+    if len(sorted_ratios) == 1:
+        q1 = median
+        q3 = median
+    else:
+        quartiles = statistics.quantiles(sorted_ratios, n=4, method="inclusive")
+        q1 = quartiles[0]
+        q3 = quartiles[2]
+
+    iqr = q3 - q1
+    lower_fence = q1 - (1.5 * iqr)
+    upper_fence = q3 + (1.5 * iqr)
+
+    non_outliers = [ratio for ratio in sorted_ratios if lower_fence <= ratio <= upper_fence]
+    lower_whisker = non_outliers[0] if non_outliers else sorted_ratios[0]
+    upper_whisker = non_outliers[-1] if non_outliers else sorted_ratios[-1]
+    left_outliers = sum(1 for ratio in sorted_ratios if ratio < lower_fence)
+    right_outliers = sum(1 for ratio in sorted_ratios if ratio > upper_fence)
+
+    return {
+        "mean": statistics.mean(sorted_ratios),
+        "median": median,
+        "variance": statistics.pvariance(sorted_ratios),
+        "min": sorted_ratios[0],
+        "q1": q1,
+        "q3": q3,
+        "max": sorted_ratios[-1],
+        "lower_whisker": lower_whisker,
+        "upper_whisker": upper_whisker,
+        "left_outliers": left_outliers,
+        "right_outliers": right_outliers,
+    }
+
+
+def render_ratio_boxplot(ratio_stats: dict[str, float]) -> str:
+    width = 560
+    height = 120
+    plot_left = 52
+    plot_right = width - 52
+    line_y = 46
+    box_top = 28
+    box_height = 32
+    minimum = ratio_stats["lower_whisker"]
+    maximum = ratio_stats["upper_whisker"]
+
+    def scale(value: float) -> float:
+        if maximum <= minimum:
+            return width / 2
+        usable_width = plot_right - plot_left
+        return plot_left + ((value - minimum) / (maximum - minimum)) * usable_width
+
+    whisker_min_x = scale(ratio_stats["lower_whisker"])
+    q1_x = scale(ratio_stats["q1"])
+    median_x = scale(ratio_stats["median"])
+    q3_x = scale(ratio_stats["q3"])
+    whisker_max_x = scale(ratio_stats["upper_whisker"])
+    left_outlier_x = 22
+    right_outlier_x = width - 22
+    left_outlier_html = ""
+    right_outlier_html = ""
+    if ratio_stats["left_outliers"]:
+        left_outlier_html = (
+            f'<circle cx="{left_outlier_x}" cy="{line_y}" r="5" class="boxplot-outlier" />'
+            f'<text x="{left_outlier_x}" y="18" class="boxplot-label" text-anchor="middle">'
+            f'{ratio_stats["left_outliers"]} low outlier(s)</text>'
+        )
+    if ratio_stats["right_outliers"]:
+        right_outlier_html = (
+            f'<circle cx="{right_outlier_x}" cy="{line_y}" r="5" class="boxplot-outlier" />'
+            f'<text x="{right_outlier_x}" y="18" class="boxplot-label" text-anchor="middle">'
+            f'{ratio_stats["right_outliers"]} high outlier(s)</text>'
+        )
+
+    return f"""
+      <div class="boxplot-block">
+        <h3>Ratio Box Plot(translation/transliteration)</h3>
+        <svg viewBox="0 0 {width} {height}" class="boxplot" role="img" aria-label="translation/transliteration 単語数比の箱ひげ図">
+          <line x1="{whisker_min_x:.2f}" y1="{line_y}" x2="{whisker_max_x:.2f}" y2="{line_y}" class="boxplot-line" />
+          <line x1="{whisker_min_x:.2f}" y1="30" x2="{whisker_min_x:.2f}" y2="62" class="boxplot-line" />
+          <line x1="{whisker_max_x:.2f}" y1="30" x2="{whisker_max_x:.2f}" y2="62" class="boxplot-line" />
+          <rect x="{q1_x:.2f}" y="{box_top}" width="{max(q3_x - q1_x, 1):.2f}" height="{box_height}" class="boxplot-box" />
+          <line x1="{median_x:.2f}" y1="{box_top}" x2="{median_x:.2f}" y2="{box_top + box_height}" class="boxplot-median" />
+          {left_outlier_html}
+          {right_outlier_html}
+          <text x="{whisker_min_x:.2f}" y="82" class="boxplot-label" text-anchor="middle">whisker {ratio_stats["lower_whisker"]:.3f}</text>
+          <text x="{q1_x:.2f}" y="100" class="boxplot-label" text-anchor="middle">Q1 {ratio_stats["q1"]:.3f}</text>
+          <text x="{median_x:.2f}" y="82" class="boxplot-label" text-anchor="middle">med {ratio_stats["median"]:.3f}</text>
+          <text x="{q3_x:.2f}" y="100" class="boxplot-label" text-anchor="middle">Q3 {ratio_stats["q3"]:.3f}</text>
+          <text x="{whisker_max_x:.2f}" y="82" class="boxplot-label" text-anchor="middle">whisker {ratio_stats["upper_whisker"]:.3f}</text>
+        </svg>
+        <p class="boxplot-note">
+          whisker は外れ値を除いた範囲です。全体の最小値は {ratio_stats["min"]:.3f}、最大値は {ratio_stats["max"]:.3f}。
+        </p>
+      </div>
+    """
 
 
 def clip_text(text: str, limit: int = 56) -> str:
@@ -107,6 +236,7 @@ def get_request_data(environ: dict[str, object]) -> dict[str, str]:
 def render_page(
     oare_options_html: str,
     same_no_text_count: int,
+    ratio_stats: dict[str, float],
     oare_id: str = "",
     transliteration: str = "",
     translation: str = "",
@@ -125,9 +255,11 @@ def render_page(
             f'<div class="message {html.escape(message_type)}">{html.escape(message)}</div>'
         )
 
+    boxplot_html = render_ratio_boxplot(ratio_stats)
     summary_html = f"""
       <section class="card summary-card">
         <p><strong>Same=No を含む文章数:</strong> {same_no_text_count}</p>
+        {boxplot_html}
       </section>
     """
     if oare_id and not not_found:
@@ -135,6 +267,7 @@ def render_page(
           <section class="card summary-card">
             <p><strong>Same=No を含む文章数:</strong> {same_no_text_count}</p>
             <p><strong>選択中レコードの Same=No 件数:</strong> {current_same_no_count}</p>
+            {boxplot_html}
           </section>
         """
 
@@ -149,6 +282,7 @@ def render_page(
             lexicon_rows += f"""
             <tr>
               <td>{html.escape(entry["form"])}</td>
+              <td>{html.escape(entry["norm"])}</td>
               <td>{html.escape(entry["lexeme"])}</td>
               <td>{html.escape(entry["type"])}</td>
               <td>{female_value}</td>
@@ -170,7 +304,8 @@ def render_page(
                 <thead>
                   <tr>
                     <th>Form</th>
-                    <th>Lexeme</th>
+                    <th>Norm</th>
+                    <th>Lexeme (Dictionary Word)</th>
                     <th>Type</th>
                     <th>Female(f)</th>
                     <th>Definition</th>
@@ -332,6 +467,57 @@ def render_page(
         margin-top: 8px;
       }}
 
+      .boxplot-block {{
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }}
+
+      .boxplot-block h3 {{
+        margin: 0 0 10px;
+        font-size: 1rem;
+      }}
+
+      .boxplot {{
+        width: 100%;
+        height: auto;
+        overflow: visible;
+      }}
+
+      .boxplot-line {{
+        stroke: #7b6758;
+        stroke-width: 2;
+      }}
+
+      .boxplot-box {{
+        fill: rgba(159, 58, 36, 0.16);
+        stroke: var(--accent);
+        stroke-width: 2;
+      }}
+
+      .boxplot-median {{
+        stroke: var(--accent-strong);
+        stroke-width: 3;
+      }}
+
+      .boxplot-label {{
+        fill: var(--muted);
+        font-size: 12px;
+        font-family: "SFMono-Regular", Consolas, monospace;
+      }}
+
+      .boxplot-outlier {{
+        fill: var(--accent-strong);
+        stroke: white;
+        stroke-width: 1.5;
+      }}
+
+      .boxplot-note {{
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }}
+
       .card {{
         background: var(--panel);
         border: 1px solid var(--line);
@@ -342,8 +528,9 @@ def render_page(
 
       .search {{
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
         gap: 12px;
+        align-items: end;
         margin-bottom: 20px;
       }}
 
@@ -550,8 +737,21 @@ def render_page(
       <section class="card">
         <form method="get" class="search">
           <div>
+            <label for="oare_id_input">oare_id を入力</label>
+            <input
+              id="oare_id_input"
+              name="oare_id"
+              type="text"
+              value="{html.escape(oare_id)}"
+              placeholder="例: 821b6253-72c8-43a5-93e1-0b40b5f9a7fb"
+            >
+          </div>
+          <div>
             <label for="oare_id">oare_id</label>
-            <select id="oare_id" name="oare_id" onchange="if (this.value) this.form.submit();">
+            <select
+              id="oare_id"
+              onchange="if (this.value) {{ document.getElementById('oare_id_input').value = this.value; this.form.submit(); }}"
+            >
               {oare_options_html}
             </select>
           </div>
@@ -573,6 +773,7 @@ def app(environ: dict[str, object], start_response):
     method = str(environ.get("REQUEST_METHOD", "GET")).upper()
     data = get_request_data(environ)
     rows = load_rows()
+    ratio_stats = compute_length_ratio_stats(rows)
     oare_id = data.get("oare_id", "").strip()
     message = ""
     message_type = "info"
@@ -618,6 +819,7 @@ def app(environ: dict[str, object], start_response):
     body = render_page(
         oare_options_html=build_oare_options(rows, oare_id),
         same_no_text_count=count_texts_with_same_no(),
+        ratio_stats=ratio_stats,
         oare_id=oare_id,
         transliteration=transliteration,
         translation=translation,
