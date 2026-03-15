@@ -4,6 +4,7 @@ import argparse
 import math
 import os
 import re
+import warnings
 from pathlib import Path
 
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
@@ -112,8 +113,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--gradient-checkpointing", type=parse_bool, default=True)
     parser.add_argument("--bf16", type=parse_bool, default=False)
     parser.add_argument("--fp16", type=parse_bool, default=True)
-    parser.add_argument("--torch-dtype", type=parse_optional_torch_dtype, default=None)
-    parser.add_argument("--attn-implementation", type=str, default="sdpa")
+    parser.add_argument("--dtype", dest="dtype", type=parse_optional_torch_dtype, default=None)
+    parser.add_argument("--torch-dtype", dest="dtype", type=parse_optional_torch_dtype)
+    parser.add_argument("--attn-implementation", type=str, default="eager")
     parser.add_argument("--optim", type=str, default="adafactor")
     parser.add_argument("--preprocessing-num-workers", type=int, default=1)
     parser.add_argument("--normalize-source", type=parse_bool, default=True)
@@ -196,6 +198,28 @@ def split_frame(frame, val_size: float, seed: int):
     return train_frame, val_frame
 
 
+def load_model(args: argparse.Namespace):
+    model_kwargs = {"attn_implementation": args.attn_implementation}
+    if args.dtype is not None:
+        model_kwargs["dtype"] = args.dtype
+
+    try:
+        return AutoModelForSeq2SeqLM.from_pretrained(args.model_name, **model_kwargs)
+    except ValueError as error:
+        if args.attn_implementation != "eager" and "scaled_dot_product_attention" in str(error):
+            warnings.warn(
+                (
+                    f"{args.model_name} does not support attn_implementation="
+                    f'"{args.attn_implementation}". Falling back to "eager".'
+                ),
+                stacklevel=2,
+            )
+            fallback_kwargs = dict(model_kwargs)
+            fallback_kwargs["attn_implementation"] = "eager"
+            return AutoModelForSeq2SeqLM.from_pretrained(args.model_name, **fallback_kwargs)
+        raise
+
+
 def main() -> None:
     args = parse_args()
     seed_everything(args.seed)
@@ -225,10 +249,7 @@ def main() -> None:
     dataset = DatasetDict(dataset_dict)
 
     tokenizer = load_tokenizer(args.model_name)
-    model_kwargs = {"attn_implementation": args.attn_implementation}
-    if args.torch_dtype is not None:
-        model_kwargs["torch_dtype"] = args.torch_dtype
-    model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name, **model_kwargs)
+    model = load_model(args)
     if args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
         model.config.use_cache = False
