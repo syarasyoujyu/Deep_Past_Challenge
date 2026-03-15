@@ -12,6 +12,7 @@ os.environ.setdefault("USE_TF", "0")
 import numpy as np
 import sacrebleu
 import torch
+from bert_score import score as bert_score
 from datasets import Dataset, DatasetDict
 from sklearn.model_selection import train_test_split
 from transformers import (
@@ -105,6 +106,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--save-total-limit", type=int, default=2)
     parser.add_argument("--num-beams", type=int, default=4)
     parser.add_argument("--length-penalty", type=float, default=1.0)
+    parser.add_argument("--bertscore-model-type", type=str, default=None)
+    parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--label-smoothing-factor", type=float, default=0.0)
     parser.add_argument("--gradient-checkpointing", type=parse_bool, default=True)
     parser.add_argument("--bf16", type=parse_bool, default=False)
@@ -273,19 +276,29 @@ def main() -> None:
         decoded_predictions = [prediction.strip() for prediction in decoded_predictions]
         decoded_labels = [label.strip() for label in decoded_labels]
 
-        bleu = sacrebleu.corpus_bleu(decoded_predictions, [decoded_labels]).score
         chrfpp = sacrebleu.corpus_chrf(
             decoded_predictions,
             [decoded_labels],
             word_order=2,
         ).score
+        _, _, bertscore_f1 = bert_score(
+            decoded_predictions,
+            decoded_labels,
+            lang="en",
+            model_type=args.bertscore_model_type,
+            batch_size=args.bertscore_batch_size,
+            device="cuda" if torch.cuda.is_available() else "cpu",
+            verbose=False,
+        )
+        bertscore = float(bertscore_f1.mean().item())
+        geometric_mean = math.sqrt(max(bertscore, 0.0) * max(chrfpp / 100.0, 0.0)) * 100.0
         prediction_lengths = [
             np.count_nonzero(prediction != tokenizer.pad_token_id) for prediction in predictions
         ]
         return {
-            "bleu": round(float(bleu), 4),
+            "bertscore": round(bertscore, 4),
             "chrfpp": round(float(chrfpp), 4),
-            "geometric_mean": round(float(math.sqrt(max(bleu, 0.0) * max(chrfpp, 0.0))), 4),
+            "bertscore_chrfpp_geometric_mean": round(float(geometric_mean), 4),
             "gen_len": round(float(np.mean(prediction_lengths)), 4),
         }
 
@@ -309,7 +322,7 @@ def main() -> None:
         save_steps=args.save_steps,
         save_total_limit=args.save_total_limit,
         load_best_model_at_end=has_validation,
-        metric_for_best_model="geometric_mean" if has_validation else None,
+        metric_for_best_model="bertscore_chrfpp_geometric_mean" if has_validation else None,
         greater_is_better=True,
         generation_max_length=args.max_target_length,
         generation_num_beams=args.num_beams,
