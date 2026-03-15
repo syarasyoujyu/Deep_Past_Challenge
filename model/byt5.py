@@ -199,9 +199,20 @@ def split_frame(frame, val_size: float, seed: int):
 
 
 def load_model(args: argparse.Namespace):
+    load_dtype = args.dtype
+    if args.fp16 and load_dtype == torch.float16:
+        warnings.warn(
+            (
+                "--fp16 true with --dtype float16 loads trainable weights in FP16 and breaks "
+                "GradScaler. Ignoring --dtype float16 and relying on AMP autocast instead."
+            ),
+            stacklevel=2,
+        )
+        load_dtype = None
+
     model_kwargs = {"attn_implementation": args.attn_implementation}
-    if args.dtype is not None:
-        model_kwargs["dtype"] = args.dtype
+    if load_dtype is not None:
+        model_kwargs["dtype"] = load_dtype
 
     try:
         return AutoModelForSeq2SeqLM.from_pretrained(args.model_name, **model_kwargs)
