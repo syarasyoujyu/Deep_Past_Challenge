@@ -82,6 +82,16 @@ def parse_optional_torch_dtype(value: str | None) -> torch.dtype | None:
     return mapping[normalized]
 
 
+def parse_interval_strategy(value: str) -> str:
+    normalized = value.strip().lower()
+    allowed = {"no", "steps", "epoch"}
+    if normalized not in allowed:
+        raise argparse.ArgumentTypeError(
+            f"invalid strategy: {value}. expected one of {sorted(allowed)}"
+        )
+    return normalized
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fine-tune google/byt5-* for Akkadian transliteration to English."
@@ -102,6 +112,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--num-train-epochs", type=float, default=10.0)
     parser.add_argument("--warmup-ratio", type=float, default=0.05)
     parser.add_argument("--logging-steps", type=int, default=10)
+    parser.add_argument("--eval-strategy", type=parse_interval_strategy, default="epoch")
+    parser.add_argument("--save-strategy", type=parse_interval_strategy, default="epoch")
     parser.add_argument("--eval-steps", type=int, default=100)
     parser.add_argument("--save-steps", type=int, default=100)
     parser.add_argument("--save-total-limit", type=int, default=2)
@@ -125,6 +137,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--normalize-breaks", type=parse_bool, default=True)
     parser.add_argument("--remove-editorial-marks", type=parse_bool, default=True)
     parser.add_argument("--strip-word-dividers", type=parse_bool, default=False)
+    parser.add_argument("--debug-first-batch", type=parse_bool, default=True)
     parser.add_argument("--wandb-project", type=str, default="deep-past-challenge")
     parser.add_argument("--wandb-run-name", type=str, default=None)
     parser.add_argument("--wandb-entity", type=str, default=None)
@@ -231,6 +244,87 @@ def load_model(args: argparse.Namespace):
         raise
 
 
+def sanitize_token_ids(token_ids, tokenizer, tensor_name: str) -> np.ndarray:
+    token_ids = np.asarray(token_ids)
+    if token_ids.ndim == 3:
+        warnings.warn(
+            f"{tensor_name} arrived as logits with shape {token_ids.shape}; applying argmax before decode.",
+            stacklevel=2,
+        )
+        token_ids = token_ids.argmax(axis=-1)
+
+    token_ids = token_ids.astype(np.int64, copy=False)
+    pad_token_id = tokenizer.pad_token_id if tokenizer.pad_token_id is not None else 0
+    unk_token_id = tokenizer.unk_token_id if tokenizer.unk_token_id is not None else pad_token_id
+    max_token_id = max(getattr(tokenizer, "vocab_size", 0), len(tokenizer)) - 1
+
+    invalid_mask = (token_ids < 0) | (token_ids > max_token_id)
+    if np.any(invalid_mask):
+        invalid_count = int(invalid_mask.sum())
+        warnings.warn(
+            (
+                f"{tensor_name} contains {invalid_count} invalid token ids outside "
+                f"[0, {max_token_id}]; replacing them with unk_token_id={unk_token_id}."
+            ),
+            stacklevel=2,
+        )
+        token_ids = token_ids.copy()
+        token_ids[invalid_mask] = unk_token_id
+
+    return token_ids
+
+
+def debug_first_batch(tokenized_train, data_collator, model, args) -> dict[str, float] | None:
+    if not args.debug_first_batch or len(tokenized_train) == 0:
+        return None
+
+    sample_count = min(args.per_device_train_batch_size, len(tokenized_train))
+    features = [tokenized_train[index] for index in range(sample_count)]
+    batch = data_collator(features)
+    valid_label_tokens = int((batch["labels"] != -100).sum().item())
+
+    model_device = next(model.parameters()).device
+    batch = {
+        key: value.to(model_device) if isinstance(value, torch.Tensor) else value
+        for key, value in batch.items()
+    }
+
+    was_training = model.training
+    model.eval()
+    try:
+        with torch.no_grad():
+            outputs = model(**batch)
+        manual_loss = float(outputs.loss.item())
+    finally:
+        if was_training:
+            model.train()
+
+    metrics = {
+        "debug_first_batch_samples": float(sample_count),
+        "debug_first_batch_valid_label_tokens": float(valid_label_tokens),
+        "debug_first_batch_manual_loss": float(manual_loss),
+    }
+    print(
+        "[debug:first_batch] "
+        f"samples={sample_count} "
+        f"valid_label_tokens={valid_label_tokens} "
+        f"manual_loss={manual_loss:.8f}"
+    )
+    return metrics
+
+
+def resolve_interval_strategy(
+    requested_strategy: str,
+    has_validation: bool,
+    strategy_name: str,
+) -> str:
+    if requested_strategy == "no":
+        return "no"
+    if not has_validation:
+        return "no"
+    return requested_strategy
+
+
 def main() -> None:
     args = parse_args()
     seed_everything(args.seed)
@@ -295,13 +389,16 @@ def main() -> None:
         model=model,
         pad_to_multiple_of=pad_to_multiple_of,
     )
+    debug_metrics = debug_first_batch(tokenized["train"], data_collator, model, args)
 
     def compute_metrics(eval_prediction) -> dict[str, float]:
         predictions, labels = eval_prediction
         if isinstance(predictions, tuple):
             predictions = predictions[0]
 
+        predictions = sanitize_token_ids(predictions, tokenizer, "predictions")
         labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+        labels = sanitize_token_ids(labels, tokenizer, "labels")
         decoded_predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
@@ -334,11 +431,14 @@ def main() -> None:
             "gen_len": round(float(np.mean(prediction_lengths)), 4),
         }
 
+    eval_strategy = resolve_interval_strategy(args.eval_strategy, has_validation, "eval")
+    save_strategy = resolve_interval_strategy(args.save_strategy, has_validation, "save")
+
     training_args = Seq2SeqTrainingArguments(
         output_dir=str(args.output_dir),
         overwrite_output_dir=True,
         do_train=True,
-        do_eval=has_validation,
+        do_eval=eval_strategy != "no",
         predict_with_generate=True,
         per_device_train_batch_size=args.per_device_train_batch_size,
         per_device_eval_batch_size=args.per_device_eval_batch_size,
@@ -348,13 +448,15 @@ def main() -> None:
         num_train_epochs=args.num_train_epochs,
         warmup_ratio=args.warmup_ratio,
         logging_steps=args.logging_steps,
-        eval_strategy="steps" if has_validation else "no",
-        save_strategy="steps" if has_validation else "epoch",
-        eval_steps=args.eval_steps,
-        save_steps=args.save_steps,
+        eval_strategy=eval_strategy,
+        save_strategy=save_strategy,
+        eval_steps=args.eval_steps if eval_strategy == "steps" else None,
+        save_steps=args.save_steps if save_strategy == "steps" else None,
         save_total_limit=args.save_total_limit,
-        load_best_model_at_end=has_validation,
-        metric_for_best_model="bertscore_chrfpp_geometric_mean" if has_validation else None,
+        load_best_model_at_end=eval_strategy != "no",
+        metric_for_best_model=(
+            "bertscore_chrfpp_geometric_mean" if eval_strategy != "no" else None
+        ),
         greater_is_better=True,
         generation_max_length=args.max_target_length,
         generation_num_beams=args.num_beams,
@@ -376,18 +478,20 @@ def main() -> None:
         model=model,
         args=training_args,
         train_dataset=tokenized["train"],
-        eval_dataset=tokenized["validation"] if has_validation else None,
+        eval_dataset=tokenized["validation"] if eval_strategy != "no" else None,
         processing_class=tokenizer,
         data_collator=data_collator,
-        compute_metrics=compute_metrics if has_validation else None,
+        compute_metrics=compute_metrics if eval_strategy != "no" else None,
     )
+    if debug_metrics:
+        trainer.log(debug_metrics)
 
     trainer.train()
     trainer.save_model()
     tokenizer.save_pretrained(args.output_dir)
     trainer.save_state()
 
-    if has_validation:
+    if eval_strategy != "no":
         eval_metrics = trainer.evaluate(**generation_config)
         trainer.log_metrics("eval", eval_metrics)
         trainer.save_metrics("eval", eval_metrics)
