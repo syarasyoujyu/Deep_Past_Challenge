@@ -123,8 +123,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--label-smoothing-factor", type=float, default=0.0)
     parser.add_argument("--gradient-checkpointing", type=parse_bool, default=True)
-    parser.add_argument("--bf16", type=parse_bool, default=False)
-    parser.add_argument("--fp16", type=parse_bool, default=True)
     parser.add_argument("--dtype", dest="dtype", type=parse_optional_torch_dtype, default=None)
     parser.add_argument("--torch-dtype", dest="dtype", type=parse_optional_torch_dtype)
     parser.add_argument("--attn-implementation", type=str, default="eager")
@@ -213,15 +211,6 @@ def split_frame(frame, val_size: float, seed: int):
 
 def load_model(args: argparse.Namespace):
     load_dtype = args.dtype
-    if args.fp16 and load_dtype == torch.float16:
-        warnings.warn(
-            (
-                "--fp16 true with --dtype float16 loads trainable weights in FP16 and breaks "
-                "GradScaler. Ignoring --dtype float16 and relying on AMP autocast instead."
-            ),
-            stacklevel=2,
-        )
-        load_dtype = None
 
     model_kwargs = {"attn_implementation": args.attn_implementation}
     if load_dtype is not None:
@@ -258,18 +247,33 @@ def sanitize_token_ids(token_ids, tokenizer, tensor_name: str) -> np.ndarray:
     unk_token_id = tokenizer.unk_token_id if tokenizer.unk_token_id is not None else pad_token_id
     max_token_id = max(getattr(tokenizer, "vocab_size", 0), len(tokenizer)) - 1
 
-    invalid_mask = (token_ids < 0) | (token_ids > max_token_id)
-    if np.any(invalid_mask):
-        invalid_count = int(invalid_mask.sum())
+    negative_mask = token_ids < 0
+    overflow_mask = token_ids > max_token_id
+
+    if np.any(negative_mask):
+        negative_count = int(negative_mask.sum())
         warnings.warn(
             (
-                f"{tensor_name} contains {invalid_count} invalid token ids outside "
-                f"[0, {max_token_id}]; replacing them with unk_token_id={unk_token_id}."
+                f"{tensor_name} contains {negative_count} negative token ids; "
+                f"replacing them with pad_token_id={pad_token_id}."
             ),
             stacklevel=2,
         )
         token_ids = token_ids.copy()
-        token_ids[invalid_mask] = unk_token_id
+        token_ids[negative_mask] = pad_token_id
+
+    if np.any(overflow_mask):
+        overflow_count = int(overflow_mask.sum())
+        warnings.warn(
+            (
+                f"{tensor_name} contains {overflow_count} token ids above "
+                f"{max_token_id}; replacing them with unk_token_id={unk_token_id}."
+            ),
+            stacklevel=2,
+        )
+        if not np.any(negative_mask):
+            token_ids = token_ids.copy()
+        token_ids[overflow_mask] = unk_token_id
 
     return token_ids
 
@@ -383,11 +387,10 @@ def main() -> None:
     )
 
     generation_config = build_generation_config(args)
-    pad_to_multiple_of = 8 if args.fp16 or args.bf16 else None
     data_collator = DataCollatorForSeq2Seq(
         tokenizer=tokenizer,
         model=model,
-        pad_to_multiple_of=pad_to_multiple_of,
+        pad_to_multiple_of=None,
     )
     debug_metrics = debug_first_batch(tokenized["train"], data_collator, model, args)
 
@@ -463,8 +466,7 @@ def main() -> None:
         label_smoothing_factor=args.label_smoothing_factor,
         report_to=report_to,
         run_name=args.wandb_run_name,
-        bf16=args.bf16,
-        fp16=args.fp16,
+        fp16=False,
         optim=args.optim,
         gradient_checkpointing=args.gradient_checkpointing,
         hub_model_id=args.hub_model_id,

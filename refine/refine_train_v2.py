@@ -16,6 +16,7 @@ SHORT_TRANSLATION_WORD_LIMIT=10
 # 4. Preprocessing  (unchanged from v3)
 # ---------------------------------------------------------------------------
 
+
 _V2 = re.compile(r"([aAeEiIuU])(?:2|₂)")
 _V3 = re.compile(r"([aAeEiIuU])(?:3|₃)")
 _ACUTE = str.maketrans({"a":"á","e":"é","i":"í","u":"ú","A":"Á","E":"É","I":"Í","U":"Ú"})
@@ -30,15 +31,13 @@ def _ascii_to_diacritics(s: str) -> str:
     return s
 
 _ALLOWED_FRACS = [
-    (1/6,"0.1666"),(1/4,"0.25"),(1/3,"0.3333"),(1/2,"0.5"),
-    (2/3,"0.6666"),(3/4,"0.75"),(5/6,"0.8333")
+    (1/6,"0.16666"),(1/4,"0.25"),(1/3,"0.33333"),(1/2,"0.5"),
+    (2/3,"0.66666"),(3/4,"0.75"),(5/6,"0.83333"),
 ]
 _FRAC_TOL = 2e-3
 _FLOAT_RE = re.compile(r"(?<![\w/])(\d+\.\d{4,})(?![\w/])")
-_FLOAT_PLUS_RE = re.compile(r"(?<![\w/])(\d+)\s*\+\s*(0\.\d{4,})(?![\w/])")
 
 def _canon_decimal(x: float) -> str:
-    """小数を、分数表現に近い形で文字列化する。"""
     ip = int(math.floor(x + 1e-12))
     frac = x - ip
     best = min(_ALLOWED_FRACS, key=lambda t: abs(frac - t[0]))
@@ -48,20 +47,6 @@ def _canon_decimal(x: float) -> str:
             return dec
         return f"{ip}{dec[1:]}" if dec.startswith("0.") else f"{ip}+{dec}"
     return f"{x:.5f}".rstrip("0").rstrip(".")
-
-
-def _canon_plus_decimal(x1:float,x2:float) -> str:
-    """小数の足し算(~~ + ~~)を、分数表現に近い形で文字列化する。"""
-    ip = int(x1)
-    frac = x2
-    val=x1+x2
-    best = min(_ALLOWED_FRACS, key=lambda t: abs(frac - t[0]))
-    if abs(frac - best[0]) <= _FRAC_TOL:
-        dec = best[1]
-        if ip == 0:
-            return dec
-        return f"{ip}{dec[1:]}" if dec.startswith("0.") else f"{ip}+{dec}"
-    return f"{val:.5f}".rstrip("0").rstrip(".")
 
 _WS_RE = re.compile(r"\s+")
 _GAP_UNIFIED_RE = re.compile(
@@ -75,8 +60,7 @@ _GAP_UNIFIED_RE = re.compile(
     r"|(?<!\w)x(?!\w)"
     r"|\(\s*large\s+break\s*\)"
     r"|\(\s*break\s*\)"
-    r"|\(\s*\d+\s+broken\s+lines?\s*\)"
-    r"|\(\s*broken\s+line\s*\)",
+    r"|\(\s*\d+\s+broken\s+lines?\s*\)",
     re.I
 )
 
@@ -105,21 +89,7 @@ _EXACT_FRAC_MAP = {
 }
 
 def _frac_repl(m: re.Match) -> str:
-    """上記のEXACT_FRAC_MAPに基づいて、特定の小数を分数表現に置換する。"""
     return _EXACT_FRAC_MAP[m.group(0)]
-
-TRANSLITERATION_REMOVALS = ("!","?","(",")","⌈","⌉","[","]",'"',"'","ʾ","˹","˺")
-TRANSLITERATION_SPACES=("/",":")
-GAP_SENTINEL = "\x00GAP\x00"
-def strip_angle_brackets_except_gap_tokens(text: str) -> str:
-    """<や>を<gap>に注意しながら削除＆<big_gap>は<gap>に変換"""
-    cleaned = text.replace("<big_gap>", GAP_SENTINEL)
-    cleaned = cleaned.replace("<gap>", GAP_SENTINEL)
-    cleaned = cleaned.replace("<", "")
-    cleaned = cleaned.replace(">", "")
-    cleaned = cleaned.replace(GAP_SENTINEL, "<big_gap>")
-    cleaned = cleaned.replace(GAP_SENTINEL, "<gap>")
-    return cleaned
 
 class OptimizedPreprocessor:
     def preprocess_batch(self, texts: List[str]) -> List[str]:
@@ -133,13 +103,7 @@ class OptimizedPreprocessor:
         ser = ser.str.replace(_KUBABBAR_RE, "KÙ.BABBAR", regex=True)
         ser = ser.str.replace(_EXACT_FRAC_RE, _frac_repl, regex=True)
         ser = ser.str.replace(_FLOAT_RE, lambda m: _canon_decimal(float(m.group(1))), regex=True)
-        ser = ser.str.replace(_FLOAT_PLUS_RE, lambda m: _canon_plus_decimal(float(m.group(1)), float(m.group(2))), regex=True)
-        for ch in TRANSLITERATION_REMOVALS:
-            ser = ser.str.replace(ch, "", regex=False)
-        ser = ser.apply(strip_angle_brackets_except_gap_tokens)
         ser = ser.str.replace(_WS_RE, " ", regex=True).str.strip()
-        for ch in TRANSLITERATION_SPACES:
-            ser = ser.str.replace(ch, " ", regex=False)#文を区切るものは" "にする→"  "(半角×２)で文章を区切る関数を設置することで、効率的に文章をsplitしやすいようにできる
         return ser.tolist()
 
 # ---------------------------------------------------------------------------
@@ -175,27 +139,17 @@ _SHEKEL_REPLS = [
 ]
 
 _SLASH_ALT_RE   = re.compile(r'(?<![0-9/])\s+/\s+(?![0-9])\S+')
-_STRAY_MARKS_RE = re.compile(r'<<[^>]*>>|<(?![big_gap|gap]\b)[^>]*>')
-_MULTI_GAP_RE   = re.compile(r'(?:<[big_gap|gap]>\s*){2,}')
+_STRAY_MARKS_RE = re.compile(r'<<[^>]*>>|<(?!gap\b)[^>]*>')
+_MULTI_GAP_RE   = re.compile(r'(?:<gap>\s*){2,}')
 _EXTRA_STRAY_RE = re.compile(r'(?<!\w)(?:\.\.+|xx+)(?!\w)')
 _HACEK_TRANS    = str.maketrans({"ḫ":"h","Ḫ":"H"})
 
 def _month_repl(m: re.Match) -> str:
     return f"Month {_ROMAN2INT.get(m.group(1).upper(), m.group(1))}"
 
-SPATIAL_TRANSLATION_ROOLS=(
-    ('ofדsilver', 'of silver'),
-    ("myself()","myself"),
-    ("<lil>","-lil"),
-    ("<of firewood>","of firewood"),
-    ("andĀl-ṭāb","and Āl-ṭāb"),
-)
-
 class VectorizedPostprocessor:
     def postprocess_batch(self, translations: List[str]) -> List[str]:
         s = pd.Series(translations).fillna("").astype(str)
-        for pat, repl in SPATIAL_TRANSLATION_ROOLS:
-            s = s.str.replace(pat, repl, regex=False)
         s = _normalize_gaps_vec(s)
         s = s.str.replace(_PN_RE, "<gap>", regex=True)
         s = s.str.replace(_COMMODITY_RE, _commodity_repl, regex=True)
@@ -203,20 +157,19 @@ class VectorizedPostprocessor:
             s = s.str.replace(pat, repl, regex=True)
         s = s.str.replace(_EXACT_FRAC_RE, _frac_repl, regex=True)
         s = s.str.replace(_FLOAT_RE, lambda m: _canon_decimal(float(m.group(1))), regex=True)
-        s = s.str.replace(_FLOAT_PLUS_RE, lambda m: _canon_plus_decimal(float(m.group(1)), float(m.group(2))), regex=True)
         s = s.str.replace(_SOFT_GRAM_RE, " ", regex=True)
         s = s.str.replace(_BARE_GRAM_RE, " ", regex=True)
         s = s.str.replace(_UNCERTAIN_RE, "", regex=True)
-        s = s.str.replace(_STRAY_MARKS_RE, "", regex=True)#<<comment>>ana kaspu→ana kaspuのように<>で囲まれた、gap,big_gap以外を削除(<~~~<gap>>削除のリスクあるが、もう無視する)
+        s = s.str.replace(_STRAY_MARKS_RE, "", regex=True)
         s = s.str.replace(_EXTRA_STRAY_RE, "", regex=True)
         s = s.str.replace(_SLASH_ALT_RE, "", regex=True)
         s = s.str.replace(_CURLY_DQ_RE, '"', regex=True)
         s = s.str.replace(_CURLY_SQ_RE, "'", regex=True)
         s = s.str.replace(_MONTH_RE, _month_repl, regex=True)
         s = s.str.replace(_MULTI_GAP_RE, "<gap>", regex=True)
-        s = s.str.replace("<gap>", GAP_SENTINEL, regex=False)
+        s = s.str.replace("<gap>", "\x00GAP\x00", regex=False)
         s = s.str.translate(_FORBIDDEN_TRANS)
-        s = s.str.replace(GAP_SENTINEL, " <gap> ", regex=False)
+        s = s.str.replace("\x00GAP\x00", " <gap> ", regex=False)
         s = s.str.translate(_HACEK_TRANS)
         s = s.str.replace(_REPEAT_WORD_RE, r"\1", regex=True)
         for n in range(4, 1, -1):
@@ -224,7 +177,6 @@ class VectorizedPostprocessor:
             s = s.str.replace(pat, r"\1", regex=True)
         s = s.str.replace(_PUNCT_SPACE_RE, r"\1", regex=True)
         s = s.str.replace(_REPEAT_PUNCT_RE, r"\1", regex=True)
-        s = s.apply(strip_angle_brackets_except_gap_tokens)
         s = s.str.replace(_WS_RE, " ", regex=True).str.strip()
         return s.tolist()
 
