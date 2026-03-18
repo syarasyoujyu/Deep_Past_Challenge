@@ -4,3 +4,4 @@ wandb/
 submission.csv
 __pycache__/
 data/*
+.env

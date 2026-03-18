@@ -1,0 +1,1 @@
+uv run python -m model.calc_score /home/watas/kaggle/Deep_Past_Challenge/data/result/submission_v.csv /home/watas/kaggle/Deep_Past_Challenge/data/result/submission_r10.csv

@@ -65,7 +65,7 @@ def parse_args() -> argparse.Namespace:
         "hypothesis_path",
         nargs="?",
         type=Path,
-        default=PROJECT_ROOT / "data" / "submission_r2.csv",
+        default=PROJECT_ROOT / "data" / "submission_r3.csv",
     )
     return parser.parse_args()
 
