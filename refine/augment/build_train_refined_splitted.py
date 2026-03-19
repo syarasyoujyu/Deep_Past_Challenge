@@ -6,7 +6,14 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+def find_project_root(start_path: Path) -> Path:
+    for candidate in (start_path, *start_path.parents):
+        if (candidate / "pyproject.toml").exists():
+            return candidate
+    raise RuntimeError(f"Could not find project root from {start_path}")
+
+
+PROJECT_ROOT = find_project_root(Path(__file__).resolve())
 DEFAULT_INPUT_PATH = PROJECT_ROOT / "data" / "now" / "train_refined_splitted.csv"
 DEFAULT_OUTPUT_V1_PATH = PROJECT_ROOT / "data" / "now" / "train_refined_splitted_augmented_v1.csv"
 DEFAULT_OUTPUT_V2_PATH = PROJECT_ROOT / "data" / "now" / "train_refined_splitted_augmented_v2.csv"

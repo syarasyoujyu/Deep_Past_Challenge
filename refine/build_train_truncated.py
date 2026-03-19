@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import csv
 import re
 import statistics
@@ -7,9 +8,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-TRAIN_PATH = PROJECT_ROOT / "data" / "train.csv"
-SENTENCE_PATH = PROJECT_ROOT / "data" / "Sentences_Oare_FirstWord_LinNum.csv"
-OUTPUT_PATH = PROJECT_ROOT / "data" / "train_truncated.csv"
+DEFAULT_TRAIN_PATH = PROJECT_ROOT / "data" / "train.csv"
+DEFAULT_SENTENCE_PATH = PROJECT_ROOT / "data" / "Sentences_Oare_FirstWord_LinNum.csv"
+DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "train_truncated.csv"
 EXCLUDED_TRANSLATIONS = {
     "Lullu,",
     "Obverse too broken for translation",
@@ -31,14 +32,17 @@ class SentenceCheck:
     same: bool
 
 
-def load_train_rows() -> list[dict[str, str]]:
-    with TRAIN_PATH.open("r", encoding="utf-8", newline="") as csv_file:
-        return list(csv.DictReader(csv_file))
+def load_train_rows(path: Path) -> tuple[list[dict[str, str]], list[str]]:
+    with path.open("r", encoding="utf-8", newline="") as csv_file:
+        reader = csv.DictReader(csv_file)
+        rows = list(reader)
+        fieldnames = list(reader.fieldnames or [])
+    return rows, fieldnames
 
 
-def load_sentence_index() -> dict[str, list[dict[str, str]]]:
+def load_sentence_index(path: Path) -> dict[str, list[dict[str, str]]]:
     index: dict[str, list[dict[str, str]]] = {}
-    with SENTENCE_PATH.open("r", encoding="utf-8", newline="") as csv_file:
+    with path.open("r", encoding="utf-8", newline="") as csv_file:
         for row in csv.DictReader(csv_file):
             index.setdefault(row["text_uuid"], []).append(row)
     return index
@@ -198,10 +202,39 @@ def filter_ratio_outlier_rows(
     return kept_rows, removed_rows, ratio_stats
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Filter train CSV rows by dropping excluded translations, sentence alignment mismatches, "
+            "and translation/transliteration length-ratio outliers."
+        )
+    )
+    parser.add_argument(
+        "--train-path",
+        type=Path,
+        default=DEFAULT_TRAIN_PATH,
+        help="Input train CSV. Defaults to data/train.csv.",
+    )
+    parser.add_argument(
+        "--sentence-path",
+        type=Path,
+        default=DEFAULT_SENTENCE_PATH,
+        help="Sentence index CSV. Defaults to data/Sentences_Oare_FirstWord_LinNum.csv.",
+    )
+    parser.add_argument(
+        "--output-path",
+        type=Path,
+        default=DEFAULT_OUTPUT_PATH,
+        help="Filtered output CSV. Defaults to data/train_truncated.csv.",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
     compiled_patterns = compile_excluded_translation_patterns()
-    rows = load_train_rows()
-    sentence_index = load_sentence_index()
+    rows, input_fieldnames = load_train_rows(args.train_path)
+    sentence_index = load_sentence_index(args.sentence_path)
     truncated_rows: list[dict[str, str]] = []
     removed_rows = 0
     removed_by_same_no = 0
@@ -224,12 +257,14 @@ def main() -> None:
     removed_by_ratio_outlier = len(ratio_outlier_rows)
     removed_rows += removed_by_ratio_outlier
 
-    with OUTPUT_PATH.open("w", encoding="utf-8", newline="") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=["oare_id", "transliteration", "translation"])
+    output_fieldnames = input_fieldnames or ["oare_id", "transliteration", "translation"]
+    args.output_path.parent.mkdir(parents=True, exist_ok=True)
+    with args.output_path.open("w", encoding="utf-8", newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=output_fieldnames)
         writer.writeheader()
         writer.writerows(truncated_rows)
 
-    print(f"Wrote {len(truncated_rows)} rows to {OUTPUT_PATH}")
+    print(f"Wrote {len(truncated_rows)} rows to {args.output_path}")
     print(f"Rows removed because of Same=No: {removed_by_same_no}")
     print(f"Rows removed because of excluded translation: {removed_by_translation}")
     print(

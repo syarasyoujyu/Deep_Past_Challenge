@@ -85,6 +85,24 @@ uv run python -m model.train_marian_ar_en \
 
 このスクリプトは `MarianTokenizer` と `MarianMTModel` を使い、`attn_implementation=sdpa` を既定値にしています。必要なら `--torch-dtype float16` や `--attn-implementation eager` を上書きできます。
 
+## Continue Fine-tuning ByT5-small
+
+少量データで、すでに一度学習済みの `byt5-small` を追加学習したい場合は、`model/ft/train_byt5_small_continue.py` を使います。
+
+```bash
+bash model/ft/train_byt5_small_continue.sh
+```
+
+既定では次のような保守的な設定にしています。
+
+- 低 learning rate (`2e-5`)
+- exact duplicate の除去
+- shared embeddings と encoder の freeze
+- decoder の末尾 2 block + `lm_head` だけを主に更新
+- label smoothing と early stopping を有効化
+
+小規模データで full fine-tune すると既存性能を壊しやすいので、まずはこの設定から始めて、必要なら `--freeze-encoder false` や `--unfreeze-last-n-decoder-blocks 4` のように緩める前提です。
+
 ## Predict
 
 ```bash

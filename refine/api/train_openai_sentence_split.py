@@ -32,6 +32,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 DEFAULT_INPUT_PATH = PROJECT_ROOT / "data" / "train_refined_v2.csv"
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "train_refined_v2_sentence_split.csv"
+DEFAULT_REFINED_OUTPUT_PATH = PROJECT_ROOT / "data" / "train_refined_v2_sentence_split_refined.csv"
 DEFAULT_CHECKPOINT_PATH = PROJECT_ROOT / "data" / "now" / "train_refined_v2_sentence_split_compact.jsonl"
 DEFAULT_ENV_PATH = PROJECT_ROOT / ".env"
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
@@ -103,6 +104,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--input-path", type=Path, default=DEFAULT_INPUT_PATH)
     parser.add_argument("--output-path", type=Path, default=DEFAULT_OUTPUT_PATH)
+    parser.add_argument(
+        "--refined-output-path",
+        type=Path,
+        default=None,
+        help=(
+            "Optional filtered CSV written after the main output. "
+            "Defaults to <output-path stem>_refined.csv."
+        ),
+    )
     parser.add_argument("--checkpoint-path", type=Path, default=DEFAULT_CHECKPOINT_PATH)
     parser.add_argument("--env-file", type=Path, default=DEFAULT_ENV_PATH)
     parser.add_argument("--model", type=str, default=None)
@@ -516,13 +526,12 @@ def normalize_segments(result: dict[str, Any], source_oare_id: str) -> dict[str,
         raise ValueError(f"OpenAI returned no segments for oare_id={source_oare_id}")
 
     normalized_segments: list[dict[str, Any]] = []
-    for index, segment in enumerate(segments, start=1):
+    for segment in segments:
         transliteration = clean_segment_text(str(segment.get("transliteration", "")))
         translation = clean_segment_text(str(segment.get("translation", "")))
         if not transliteration or not translation:
-            raise ValueError(
-                f"OpenAI returned an empty segment for oare_id={source_oare_id} at segment {index}"
-            )
+            continue
+        index = len(normalized_segments) + 1
         normalized_segments.append(
             {
                 "index": index,
@@ -531,6 +540,9 @@ def normalize_segments(result: dict[str, Any], source_oare_id: str) -> dict[str,
                 "translation": translation,
             }
         )
+
+    if not normalized_segments:
+        raise ValueError(f"OpenAI returned only empty segments for oare_id={source_oare_id}")
 
     return {
         "oare_id": source_oare_id,
@@ -577,6 +589,33 @@ def write_split_csv(path: Path, split_results: list[dict[str, Any]]) -> int:
                 written_rows += 1
 
     return written_rows
+
+
+def resolve_refined_output_path(args: argparse.Namespace) -> Path:
+    if args.refined_output_path is not None:
+        return args.refined_output_path
+    return args.output_path.with_name(f"{args.output_path.stem}_refined{args.output_path.suffix}")
+
+
+def filter_split_results_with_terminal_period(
+    split_results: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    filtered_results: list[dict[str, Any]] = []
+    for result in split_results:
+        filtered_segments = [
+            segment
+            for segment in result["segments"]
+            if str(segment.get("translation", "")).rstrip().endswith(".")
+        ]
+        if not filtered_segments:
+            continue
+        filtered_results.append(
+            {
+                "oare_id": result["oare_id"],
+                "segments": filtered_segments,
+            }
+        )
+    return filtered_results
 
 
 def run_openai_requests(
@@ -802,7 +841,14 @@ def main() -> None:
 
     write_checkpoint(args.checkpoint_path, split_results)
     written_rows = write_split_csv(args.output_path, split_results)
+    refined_output_path = resolve_refined_output_path(args)
+    refined_split_results = filter_split_results_with_terminal_period(split_results)
+    refined_written_rows = write_split_csv(refined_output_path, refined_split_results)
     print(f"Wrote {written_rows} split row(s) to {args.output_path}")
+    print(
+        f"Wrote {refined_written_rows} split row(s) with translation ending in '.' "
+        f"to {refined_output_path}"
+    )
     print(f"Wrote checkpoint JSONL to {args.checkpoint_path}")
 
 

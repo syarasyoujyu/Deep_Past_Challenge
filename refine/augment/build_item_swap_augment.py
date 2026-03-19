@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import re
 import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
@@ -11,21 +12,31 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_INPUT_PATH = PROJECT_ROOT / "data" / "now" / "train_refined_splitted_augmented_v1.csv"
 DEFAULT_LEXICON_PATH = PROJECT_ROOT / "data" / "OA_Lexicon_eBL_refined_with_definition.csv"
-DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "now" / "train_refined_splitted_augmented_v1_pn_gn_swap.csv"
+DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "now" / "train_refined_splitted_augmented_v1_item_swap.csv"
 DEFAULT_MAX_AUG_PER_ROW = 3
+
+ITEM_GROUPS = {
+    "metal": ["silver", "gold", "tin", "copper"],
+    "textile": ["textile", "garment", "robe", "shawl"],
+}
+DEFINITION_TO_GROUP = {
+    item_definition: group_name
+    for group_name, item_definitions in ITEM_GROUPS.items()
+    for item_definition in item_definitions
+}
+FORM_GLOSS_OVERRIDES = {
+    "AN.NA": "tin",
+    "KÙ.GI": "gold",
+    "URUDU": "copper",
+}
 
 
 @dataclass(frozen=True)
-class LexiconName:
-    entity_type: str
+class LexiconItem:
+    group_name: str
     form: str
     form_original: str
-    norm: str
-    lexeme: str
-
-    @property
-    def display_name(self) -> str:
-        return (self.norm or self.lexeme).strip()
+    english_gloss: str
 
 
 @dataclass(frozen=True)
@@ -38,8 +49,8 @@ class TranslationMatch:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Augment train_refined_splitted_augmented_v1.csv by swapping PN/GN "
-            "tokens in transliteration and their aligned names in translation."
+            "Augment v1 sentence data by swapping item/material words such as "
+            "silver/gold/tin/copper and matching translation words."
         )
     )
     parser.add_argument("--input-path", type=Path, default=DEFAULT_INPUT_PATH)
@@ -60,35 +71,20 @@ def simplify_text(text: str) -> str:
     return without_marks.lower()
 
 
-def build_simplified_with_mapping(text: str) -> tuple[str, list[int]]:
-    simplified_chars: list[str] = []
-    mapping: list[int] = []
-    for original_index, char in enumerate(text):
-        normalized = unicodedata.normalize("NFKD", char)
-        for piece in normalized:
-            if unicodedata.combining(piece):
-                continue
-            simplified_chars.append(piece.lower())
-            mapping.append(original_index)
-    return "".join(simplified_chars), mapping
+def singularize_definition(definition: str) -> str:
+    simplified = simplify_text(definition).strip()
+    simplified = simplified.replace('"', "").replace("'", "")
+    simplified = re.split(r"[,;/()]", simplified, maxsplit=1)[0].strip()
+    simplified = simplified.removeprefix("a ").removeprefix("an ").removeprefix("the ")
+    if simplified.endswith("s"):
+        simplified = simplified[:-1]
+    return simplified
 
 
-def find_simplified_substring(text: str, candidate: str) -> TranslationMatch | None:
-    simplified_text, mapping = build_simplified_with_mapping(text)
-    simplified_candidate = simplify_text(candidate)
-    if not simplified_candidate:
-        return None
-    start = simplified_text.find(simplified_candidate)
-    if start == -1:
-        return None
-    end = start + len(simplified_candidate)
-    original_start = mapping[start]
-    original_end = mapping[end - 1] + 1
-    return TranslationMatch(
-        start=original_start,
-        end=original_end,
-        text=text[original_start:original_end],
-    )
+def pluralize(word: str) -> str:
+    if word.endswith("s"):
+        return word
+    return f"{word}s"
 
 
 def load_input_rows(path: Path) -> list[dict[str, str]]:
@@ -96,87 +92,79 @@ def load_input_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(input_file))
 
 
-def load_lexicon_names(path: Path) -> tuple[dict[str, list[LexiconName]], dict[str, list[LexiconName]]]:
-    by_token: dict[str, list[LexiconName]] = {}
-    by_type: dict[str, list[LexiconName]] = {"PN": [], "GN": []}
+def load_lexicon_items(path: Path) -> tuple[dict[str, list[LexiconItem]], dict[str, list[LexiconItem]]]:
+    by_token: dict[str, list[LexiconItem]] = {}
+    by_group: dict[str, list[LexiconItem]] = {group_name: [] for group_name in ITEM_GROUPS}
 
     with path.open("r", encoding="utf-8", newline="") as lexicon_file:
         reader = csv.DictReader(lexicon_file)
         for row in reader:
-            entity_type = row.get("type", "").strip()
-            if entity_type not in {"PN", "GN"}:
+            if row.get("type", "").strip() != "word":
                 continue
-            name = LexiconName(
-                entity_type=entity_type,
-                form=row.get("form", "").strip(),
-                form_original=row.get("form_original", "").strip(),
-                norm=row.get("norm", "").strip(),
-                lexeme=row.get("lexeme", "").strip(),
-            )
-            if not name.display_name:
+            form = row.get("form", "").strip()
+            definition_key = FORM_GLOSS_OVERRIDES.get(form, singularize_definition(row.get("definition", "")))
+            group_name = DEFINITION_TO_GROUP.get(definition_key)
+            if group_name is None:
                 continue
 
-            by_type[entity_type].append(name)
-            for token in {name.form, name.form_original}:
+            item = LexiconItem(
+                group_name=group_name,
+                form=form,
+                form_original=row.get("form_original", "").strip(),
+                english_gloss=definition_key,
+            )
+            if not item.form or not item.english_gloss:
+                continue
+
+            by_group[group_name].append(item)
+            for token in {item.form, item.form_original}:
                 token = token.strip()
                 if token:
-                    by_token.setdefault(token, []).append(name)
+                    by_token.setdefault(token, []).append(item)
 
-    deduped_by_type: dict[str, list[LexiconName]] = {}
-    for entity_type, names in by_type.items():
+    deduped_by_group: dict[str, list[LexiconItem]] = {}
+    for group_name, items in by_group.items():
         seen: set[tuple[str, str]] = set()
-        deduped: list[LexiconName] = []
-        for name in names:
-            key = (name.form, name.display_name)
+        deduped: list[LexiconItem] = []
+        for item in items:
+            key = (item.form, item.english_gloss)
             if key in seen:
                 continue
             seen.add(key)
-            deduped.append(name)
-        deduped_by_type[entity_type] = sorted(deduped, key=lambda item: (item.display_name, item.form))
+            deduped.append(item)
+        deduped_by_group[group_name] = sorted(deduped, key=lambda item: (item.english_gloss, item.form))
 
-    return by_token, deduped_by_type
-
-
-def candidate_translation_names(name: LexiconName) -> list[str]:
-    candidates = [name.norm.strip(), name.lexeme.strip()]
-    seen: set[str] = set()
-    deduped: list[str] = []
-    for candidate in candidates:
-        if not candidate:
-            continue
-        key = simplify_text(candidate)
-        if key in seen:
-            continue
-        seen.add(key)
-        deduped.append(candidate)
-    return deduped
+    return by_token, deduped_by_group
 
 
-def find_translation_match(translation: str, name: LexiconName) -> TranslationMatch | None:
-    for candidate in candidate_translation_names(name):
-        match = find_simplified_substring(translation, candidate)
-        if match is not None:
-            return match
+def find_translation_match(translation: str, english_gloss: str) -> TranslationMatch | None:
+    patterns = [
+        rf"\b{re.escape(pluralize(english_gloss))}\b",
+        rf"\b{re.escape(english_gloss)}\b",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, translation, flags=re.IGNORECASE)
+        if match:
+            return TranslationMatch(start=match.start(), end=match.end(), text=match.group(0))
     return None
 
 
 def choose_replacement(
     row_oare_id: str,
     token_index: int,
-    source_name: LexiconName,
-    names_by_type: dict[str, list[LexiconName]],
-) -> LexiconName | None:
+    source_item: LexiconItem,
+    items_by_group: dict[str, list[LexiconItem]],
+) -> LexiconItem | None:
     candidates = [
         candidate
-        for candidate in names_by_type[source_name.entity_type]
-        if candidate.form != source_name.form
-        and simplify_text(candidate.display_name) != simplify_text(source_name.display_name)
+        for candidate in items_by_group[source_item.group_name]
+        if candidate.form != source_item.form and candidate.english_gloss != source_item.english_gloss
     ]
     if not candidates:
         return None
 
     digest = hashlib.md5(
-        f"{row_oare_id}|{token_index}|{source_name.form}|{source_name.display_name}".encode("utf-8")
+        f"{row_oare_id}|{token_index}|{source_item.form}|{source_item.english_gloss}".encode("utf-8")
     ).hexdigest()
     index = int(digest, 16) % len(candidates)
     return candidates[index]
@@ -191,15 +179,18 @@ def replace_token(tokens: list[str], token_index: int, replacement_form: str) ->
 def replace_translation_span(
     translation: str,
     match: TranslationMatch,
-    replacement_name: str,
+    replacement_gloss: str,
 ) -> str:
-    return translation[: match.start] + replacement_name + translation[match.end :]
+    replacement_text = replacement_gloss
+    if match.text.lower().endswith("s"):
+        replacement_text = pluralize(replacement_text)
+    return translation[: match.start] + replacement_text + translation[match.end :]
 
 
 def build_augmented_rows(
     input_rows: list[dict[str, str]],
-    names_by_token: dict[str, list[LexiconName]],
-    names_by_type: dict[str, list[LexiconName]],
+    items_by_token: dict[str, list[LexiconItem]],
+    items_by_group: dict[str, list[LexiconItem]],
     max_aug_per_row: int,
 ) -> list[dict[str, str]]:
     augmented_rows: list[dict[str, str]] = []
@@ -211,37 +202,37 @@ def build_augmented_rows(
         produced = 0
 
         for token_index, token in enumerate(tokens):
-            source_names = names_by_token.get(token, [])
-            if not source_names:
+            source_items = items_by_token.get(token, [])
+            if not source_items:
                 continue
 
-            source_name = source_names[0]
-            translation_match = find_translation_match(translation, source_name)
+            source_item = source_items[0]
+            translation_match = find_translation_match(translation, source_item.english_gloss)
             if translation_match is None:
                 continue
 
             replacement = choose_replacement(
                 row_oare_id=row["oare_id"],
                 token_index=token_index,
-                source_name=source_name,
-                names_by_type=names_by_type,
+                source_item=source_item,
+                items_by_group=items_by_group,
             )
             if replacement is None:
                 continue
 
             augmented_row = dict(row)
-            augmented_row["oare_id"] = f"{row['oare_id']}--swap-{produced + 1}"
+            augmented_row["oare_id"] = f"{row['oare_id']}--item-swap-{produced + 1}"
             augmented_row["transliteration"] = replace_token(tokens, token_index, replacement.form)
             augmented_row["translation"] = replace_translation_span(
                 translation=translation,
                 match=translation_match,
-                replacement_name=replacement.display_name,
+                replacement_gloss=replacement.english_gloss,
             )
-            augmented_row["augmentation_type"] = f"{source_name.entity_type}_swap"
-            augmented_row["replaced_source_form"] = source_name.form
+            augmented_row["augmentation_type"] = f"{source_item.group_name}_item_swap"
+            augmented_row["replaced_source_form"] = source_item.form
             augmented_row["replacement_form"] = replacement.form
             augmented_row["replaced_source_name"] = translation_match.text
-            augmented_row["replacement_name"] = replacement.display_name
+            augmented_row["replacement_name"] = replacement.english_gloss
             augmented_rows.append(augmented_row)
 
             produced += 1
@@ -293,11 +284,11 @@ def write_rows(
 def main() -> None:
     args = parse_args()
     input_rows = load_input_rows(args.input_path)
-    names_by_token, names_by_type = load_lexicon_names(args.lexicon_path)
+    items_by_token, items_by_group = load_lexicon_items(args.lexicon_path)
     augmented_rows = build_augmented_rows(
         input_rows=input_rows,
-        names_by_token=names_by_token,
-        names_by_type=names_by_type,
+        items_by_token=items_by_token,
+        items_by_group=items_by_group,
         max_aug_per_row=max(args.max_aug_per_row, 1),
     )
     write_rows(
