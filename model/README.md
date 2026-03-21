@@ -113,6 +113,16 @@ bash model/ft/dict/train_byt5_with_dictionary.sh
 
 このスクリプトは、lexicon の `form -> definition / lexeme` を source 側へ `dictionary: ... || text: ...` 形式で注入して学習します。モデル構造を変えるのではなく、paper にある lexical bias の考え方を、この repo では source augmentation として扱う実装です。
 
+## Experimental RL Fine-tuning For Dictionary ByT5
+
+`BLEU` / `chrF++` を sequence-level reward として使う実験版は `model/ft/dict/train_byt5_with_dictionary_rl.py` です。
+
+```bash
+bash model/ft/dict/train_byt5_with_dictionary_rl.sh
+```
+
+これは `cross-entropy + self-critical sequence training` に近い構成で、reward は sentence-level `BLEU` と `chrF++` の重み付き和です。安定性は通常の supervised fine-tuning より落ちるので、実験用として扱ってください。
+
 ## Predict
 
 ```bash
