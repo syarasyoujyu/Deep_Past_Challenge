@@ -22,6 +22,7 @@ dependencies = [
     "tqdm>=4.67.1",
     "unsloth",
     "wandb>=0.19.8",
+    "optimum>=2.1.0",
 ]
 
 [build-system]

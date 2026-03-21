@@ -30,6 +30,21 @@ DEFAULT_EVAL_OUTPUT_PATH = ROOT_DIR / "artifacts" / "byt5-predictions.csv"
 DEFAULT_METRICS_PATH = ROOT_DIR / "artifacts" / "byt5-predictions-metrics.json"
 
 
+def maybe_transform_with_bettertransformer(model, enabled: bool):
+    if not enabled:
+        return model
+
+    try:
+        from optimum.bettertransformer import BetterTransformer
+    except ImportError as error:
+        raise ImportError(
+            "--use-bettertransformer true was specified, but optimum is not installed."
+        ) from error
+
+    print("Applying BetterTransformer...")
+    return BetterTransformer.transform(model)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run ByT5 translation inference and optionally write row-level evaluation metrics."
@@ -49,6 +64,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--use-bettertransformer", type=str, default="false")
     return parser.parse_args()
 
 
@@ -78,6 +94,15 @@ def load_input_frame(path: Path) -> pd.DataFrame:
 def predict_translations(frame: pd.DataFrame, args: argparse.Namespace) -> list[str]:
     tokenizer = load_tokenizer(args.model_path)
     model = AutoModelForSeq2SeqLM.from_pretrained(args.model_path)
+    use_bettertransformer = str(args.use_bettertransformer).strip().lower() in {
+        "1",
+        "true",
+        "t",
+        "yes",
+        "y",
+        "on",
+    }
+    model = maybe_transform_with_bettertransformer(model, use_bettertransformer)
     generation_config = build_generation_config(args)
     use_cpu = args.device == "cpu" or not torch.cuda.is_available()
     device = torch.device("cpu" if use_cpu else args.device)

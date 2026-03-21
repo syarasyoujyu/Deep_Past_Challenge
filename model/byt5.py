@@ -92,6 +92,21 @@ def parse_interval_strategy(value: str) -> str:
     return normalized
 
 
+def maybe_transform_with_bettertransformer(model, enabled: bool):
+    if not enabled:
+        return model
+
+    try:
+        from optimum.bettertransformer import BetterTransformer
+    except ImportError as error:
+        raise ImportError(
+            "--use-bettertransformer true was specified, but optimum is not installed."
+        ) from error
+
+    print("Applying BetterTransformer...")
+    return BetterTransformer.transform(model)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fine-tune google/byt5-* for Akkadian transliteration to English."
@@ -125,6 +140,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--label-smoothing-factor", type=float, default=0.0)
     parser.add_argument("--gradient-checkpointing", type=parse_bool, default=True)
+    parser.add_argument("--use-bettertransformer", type=parse_bool, default=False)
     parser.add_argument("--dtype", dest="dtype", type=parse_optional_torch_dtype, default=None)
     parser.add_argument("--torch-dtype", dest="dtype", type=parse_optional_torch_dtype)
     parser.add_argument("--attn-implementation", type=str, default="eager")
@@ -230,7 +246,8 @@ def load_model(args: argparse.Namespace):
         model_kwargs["dtype"] = load_dtype
 
     try:
-        return AutoModelForSeq2SeqLM.from_pretrained(model_source, **model_kwargs)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_source, **model_kwargs)
+        return maybe_transform_with_bettertransformer(model, args.use_bettertransformer)
     except ValueError as error:
         if args.attn_implementation != "eager" and "scaled_dot_product_attention" in str(error):
             warnings.warn(
@@ -242,7 +259,8 @@ def load_model(args: argparse.Namespace):
             )
             fallback_kwargs = dict(model_kwargs)
             fallback_kwargs["attn_implementation"] = "eager"
-            return AutoModelForSeq2SeqLM.from_pretrained(model_source, **fallback_kwargs)
+            model = AutoModelForSeq2SeqLM.from_pretrained(model_source, **fallback_kwargs)
+            return maybe_transform_with_bettertransformer(model, args.use_bettertransformer)
         raise
 
 
