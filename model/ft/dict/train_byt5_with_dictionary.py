@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import math
 import os
 from dataclasses import dataclass
@@ -54,6 +55,7 @@ DEFAULT_TRAIN_PATH = (
 )
 DEFAULT_LEXICON_PATH = ROOT_DIR / "data" / "OA_Lexicon_eBL_refined_with_definition.csv"
 DEFAULT_ONOMASTICON_PATH = ROOT_DIR / "data" / "onomasticon.csv"
+DEFAULT_GLOSS_PATH = ROOT_DIR / "data" / "now" / "train_openai_gloss_compact.jsonl"
 
 
 @dataclass(frozen=True)
@@ -61,6 +63,7 @@ class DictionaryEntry:
     source_form: str
     target_hint: str
     token_count: int
+    source_kind: str
 
 
 def parse_args() -> argparse.Namespace:
@@ -77,6 +80,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--trained-model-path", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--lexicon-path", type=Path, default=DEFAULT_LEXICON_PATH)
+    parser.add_argument("--gloss-path", type=Path, default=DEFAULT_GLOSS_PATH)
     parser.add_argument("--include-onomasticon", type=parse_bool, default=False)
     parser.add_argument("--onomasticon-path", type=Path, default=DEFAULT_ONOMASTICON_PATH)
     parser.add_argument("--source-prefix", type=str, default="translate Akkadian to English with dictionary: ")
@@ -84,6 +88,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-dictionary-hints", type=int, default=8)
     parser.add_argument("--max-entry-token-length", type=int, default=4)
     parser.add_argument("--max-hint-words", type=int, default=6)
+    parser.add_argument("--max-gloss-variants", type=int, default=4)
     parser.add_argument("--preview-count", type=int, default=3)
     parser.add_argument("--val-size", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42)
@@ -167,12 +172,16 @@ def normalize_dict_form(text: str, args: argparse.Namespace) -> str:
     return normalized.strip()
 
 
-def load_lexicon_entries(args: argparse.Namespace) -> dict[tuple[str, ...], list[DictionaryEntry]]:
+def load_named_entity_entries(args: argparse.Namespace) -> dict[tuple[str, ...], list[DictionaryEntry]]:
     index: dict[tuple[str, ...], list[DictionaryEntry]] = {}
 
     with args.lexicon_path.open("r", encoding="utf-8", newline="") as lexicon_file:
         reader = csv.DictReader(lexicon_file)
         for row in reader:
+            entity_type = str(row.get("type", "")).strip()
+            if entity_type not in {"PN", "GN"}:
+                continue
+
             source_form = normalize_dict_form(row.get("form", ""), args)
             if not source_form:
                 continue
@@ -181,11 +190,7 @@ def load_lexicon_entries(args: argparse.Namespace) -> dict[tuple[str, ...], list
             if not source_tokens or len(source_tokens) > args.max_entry_token_length:
                 continue
 
-            hint_text = clean_hint_text(row.get("definition", ""), args.max_hint_words)
-            if not hint_text:
-                hint_text = clean_hint_text(row.get("word", ""), args.max_hint_words)
-            if not hint_text:
-                hint_text = clean_hint_text(row.get("lexeme", ""), args.max_hint_words)
+            hint_text = clean_hint_text(row.get("lexeme", ""), args.max_hint_words)
             if not hint_text:
                 hint_text = clean_hint_text(row.get("norm", ""), args.max_hint_words)
             if not hint_text:
@@ -195,6 +200,7 @@ def load_lexicon_entries(args: argparse.Namespace) -> dict[tuple[str, ...], list
                 source_form=" ".join(source_tokens),
                 target_hint=hint_text,
                 token_count=len(source_tokens),
+                source_kind=entity_type,
             )
             index.setdefault(source_tokens, [])
             if entry not in index[source_tokens]:
@@ -220,12 +226,76 @@ def load_lexicon_entries(args: argparse.Namespace) -> dict[tuple[str, ...], list
                         source_form=" ".join(source_tokens),
                         target_hint=name,
                         token_count=len(source_tokens),
+                        source_kind="ONOMASTICON",
                     )
                     index.setdefault(source_tokens, [])
                     if entry not in index[source_tokens]:
                         index[source_tokens].append(entry)
 
     return index
+
+
+def load_gloss_entries(args: argparse.Namespace) -> dict[tuple[str, ...], list[DictionaryEntry]]:
+    gloss_candidates: dict[str, dict[str, int]] = {}
+
+    with args.gloss_path.open("r", encoding="utf-8") as gloss_file:
+        for line in gloss_file:
+            payload = json.loads(line)
+            for token_gloss in payload.get("token_glosses", []):
+                confidence = str(token_gloss.get("confidence", "")).strip().lower()
+                if confidence == "low":
+                    continue
+
+                normalized_token = normalize_dict_form(token_gloss.get("normalized_token", ""), args)
+                if not normalized_token:
+                    continue
+
+                gloss = clean_hint_text(token_gloss.get("gloss", ""), args.max_hint_words)
+                if not gloss:
+                    continue
+
+                gloss_candidates.setdefault(normalized_token, {})
+                gloss_candidates[normalized_token][gloss] = (
+                    gloss_candidates[normalized_token].get(gloss, 0) + 1
+                )
+
+    index: dict[tuple[str, ...], list[DictionaryEntry]] = {}
+    for normalized_token, candidate_counts in gloss_candidates.items():
+        glosses = [
+            gloss
+            for gloss, _ in sorted(
+                candidate_counts.items(),
+                key=lambda item: (-item[1], item[0]),
+            )
+        ]
+        if not glosses or len(glosses) >= args.max_gloss_variants + 1:
+            continue
+
+        source_tokens = tuple(token for token in normalized_token.split() if token)
+        if not source_tokens or len(source_tokens) > args.max_entry_token_length:
+            continue
+
+        entry = DictionaryEntry(
+            source_form=" ".join(source_tokens),
+            target_hint=" / ".join(glosses),
+            token_count=len(source_tokens),
+            source_kind="GLOSS",
+        )
+        index.setdefault(source_tokens, []).append(entry)
+
+    return index
+
+
+def load_dictionary_entries(args: argparse.Namespace) -> dict[tuple[str, ...], list[DictionaryEntry]]:
+    combined_index = load_named_entity_entries(args)
+    gloss_index = load_gloss_entries(args)
+
+    for key, entries in gloss_index.items():
+        if key in combined_index:
+            continue
+        combined_index[key] = entries
+
+    return combined_index
 
 
 def find_dictionary_hints(
@@ -395,7 +465,7 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    dictionary_index = load_lexicon_entries(args)
+    dictionary_index = load_dictionary_entries(args)
     frame = prepare_frame(args, dictionary_index)
     preview_augmented_examples(frame, args.preview_count)
     print(
