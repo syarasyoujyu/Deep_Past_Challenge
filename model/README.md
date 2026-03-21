@@ -103,6 +103,16 @@ bash model/ft/train_byt5_small_continue.sh
 
 小規模データで full fine-tune すると既存性能を壊しやすいので、まずはこの設定から始めて、必要なら `--freeze-encoder false` や `--unfreeze-last-n-decoder-blocks 4` のように緩める前提です。
 
+## Train ByT5-small With Dictionary Hints
+
+辞書を参照できるように ByT5 を追加学習したい場合は、`model/ft/dict/train_byt5_with_dictionary.py` を使います。
+
+```bash
+bash model/ft/dict/train_byt5_with_dictionary.sh
+```
+
+このスクリプトは、lexicon の `form -> definition / lexeme` を source 側へ `dictionary: ... || text: ...` 形式で注入して学習します。モデル構造を変えるのではなく、paper にある lexical bias の考え方を、この repo では source augmentation として扱う実装です。
+
 ## Predict
 
 ```bash

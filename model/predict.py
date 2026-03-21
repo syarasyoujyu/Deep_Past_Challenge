@@ -9,21 +9,19 @@ from pathlib import Path
 os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ.setdefault("USE_TF", "0")
 
-import numpy as np
 import pandas as pd
 import sacrebleu
 import torch
 from bert_score import score as bert_score
-from datasets import Dataset
-from transformers import (
-    AutoModelForSeq2SeqLM,
-    DataCollatorForSeq2Seq,
-    Seq2SeqTrainer,
-    Seq2SeqTrainingArguments,
+from transformers import AutoModelForSeq2SeqLM
+
+from model.common import (
+    DATA_DIR,
+    ROOT_DIR,
+    build_generation_config,
+    load_tokenizer,
+    seed_everything,
 )
-
-from model.common import DATA_DIR, ROOT_DIR, build_generation_config, load_tokenizer
-
 
 DEFAULT_MODEL_PATH = ROOT_DIR / "artifacts" / "byt5-small"
 DEFAULT_INPUT_PATH = DATA_DIR / "test.csv"
@@ -43,13 +41,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model-path", type=str, default=str(DEFAULT_MODEL_PATH))
     parser.add_argument("--source-prefix", type=str, default="translate Akkadian to English: ")
     parser.add_argument("--batch-size", type=int, default=8)
-    parser.add_argument("--max-source-length", type=int, default=256)
-    parser.add_argument("--max-target-length", type=int, default=256)
+    parser.add_argument("--max-source-length", type=int, default=512)
+    parser.add_argument("--max-target-length", type=int, default=384)
     parser.add_argument("--num-beams", type=int, default=4)
     parser.add_argument("--length-penalty", type=float, default=1.0)
     parser.add_argument("--bertscore-model-type", type=str, default=None)
     parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
+    parser.add_argument("--seed", type=int, default=42)
     return parser.parse_args()
 
 
@@ -76,72 +75,49 @@ def load_input_frame(path: Path) -> pd.DataFrame:
     return frame
 
 
-def build_prediction_dataset(frame: pd.DataFrame, args: argparse.Namespace) -> Dataset:
-    return Dataset.from_dict(
-        {
-            "oare_id": frame["oare_id"].tolist(),
-            "input_text": [f"{args.source_prefix}{text}" for text in frame["transliteration"].tolist()],
-        }
-    )
-
-
 def predict_translations(frame: pd.DataFrame, args: argparse.Namespace) -> list[str]:
     tokenizer = load_tokenizer(args.model_path)
     model = AutoModelForSeq2SeqLM.from_pretrained(args.model_path)
-    dataset = build_prediction_dataset(frame, args)
     generation_config = build_generation_config(args)
+    use_cpu = args.device == "cpu" or not torch.cuda.is_available()
+    device = torch.device("cpu" if use_cpu else args.device)
+    print(
+        "Inference device: "
+        f"requested={args.device} "
+        f"resolved={device} "
+        f"cuda_available={torch.cuda.is_available()}"
+    )
+    if torch.cuda.is_available():
+        print(f"CUDA device name: {torch.cuda.get_device_name(0)}")
+    model = model.to(device)
+    model.eval()
 
-    def preprocess(batch: dict[str, list[str]]) -> dict[str, list[list[int]]]:
-        return tokenizer(
-            batch["input_text"],
-            max_length=args.max_source_length,
+    source_texts = [
+        f"{args.source_prefix}{text}" for text in frame["transliteration"].tolist()
+    ]
+    predictions: list[str] = []
+
+    for start in range(0, len(source_texts), args.batch_size):
+        batch_texts = source_texts[start : start + args.batch_size]
+        encoded = tokenizer(
+            batch_texts,
+            return_tensors="pt",
+            padding=True,
             truncation=True,
+            max_length=args.max_source_length,
         )
+        encoded = {
+            key: value.to(device) if isinstance(value, torch.Tensor) else value
+            for key, value in encoded.items()
+        }
 
-    tokenized = dataset.map(
-        preprocess,
-        batched=True,
-        remove_columns=dataset.column_names,
-        desc="Tokenizing dataset",
-    )
+        with torch.inference_mode():
+            generated = model.generate(**encoded, **generation_config)
 
-    predict_args = Seq2SeqTrainingArguments(
-        output_dir=str(args.eval_output_path.parent / ".predict_tmp"),
-        do_train=False,
-        do_eval=False,
-        do_predict=True,
-        per_device_eval_batch_size=args.batch_size,
-        predict_with_generate=True,
-        report_to=[],
-        fp16=False,
-        bf16=False,
-        use_cpu=args.device == "cpu" or not torch.cuda.is_available(),
-    )
-    trainer = Seq2SeqTrainer(
-        model=model,
-        args=predict_args,
-        processing_class=tokenizer,
-        data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model),
-    )
+        decoded_batch = tokenizer.batch_decode(generated, skip_special_tokens=True)
+        predictions.extend(prediction.strip() for prediction in decoded_batch)
 
-    prediction_output = trainer.predict(tokenized, **generation_config)
-    predictions = prediction_output.predictions
-    if isinstance(predictions, tuple):
-        predictions = predictions[0]
-
-    predictions = np.asarray(predictions)
-    if predictions.ndim == 3:
-        predictions = predictions.argmax(axis=-1)
-
-    pad_token_id = tokenizer.pad_token_id
-    if pad_token_id is None:
-        pad_token_id = tokenizer.eos_token_id
-    if pad_token_id is None:
-        pad_token_id = 0
-
-    predictions = np.where(predictions != -100, predictions, pad_token_id)
-    decoded_predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-    return [prediction.strip() for prediction in decoded_predictions]
+    return predictions
 
 
 def compute_row_metrics(
@@ -221,6 +197,7 @@ def write_eval_csv(frame: pd.DataFrame, predictions: list[str], args: argparse.N
 
 def main() -> None:
     args = parse_args()
+    seed_everything(args.seed)
     frame = load_input_frame(args.input_path)
     predictions = predict_translations(frame, args)
 

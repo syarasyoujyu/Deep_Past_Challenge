@@ -98,6 +98,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--train-path", type=Path, default=DATA_DIR / "train.csv")
     parser.add_argument("--model-name", type=str, default=DEFAULT_MODEL_NAME)
+    parser.add_argument("--load-trained-model", type=parse_bool, default=False)
+    parser.add_argument("--trained-model-path", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--source-prefix", type=str, default="translate Akkadian to English: ")
     parser.add_argument("--val-size", type=float, default=0.1)
@@ -209,27 +211,38 @@ def split_frame(frame, val_size: float, seed: int):
     return train_frame, val_frame
 
 
+def resolve_model_source(args: argparse.Namespace) -> str:
+    if args.load_trained_model:
+        if args.trained_model_path is None:
+            raise ValueError(
+                "--load-trained-model true requires --trained-model-path to be set."
+            )
+        return str(args.trained_model_path)
+    return args.model_name
+
+
 def load_model(args: argparse.Namespace):
     load_dtype = args.dtype
+    model_source = resolve_model_source(args)
 
     model_kwargs = {"attn_implementation": args.attn_implementation}
     if load_dtype is not None:
         model_kwargs["dtype"] = load_dtype
 
     try:
-        return AutoModelForSeq2SeqLM.from_pretrained(args.model_name, **model_kwargs)
+        return AutoModelForSeq2SeqLM.from_pretrained(model_source, **model_kwargs)
     except ValueError as error:
         if args.attn_implementation != "eager" and "scaled_dot_product_attention" in str(error):
             warnings.warn(
                 (
-                    f"{args.model_name} does not support attn_implementation="
+                    f"{model_source} does not support attn_implementation="
                     f'"{args.attn_implementation}". Falling back to "eager".'
                 ),
                 stacklevel=2,
             )
             fallback_kwargs = dict(model_kwargs)
             fallback_kwargs["attn_implementation"] = "eager"
-            return AutoModelForSeq2SeqLM.from_pretrained(args.model_name, **fallback_kwargs)
+            return AutoModelForSeq2SeqLM.from_pretrained(model_source, **fallback_kwargs)
         raise
 
 
@@ -357,7 +370,9 @@ def main() -> None:
         )
     dataset = DatasetDict(dataset_dict)
 
-    tokenizer = load_tokenizer(args.model_name)
+    model_source = resolve_model_source(args)
+    print(f"Loading ByT5 from: {model_source}")
+    tokenizer = load_tokenizer(model_source)
     model = load_model(args)
     if args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
