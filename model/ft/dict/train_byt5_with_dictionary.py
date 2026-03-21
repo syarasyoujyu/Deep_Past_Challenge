@@ -357,6 +357,12 @@ def build_augmented_source(
     return f"{args.source_prefix}{normalized_transliteration} || dictionary: {hint_text}".strip()
 
 
+def serialize_dictionary_hints(dictionary_hints: list[DictionaryEntry]) -> str:
+    return " ; ".join(
+        f"{entry.source_form} = {entry.target_hint}" for entry in dictionary_hints
+    )
+
+
 def prepare_frame(args: argparse.Namespace, dictionary_index: dict[tuple[str, ...], list[DictionaryEntry]]) -> pd.DataFrame:
     frame = read_train_frame(args.train_path).copy()
 
@@ -380,6 +386,7 @@ def prepare_frame(args: argparse.Namespace, dictionary_index: dict[tuple[str, ..
         augmented_source_column.append(build_augmented_source(transliteration, hints, args))
 
     frame["dictionary_hints"] = dictionary_hints_column
+    frame["dictionary_hint_text"] = frame["dictionary_hints"].map(serialize_dictionary_hints)
     frame["augmented_source"] = augmented_source_column
     frame["dictionary_hint_count"] = frame["dictionary_hints"].map(len)
     return frame
@@ -407,6 +414,12 @@ def preview_augmented_examples(frame: pd.DataFrame, preview_count: int) -> None:
         print(f"[augmented]       {row['augmented_source']}")
         print(f"[translation]     {row['translation']}")
         print()
+
+
+def build_arrow_ready_frame(frame: pd.DataFrame) -> pd.DataFrame:
+    columns = ["transliteration", "translation", "augmented_source", "dictionary_hint_count"]
+    available_columns = [column for column in columns if column in frame.columns]
+    return frame.loc[:, available_columns].reset_index(drop=True)
 
 
 def build_compute_metrics(args: argparse.Namespace, tokenizer):
@@ -476,12 +489,16 @@ def main() -> None:
 
     train_frame, val_frame = split_frame(frame, args.val_size, args.seed)
     dataset_dict = {
-        "train": Dataset.from_pandas(train_frame.reset_index(drop=True), preserve_index=False)
+        "train": Dataset.from_pandas(
+            build_arrow_ready_frame(train_frame),
+            preserve_index=False,
+        )
     }
     has_validation = val_frame is not None and not val_frame.empty
     if has_validation:
         dataset_dict["validation"] = Dataset.from_pandas(
-            val_frame.reset_index(drop=True), preserve_index=False
+            build_arrow_ready_frame(val_frame),
+            preserve_index=False,
         )
     dataset = DatasetDict(dataset_dict)
 
