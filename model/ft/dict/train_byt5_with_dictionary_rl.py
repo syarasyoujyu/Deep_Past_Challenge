@@ -11,7 +11,6 @@ os.environ.setdefault("USE_TF", "0")
 
 import sacrebleu
 import torch
-from bert_score import score as bert_score
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from transformers import Adafactor, AdamW, get_linear_schedule_with_warmup
@@ -79,8 +78,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--save-total-limit", type=int, default=2)
     parser.add_argument("--num-beams", type=int, default=4)
     parser.add_argument("--length-penalty", type=float, default=1.0)
-    parser.add_argument("--bertscore-model-type", type=str, default=None)
-    parser.add_argument("--bertscore-batch-size", type=int, default=8)
     parser.add_argument("--gradient-checkpointing", type=parse_bool, default=True)
     parser.add_argument("--dtype", dest="dtype", type=parse_optional_torch_dtype, default=None)
     parser.add_argument("--torch-dtype", dest="dtype", type=parse_optional_torch_dtype)
@@ -258,26 +255,15 @@ def evaluate_model(model, tokenizer, records: list[dict[str, str]], args: argpar
 
     bleu = float(sacrebleu.corpus_bleu(predictions, [references]).score)
     chrfpp = float(sacrebleu.corpus_chrf(predictions, [references], word_order=2).score)
-    _, _, bertscore_f1 = bert_score(
-        predictions,
-        references,
-        lang="en",
-        model_type=args.bertscore_model_type,
-        batch_size=args.bertscore_batch_size,
-        device="cuda" if device.type == "cuda" else "cpu",
-        verbose=False,
-    )
-    bertscore = float(bertscore_f1.mean().item())
     reward_mean = float(
         compute_rewards(references, predictions, args).mean().item()
     )
-    geometric_mean = math.sqrt(max(bleu / 100.0, 0.0) * max(chrfpp / 100.0, 0.0)) * 100.0
+    geometric_mean = math.sqrt(max(bleu, 0.0) * max(chrfpp, 0.0))
     return {
-        "bleu": round(bleu, 4),
-        "chrfpp": round(chrfpp, 4),
-        "bertscore": round(bertscore, 4),
+        "_bleu": round(bleu, 4),
+        "chrf++": round(chrfpp, 4),
         "reward_mean": round(reward_mean, 6),
-        "bleu_chrfpp_geometric_mean": round(geometric_mean, 4),
+        "_bleu_chrfpp_geometric_mean": round(geometric_mean, 4),
     }
 
 
@@ -302,8 +288,12 @@ def main() -> None:
     wandb_run = maybe_init_wandb(args)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
+    model_source = resolve_model_source(args)
+    print(f"Loading ByT5 from: {model_source}")
+    tokenizer = load_tokenizer(model_source)
+
     dictionary_index = load_dictionary_entries(args)
-    frame = prepare_frame(args, dictionary_index)
+    frame = prepare_frame(args, dictionary_index, tokenizer)
     preview_augmented_examples(frame, args.preview_count)
     print(
         "Dictionary coverage: "
@@ -331,9 +321,6 @@ def main() -> None:
     train_records = build_records(train_frame.reset_index(drop=True))
     val_records = [] if val_frame is None else build_records(val_frame.reset_index(drop=True))
 
-    model_source = resolve_model_source(args)
-    print(f"Loading ByT5 from: {model_source}")
-    tokenizer = load_tokenizer(model_source)
     model = load_model(args)
 
     use_cpu = not torch.cuda.is_available()
@@ -451,7 +438,7 @@ def main() -> None:
                     {f"eval/{key}": value for key, value in eval_metrics.items()} | {"eval/epoch": epoch_index + 1},
                     step=global_step,
                 )
-            current_metric = eval_metrics.get("reward_mean", float("-inf"))
+            current_metric = eval_metrics.get("_bleu_chrfpp_geometric_mean", float("-inf"))
             if current_metric > best_metric:
                 best_metric = current_metric
                 save_model(args.output_dir / "best_model", model, tokenizer, eval_metrics)

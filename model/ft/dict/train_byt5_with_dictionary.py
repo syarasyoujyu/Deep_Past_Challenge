@@ -15,7 +15,6 @@ import numpy as np
 import pandas as pd
 import sacrebleu
 import torch
-from bert_score import score as bert_score
 from datasets import Dataset, DatasetDict
 from sklearn.model_selection import train_test_split
 from transformers import (
@@ -490,6 +489,7 @@ def build_arrow_ready_frame(frame: pd.DataFrame) -> pd.DataFrame:
 
 def build_compute_metrics(args: argparse.Namespace, tokenizer):
     def compute_metrics(eval_prediction) -> dict[str, float]:
+        del args
         predictions, labels = eval_prediction
         if isinstance(predictions, tuple):
             predictions = predictions[0]
@@ -504,25 +504,16 @@ def build_compute_metrics(args: argparse.Namespace, tokenizer):
         decoded_predictions = [prediction.strip() for prediction in decoded_predictions]
         decoded_labels = [label.strip() for label in decoded_labels]
 
-        chrfpp = sacrebleu.corpus_chrf(decoded_predictions, [decoded_labels], word_order=2).score
-        _, _, bertscore_f1 = bert_score(
-            decoded_predictions,
-            decoded_labels,
-            lang="en",
-            model_type=args.bertscore_model_type,
-            batch_size=args.bertscore_batch_size,
-            device="cuda" if torch.cuda.is_available() else "cpu",
-            verbose=False,
-        )
-        bertscore = float(bertscore_f1.mean().item())
-        geometric_mean = math.sqrt(max(bertscore, 0.0) * max(chrfpp / 100.0, 0.0)) * 100.0
+        bleu = float(sacrebleu.corpus_bleu(decoded_predictions, [decoded_labels]).score)
+        chrfpp = float(sacrebleu.corpus_chrf(decoded_predictions, [decoded_labels], word_order=2).score)
+        geometric_mean = math.sqrt(max(bleu, 0.0) * max(chrfpp, 0.0))
         prediction_lengths = [
             np.count_nonzero(prediction != tokenizer.pad_token_id) for prediction in predictions
         ]
         return {
-            "bertscore": round(bertscore, 4),
-            "chrfpp": round(float(chrfpp), 4),
-            "bertscore_chrfpp_geometric_mean": round(float(geometric_mean), 4),
+            "_bleu": round(float(bleu), 4),
+            "chrf++": round(float(chrfpp), 4),
+            "_bleu_chrfpp_geometric_mean": round(float(geometric_mean), 4),
             "gen_len": round(float(np.mean(prediction_lengths)), 4),
         }
 
@@ -633,7 +624,7 @@ def main() -> None:
         save_total_limit=args.save_total_limit,
         load_best_model_at_end=eval_strategy != "no",
         metric_for_best_model=(
-            "bertscore_chrfpp_geometric_mean" if eval_strategy != "no" else None
+            "_bleu_chrfpp_geometric_mean" if eval_strategy != "no" else None
         ),
         greater_is_better=True,
         generation_max_length=args.max_target_length,
