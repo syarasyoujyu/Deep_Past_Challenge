@@ -489,7 +489,6 @@ def build_arrow_ready_frame(frame: pd.DataFrame) -> pd.DataFrame:
 
 def build_compute_metrics(args: argparse.Namespace, tokenizer):
     def compute_metrics(eval_prediction) -> dict[str, float]:
-        del args
         predictions, labels = eval_prediction
         if isinstance(predictions, tuple):
             predictions = predictions[0]
