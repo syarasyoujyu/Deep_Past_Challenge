@@ -43,7 +43,6 @@ from model.common import (
     seed_everything,
 )
 
-
 DEFAULT_MODEL_NAME = "google/byt5-small"
 DEFAULT_OUTPUT_DIR = ROOT_DIR / "artifacts" / "byt5-small-dict"
 DEFAULT_TRAIN_PATH = (
@@ -350,21 +349,50 @@ def build_augmented_source(
     if not dictionary_hints:
         return f"{args.source_prefix}{normalized_transliteration}".strip()
 
-    hint_text = " ; ".join(
+    hint_text = " ; \n".join(
         f"{entry.source_form} = {entry.target_hint}" for entry in dictionary_hints
     )
     if args.hint_placement == "prepend":
-        return f"{args.source_prefix}dictionary: {hint_text} || text: {normalized_transliteration}".strip()
-    return f"{args.source_prefix}{normalized_transliteration} || dictionary: {hint_text}".strip()
+        return f"{args.source_prefix}\n\ndictionary: {hint_text} \n\n text: {normalized_transliteration}".strip()
+    return f"{args.source_prefix}{normalized_transliteration} \n\n dictionary: {hint_text}".strip()
+
+
+def fit_dictionary_hints_to_source_budget(
+    normalized_transliteration: str,
+    dictionary_hints: list[DictionaryEntry],
+    args: argparse.Namespace,
+    tokenizer,
+) -> tuple[list[DictionaryEntry], str]:
+    kept_hints = list(dictionary_hints)
+    while True:
+        augmented_source = build_augmented_source(
+            normalized_transliteration,
+            kept_hints,
+            args,
+        )
+        token_count = len(
+            tokenizer(
+                augmented_source,
+                add_special_tokens=True,
+                truncation=False,
+            )["input_ids"]
+        )
+        if token_count <= args.max_source_length or not kept_hints:
+            return kept_hints, augmented_source
+        kept_hints = kept_hints[:-1]
 
 
 def serialize_dictionary_hints(dictionary_hints: list[DictionaryEntry]) -> str:
-    return " ; ".join(
+    return " ;\n ".join(
         f"{entry.source_form} = {entry.target_hint}" for entry in dictionary_hints
     )
 
 
-def prepare_frame(args: argparse.Namespace, dictionary_index: dict[tuple[str, ...], list[DictionaryEntry]]) -> pd.DataFrame:
+def prepare_frame(
+    args: argparse.Namespace,
+    dictionary_index: dict[tuple[str, ...], list[DictionaryEntry]],
+    tokenizer,
+) -> pd.DataFrame:
     frame = read_train_frame(args.train_path).copy()
 
     if args.normalize_source:
@@ -383,8 +411,14 @@ def prepare_frame(args: argparse.Namespace, dictionary_index: dict[tuple[str, ..
     augmented_source_column: list[str] = []
     for transliteration in frame["transliteration"].tolist():
         hints = find_dictionary_hints(transliteration, dictionary_index, args)
-        dictionary_hints_column.append(hints)
-        augmented_source_column.append(build_augmented_source(transliteration, hints, args))
+        fitted_hints, augmented_source = fit_dictionary_hints_to_source_budget(
+            transliteration,
+            hints,
+            args,
+            tokenizer,
+        )
+        dictionary_hints_column.append(fitted_hints)
+        augmented_source_column.append(augmented_source)
 
     frame["dictionary_hints"] = dictionary_hints_column
     frame["dictionary_hint_text"] = frame["dictionary_hints"].map(serialize_dictionary_hints)
@@ -510,18 +544,18 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
+    model_source = resolve_model_source(args)
+    print(f"Loading ByT5 from: {model_source}")
+    tokenizer = load_tokenizer(model_source)
+
     dictionary_index = load_dictionary_entries(args)
-    frame = prepare_frame(args, dictionary_index)
+    frame = prepare_frame(args, dictionary_index, tokenizer)
     preview_augmented_examples(frame, args.preview_count)
     print(
         "Dictionary coverage: "
         f"{int((frame['dictionary_hint_count'] > 0).sum())}/{len(frame)} rows "
         f"have at least one hint."
     )
-
-    model_source = resolve_model_source(args)
-    print(f"Loading ByT5 from: {model_source}")
-    tokenizer = load_tokenizer(model_source)
 
     if args.dry_run:
         preview_prompt_length_extremes(frame, tokenizer, top_k=5)

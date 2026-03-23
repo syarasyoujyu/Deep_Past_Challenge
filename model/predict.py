@@ -12,7 +12,6 @@ os.environ.setdefault("USE_TF", "0")
 import pandas as pd
 import sacrebleu
 import torch
-from bert_score import score as bert_score
 from transformers import AutoModelForSeq2SeqLM
 
 from model.common import (
@@ -150,23 +149,14 @@ def compute_row_metrics(
     hypothesis_texts: list[str],
     args: argparse.Namespace,
 ) -> tuple[list[float], list[float], list[float]]:
-    _, _, bertscore_f1 = bert_score(
-        hypothesis_texts,
-        reference_texts,
-        lang="en",
-        model_type=args.bertscore_model_type,
-        batch_size=args.bertscore_batch_size,
-        device="cuda" if args.device != "cpu" and torch.cuda.is_available() else "cpu",
-        verbose=False,
-    )
-    bertscores = [float(score.item()) for score in bertscore_f1]
-
+    bertscores = []
     chrf_scores: list[float] = []
     geometric_means: list[float] = []
     for reference_text, hypothesis_text in zip(reference_texts, hypothesis_texts, strict=True):
-        sentence_bleu = float(sacrebleu.sentence_bleu(hypothesis_text, [reference_text]).score)
-        sentence_chrf = float(sacrebleu.sentence_chrf(hypothesis_text, [reference_text], word_order=2).score)
-        geometric_mean = math.sqrt((sentence_bleu / 100.0) * (sentence_chrf / 100.0)) * 100.0
+        sentence_bleu = float(sacrebleu.corpus_bleu(hypothesis_text, [reference_text]).score)
+        sentence_chrf = float(sacrebleu.corpus_chrf(hypothesis_text, [reference_text], word_order=2).score)
+        bertscores.append(sentence_bleu)
+        geometric_mean = math.sqrt(sentence_bleu*sentence_chrf)
         chrf_scores.append(sentence_chrf)
         geometric_means.append(geometric_mean)
 

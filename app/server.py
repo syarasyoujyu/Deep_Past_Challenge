@@ -18,7 +18,7 @@ except ImportError:
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_PATH = PROJECT_ROOT / "data" / "train_refined.csv"
+DATA_PATH = PROJECT_ROOT / "data" / "train_refined_v2.csv"
 HOST = os.environ.get("APP_HOST", "127.0.0.1")
 PORT = int(os.environ.get("APP_PORT", "8000"))
 

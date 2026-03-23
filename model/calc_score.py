@@ -44,7 +44,7 @@ def calculate_scores(df_ref: pd.DataFrame, df_hyp: pd.DataFrame) -> dict[str, fl
 
     bleu = float(sacrebleu.corpus_bleu(hypotheses, [references]).score)
     chrfpp = float(sacrebleu.corpus_chrf(hypotheses, [references], word_order=2).score)
-    bleu_chrfpp_geometric_mean = math.sqrt((bleu / 100.0) * (chrfpp / 100.0)) * 100.0
+    bleu_chrfpp_geometric_mean = math.sqrt(bleu* chrfpp)
 
     return {
         "_bleu": bleu,
