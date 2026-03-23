@@ -34,7 +34,7 @@ os.environ.setdefault("USE_TF", "0")
 
 DEFAULT_TEST_PATH = "/kaggle/input/deep-past-initiative-machine-translation/test.csv"
 DEFAULT_OUTPUT_DIR = "/kaggle/working/"
-DEFAULT_MODEL_A_PATH = "/kaggle/input/models/yokoinaba/akkad-dict-v3/transformers/default/1/checkpoint-164"
+DEFAULT_MODEL_A_PATH = "/kaggle/input/models/yokoinaba/akkad-dict-v2/transformers/default/1/checkpoint-246"
 DEFAULT_MODEL_B_PATH = "/kaggle/input/models/mattiaangeli/byt5-akkadian-mbr/pytorch/default/6"
 DEFAULT_LEXICON_PATH = "/kaggle/input/datasets/yokoinaba/word-dict-akkad/OA_Lexicon_eBL_refined_with_definition.csv"
 DEFAULT_GLOSS_PATH = "/kaggle/input/datasets/yokoinaba/akkad-dict/train_openai_gloss_compact.jsonl"
@@ -192,6 +192,9 @@ class EnsembleDictConfig:
     mbr_w_jaccard: float = 0.20
     mbr_w_length: float = 0.04
     mbr_w_support: float = 0.00
+    mbr_w_model_priority: float = 0.08
+    model_a_priority: float = 1.0
+    model_b_priority: float = 1.0
 
     use_mixed_precision: bool = True
     use_better_transformer: bool = True
@@ -1051,6 +1054,7 @@ class MBRSelector:
         w_jaccard: float = 0.20,
         w_length: float = 0.10,
         w_support: float = 0.12,
+        w_model_priority: float = 0.08,
     ):
         self._chrf_metric = sacrebleu.metrics.CHRF(word_order=2)
         self._bleu_metric = sacrebleu.metrics.BLEU(effective_order=True)
@@ -1060,7 +1064,11 @@ class MBRSelector:
         self.w_jaccard = w_jaccard
         self.w_length = w_length
         self.w_support = w_support
-        self._full_total = max(w_chrf + w_bleu + w_jaccard + w_length + w_support, 1e-9)
+        self.w_model_priority = w_model_priority
+        self._full_total = max(
+            w_chrf + w_bleu + w_jaccard + w_length + w_support + w_model_priority,
+            1e-9,
+        )
 
     def _chrfpp(self, a: str, b: str) -> float:
         if not a or not b:
@@ -1104,22 +1112,31 @@ class MBRSelector:
     def _normalize_key(text: str) -> str:
         return re.sub(r"\s+", " ", str(text).strip().lower())
 
-    def _dedup_with_support(self, xs: List[str]) -> tuple[List[str], List[int]]:
+    def _dedup_with_support(
+        self,
+        xs: List[str],
+        candidate_priorities: List[float] | None = None,
+    ) -> tuple[List[str], List[int], List[float]]:
         seen = {}
         out = []
         support = []
-        for text in xs:
+        priorities = []
+        if candidate_priorities is None:
+            candidate_priorities = [1.0] * len(xs)
+        for text, priority in zip(xs, candidate_priorities, strict=True):
             text = str(text).strip()
             if not text:
                 continue
             key = self._normalize_key(text)
             if key in seen:
                 support[seen[key]] += 1
+                priorities[seen[key]] = max(priorities[seen[key]], float(priority))
                 continue
             seen[key] = len(out)
             out.append(text)
             support.append(1)
-        return out, support
+            priorities.append(float(priority))
+        return out, support, priorities
 
     @staticmethod
     def _support_bonus(support: List[int], idx: int) -> float:
@@ -1130,15 +1147,30 @@ class MBRSelector:
             return 0.0
         return 100.0 * (support[idx] - 1) / (max_support - 1)
 
-    def pick(self, candidates: List[str]) -> str:
-        cands, support = self._dedup_with_support(candidates)
+    @staticmethod
+    def _model_priority_bonus(model_priorities: List[float], idx: int) -> float:
+        if not model_priorities:
+            return 0.0
+        max_priority = max(model_priorities)
+        min_priority = min(model_priorities)
+        if max_priority <= min_priority:
+            return 0.0
+        return 100.0 * (model_priorities[idx] - min_priority) / (max_priority - min_priority)
+
+    def pick(self, candidates: List[str], candidate_priorities: List[float] | None = None) -> str:
+        cands, support, model_priorities = self._dedup_with_support(candidates, candidate_priorities)
         if support:
-            ranked = sorted(zip(cands, support), key=lambda item: (-item[1], item[0]))
+            ranked = sorted(
+                zip(cands, support, model_priorities),
+                key=lambda item: (-item[1], -item[2], item[0]),
+            )
             cands = [item[0] for item in ranked]
             support = [item[1] for item in ranked]
+            model_priorities = [item[2] for item in ranked]
         if self.pool_cap:
             cands = cands[: self.pool_cap]
             support = support[: self.pool_cap]
+            model_priorities = model_priorities[: self.pool_cap]
         num_candidates = len(cands)
         if num_candidates == 0:
             return ""
@@ -1154,7 +1186,13 @@ class MBRSelector:
             ) / max(1, num_candidates - 1)
             length_bonus = self._length_bonus(lengths, idx)
             support_bonus = self._support_bonus(support, idx)
-            total = (pairwise + self.w_length * length_bonus + self.w_support * support_bonus) / self._full_total
+            model_priority_bonus = self._model_priority_bonus(model_priorities, idx)
+            total = (
+                pairwise
+                + self.w_length * length_bonus
+                + self.w_support * support_bonus
+                + self.w_model_priority * model_priority_bonus
+            ) / self._full_total
             scores.append(total)
         return cands[int(np.argmax(scores))]
 
@@ -1171,6 +1209,7 @@ class EnsembleDictEngine:
             w_jaccard=cfg.mbr_w_jaccard,
             w_length=cfg.mbr_w_length,
             w_support=cfg.mbr_w_support,
+            w_model_priority=cfg.mbr_w_model_priority,
         )
 
     def _adaptive_beams(self, attn: torch.Tensor) -> int:
@@ -1276,6 +1315,10 @@ class EnsembleDictEngine:
         self.logger.info(f"  batch_size        : {cfg.batch_size}")
         self.logger.info(f"  seed              : {cfg.seed}")
         self.logger.info(
+            f"  Model priority    : Model-A={cfg.model_a_priority:.3f}, "
+            f"Model-B={cfg.model_b_priority:.3f}, mbr_w_model_priority={cfg.mbr_w_model_priority:.3f}"
+        )
+        self.logger.info(
             f"  Dictionary prompt : lexicon={cfg.lexicon_path}, gloss={cfg.gloss_path}, "
             f"onomasticon={cfg.onomasticon_path}, include_onomasticon={cfg.include_onomasticon}"
         )
@@ -1317,8 +1360,12 @@ class EnsembleDictEngine:
         results = []
         for sample_id in tqdm(sample_ids, desc="  MBR"):
             combined = pools_a.get(sample_id, []) + pools_b.get(sample_id, [])
+            candidate_priorities = (
+                [cfg.model_a_priority] * len(pools_a.get(sample_id, []))
+                + [cfg.model_b_priority] * len(pools_b.get(sample_id, []))
+            )
             postprocessed = self.postprocessor.postprocess_batch(combined) if combined else []
-            chosen = self.mbr.pick(postprocessed)
+            chosen = self.mbr.pick(postprocessed, candidate_priorities=candidate_priorities)
             if not chosen or not chosen.strip():
                 chosen = "The tablet is too damaged to translate."
             results.append((sample_id, chosen))
@@ -1357,6 +1404,11 @@ def print_env(cfg: EnsembleDictConfig) -> None:
     print(f"Seed     : {cfg.seed}")
     print(f"Model A  : {cfg.model_a_path}")
     print(f"Model B  : {cfg.model_b_path}")
+    print(
+        f"Priority : Model-A={cfg.model_a_priority:.3f}, "
+        f"Model-B={cfg.model_b_priority:.3f}, "
+        f"mbr_w_model_priority={cfg.mbr_w_model_priority:.3f}"
+    )
     print(f"Tokenizer: {cfg.tokenizer_path}")
     print(f"Lexicon  : {cfg.lexicon_path}")
     print(f"Gloss    : {cfg.gloss_path}")
@@ -1441,6 +1493,9 @@ def main() -> None:
         "mbr_w_jaccard": cfg.mbr_w_jaccard,
         "mbr_w_length": cfg.mbr_w_length,
         "mbr_w_support": cfg.mbr_w_support,
+        "mbr_w_model_priority": cfg.mbr_w_model_priority,
+        "model_a_priority": cfg.model_a_priority,
+        "model_b_priority": cfg.model_b_priority,
         "cuda_device_count": cfg.cuda_device_count,
         "dual_gpu": cfg.dual_gpu,
         "gpu_a": cfg.gpu_a,

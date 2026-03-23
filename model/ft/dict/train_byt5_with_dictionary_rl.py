@@ -12,8 +12,9 @@ os.environ.setdefault("USE_TF", "0")
 import sacrebleu
 import torch
 from sklearn.model_selection import train_test_split
+from torch.optim import AdamW
 from torch.utils.data import DataLoader
-from transformers import Adafactor, AdamW, get_linear_schedule_with_warmup
+from transformers import Adafactor, get_linear_schedule_with_warmup
 
 from model.byt5 import parse_bool, parse_interval_strategy, parse_optional_torch_dtype
 from model.common import ROOT_DIR, build_generation_config, load_tokenizer, seed_everything
