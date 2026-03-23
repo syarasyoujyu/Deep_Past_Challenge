@@ -250,15 +250,14 @@ def evaluate_model(model, tokenizer, records: list[dict[str, str]], args: argpar
             generated = model.generate(**encoded, **generation_config)
         predictions.extend(tokenizer.batch_decode(generated, skip_special_tokens=True))
 
-    predictions = [prediction.strip() for prediction in predictions]
-    references = [reference.strip() for reference in references]
-
-    bleu = float(sacrebleu.corpus_bleu(predictions, [references]).score)
-    chrfpp = float(sacrebleu.corpus_chrf(predictions, [references], word_order=2).score)
+    bleu_result = sacrebleu.corpus_bleu(predictions, [references])
+    chrfpp_result = sacrebleu.corpus_chrf(predictions, [references], word_order=2)
+    bleu = float(bleu_result.score)
+    chrfpp = float(chrfpp_result.score)
     reward_mean = float(
         compute_rewards(references, predictions, args).mean().item()
     )
-    geometric_mean = math.sqrt(max(bleu, 0.0) * max(chrfpp, 0.0))
+    geometric_mean = math.sqrt(bleu * chrfpp)
     return {
         "_bleu": round(bleu, 4),
         "chrf++": round(chrfpp, 4),

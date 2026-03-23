@@ -500,12 +500,11 @@ def build_compute_metrics(args: argparse.Namespace, tokenizer):
         decoded_predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
 
-        decoded_predictions = [prediction.strip() for prediction in decoded_predictions]
-        decoded_labels = [label.strip() for label in decoded_labels]
-
-        bleu = float(sacrebleu.corpus_bleu(decoded_predictions, [decoded_labels]).score)
-        chrfpp = float(sacrebleu.corpus_chrf(decoded_predictions, [decoded_labels], word_order=2).score)
-        geometric_mean = math.sqrt(max(bleu, 0.0) * max(chrfpp, 0.0))
+        bleu_result = sacrebleu.corpus_bleu(decoded_predictions, [decoded_labels])
+        chrfpp_result = sacrebleu.corpus_chrf(decoded_predictions, [decoded_labels], word_order=2)
+        bleu = float(bleu_result.score)
+        chrfpp = float(chrfpp_result.score)
+        geometric_mean = math.sqrt(bleu * chrfpp)
         prediction_lengths = [
             np.count_nonzero(prediction != tokenizer.pad_token_id) for prediction in predictions
         ]
