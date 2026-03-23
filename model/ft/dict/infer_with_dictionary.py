@@ -22,7 +22,6 @@ from model.ft.dict.train_byt5_with_dictionary import (
     DEFAULT_GLOSS_PATH,
     DEFAULT_LEXICON_PATH,
     DEFAULT_ONOMASTICON_PATH,
-    build_augmented_source,
     find_dictionary_hints,
     fit_dictionary_hints_to_source_budget,
     load_dictionary_entries,
@@ -37,7 +36,6 @@ from model.predict import (
     maybe_transform_with_bettertransformer,
     write_submission,
 )
-
 
 DEFAULT_MODEL_PATH = ROOT_DIR / "artifacts" / "byt5-small-dict"
 DEFAULT_INPUT_PATH = ROOT_DIR / "data" / "test.csv"
@@ -163,7 +161,7 @@ def predict_translations(frame: pd.DataFrame, tokenizer, args: argparse.Namespac
 
 
 def write_eval_csv(frame: pd.DataFrame, predictions: list[str], args: argparse.Namespace) -> None:
-    reference_texts = frame["translation"].tolist()
+    reference_texts = frame["translation"].fillna("").astype(str).tolist()
     bleu_scores, chrf_scores, geometric_means = compute_row_metrics(reference_texts, predictions, args)
     eval_frame = pd.DataFrame(
         {
