@@ -1,0 +1,2286 @@
+entity_type,dict_key,mention_count,row_count,sources,canonical_names
+PN,a-lá-hi-im,367,298,lexicon,Ali-aḫu
+PN,a-la-hi-im,367,298,lexicon,Ali-aḫu
+PN,en-um-a-šur,356,243,onomasticon,Enum-Aššur
+PN,en-um-a-šùr,356,243,onomasticon,Enum-Aššur
+PN,ša-lim-a-šur,227,152,lexicon; onomasticon,Šalim-Aššur
+PN,en-nam-a-šùr,185,145,onomasticon,Enum-Aššur
+PN,en-nam-a-šur,185,145,lexicon; onomasticon,Ennam-Aššur
+PN,e-lá-ma,173,114,lexicon; onomasticon,Elamma
+PN,e-la-ma,173,114,lexicon; onomasticon,Elamma
+PN,šu-ištar,167,129,lexicon; onomasticon,Šu-Ištar
+PN,a-šur-ma-lik,161,134,onomasticon,Ašurmalik
+PN,a-šùr-ma-lik,161,134,onomasticon,Ašurmalik
+PN,a-mur-ištar,151,120,lexicon; onomasticon,Amur-Ištar
+PN,en-na-sú-in,149,117,lexicon,Ennam-Suen
+PN,a-šùr-du10,134,86,lexicon; onomasticon,Aššur-ṭab; Aššur-ṭāb
+PN,ša-lim-a-šùr,133,93,lexicon; onomasticon,Šalim-Aššur
+PN,šál-ma-a-šur,129,87,lexicon; onomasticon,Šalim-Aššur
+PN,a-šùr-i-mì-ti,115,89,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-i-mì-tí,115,89,lexicon; onomasticon,Aššur-imittī
+PN,a-šùr-i-mì-tí,115,89,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-i-mì-ti,115,89,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-i-mì-tì,115,89,lexicon; onomasticon,Aššur-imittī
+PN,a-šùr-i-mi-ti,115,89,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-ì-mì-tí,115,89,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-i-mi-ti,115,89,lexicon; onomasticon,Aššur-imittī
+PN,lá-qé-ep,104,79,lexicon,Lā-qēpu
+PN,a-lá-hu-um,98,86,lexicon,Ali-aḫu
+PN,a-la-hu-um,98,86,lexicon,Ali-aḫu
+PN,i-tur4-dingir,94,83,lexicon; onomasticon,Itūr-ilī
+PN,puzur4-a-šùr,89,77,lexicon; onomasticon,Puzur-Aššur
+PN,puzur4-a-šur,89,77,lexicon; onomasticon,Puzur-Aššur
+PN,en-na-nim,85,78,lexicon,Ennānu
+PN,i-ku-pí-a,81,66,onomasticon,Ikupia
+PN,i-dí-a-bi-im,81,63,lexicon,Iddin-abu
+PN,a-šur-na-da,76,60,lexicon; onomasticon,Aššur-nādā
+PN,ku-li-a,74,43,lexicon; onomasticon,Kulia; Kuliā
+PN,a-šur-du10,73,49,lexicon; onomasticon,Aššur-ṭab; Aššur-ṭāb
+PN,a-mur-a-šùr,71,54,lexicon; onomasticon,Amur-Aššur
+PN,a-mur-a-šur,71,54,lexicon; onomasticon,Amur-Aššur
+PN,i-dí-a-šur,70,55,onomasticon,Idi-Aššur
+PN,i-dí-a-šùr,70,55,onomasticon,Idi-Aššur
+PN,pì-lá-ah-ištar,67,44,lexicon; onomasticon,Pilah-Ištar; Pilaḫ-Ištar
+PN,pì-la-ah-ištar,67,44,lexicon; onomasticon,Pilah-Ištar; Pilaḫ-Ištar
+PN,pí-la-ah-ištar,67,44,lexicon; onomasticon,Pilah-Ištar; Pilaḫ-Ištar
+PN,pí-lá-ah-ištar,67,44,lexicon; onomasticon,Pilah-Ištar; Pilaḫ-Ištar
+PN,a-bu-ša-lim,64,43,lexicon,Abum-šali
+PN,šu-be-lim,64,57,lexicon,Šu-Bēlu
+PN,a-šùr-i-dí,62,45,lexicon; onomasticon,Aššur-idī
+PN,a-šur-i-dí,62,45,lexicon; onomasticon,Aššur-idī
+PN,a-šur-i-dì,62,45,lexicon; onomasticon,Aššur-idī
+PN,a-šùr-i-dì,62,45,lexicon; onomasticon,Aššur-idī
+PN,a-šùr-ba-ni,61,55,lexicon; onomasticon,Aššur-bāni; Aššur-bānī
+PN,šu-{d}en.líl,58,39,lexicon; onomasticon,Šu-Enlil
+PN,dan-a-šur,58,45,lexicon; onomasticon,Dan-Aššur; Dān-Aššur
+PN,dan-a-šùr,58,45,lexicon; onomasticon,Dan-Aššur; Dān-Aššur
+PN,a-dí-da,58,52,lexicon; onomasticon,Adida
+PN,i-dí-a-bi4-im,56,52,lexicon,Iddin-abu
+PN,a-šùr-be-el-a-wa-tim,55,48,lexicon,Aššur-bēl-awāti
+PN,be-lúm-ba-ni,54,38,lexicon; onomasticon,Belum-bani; Bēlum-bāni; Bēlum-bānī
+PN,i-lí-a,50,39,lexicon,Eliā
+PN,šu-ku-bi-im,49,40,lexicon,Šu-Kūbu
+PN,ili5-ba-ni,49,42,lexicon; onomasticon,Ilī-bāni; Ilī-bānī
+PN,ma-ma-hi-ir,49,39,lexicon; onomasticon,Man-maḫir; Man-māhir
+PN,hi-na-a,47,37,lexicon,Ḫinnā
+PN,kur-ub-ištar,46,36,lexicon; onomasticon,Kurub-Ištar
+PN,šu-a-šur,46,36,lexicon; onomasticon,Šu-Aššur
+PN,šu-a-šùr,46,36,lexicon; onomasticon,Šu-Aššur
+PN,ku-zi-zi-a,45,31,lexicon; onomasticon,Kuzizia; Kuziziā
+PN,puzur4.ištar,45,39,lexicon; onomasticon,Puzur-Ištar
+PN,e-lá-li,44,41,lexicon; onomasticon,Elāli
+PN,e-lá-lí,44,41,lexicon; onomasticon,Elāli
+PN,šál-ma-a-šùr,43,30,lexicon; onomasticon,Šalim-Aššur
+PN,a-lu-wa,43,31,lexicon; onomasticon,Alua
+PN,ša-lim-a-šùr-ma,42,32,lexicon; onomasticon,Šalim-Aššur
+PN,a-šùr-sipa,42,37,lexicon,Aššur-rē'ī
+PN,ì-lí-dan,41,31,lexicon; onomasticon,Ilī-dān
+PN,ištar-lá-ma-sí,41,31,lexicon; onomasticon,Ištar-lamassī
+PN,i-sú-rik13,41,28,lexicon; onomasticon,Issu-arik
+PN,šu-ku-bu-um,40,32,lexicon,Šu-Kūbu
+PN,en-um-a-šur-ma,39,37,lexicon; onomasticon,Ennam-Aššur
+PN,a-šùr-ta-ak-lá-ku,39,34,lexicon; onomasticon,Aššur-taklaku; Aššur-taklāku
+PN,a-mur-{d}utu,39,33,lexicon; onomasticon,Amur-Šamaš
+PN,šé-ep-ištar,39,32,lexicon; onomasticon,Šēp-Ištar
+PN,šu-nu-nu,38,26,lexicon; onomasticon,Šu-Nunu
+PN,šu-a-nim,38,37,lexicon,Šu-Anu
+PN,{d}mar.tu-ba-ni,38,33,lexicon; onomasticon,Amurrum-bāni; Amurrum-bānī
+PN,a-al-du10,38,21,lexicon; onomasticon,Al-ṭab; Al-ṭāb; Āl-ṭāb
+PN,a-šùr-lá-ma-sí,38,29,lexicon; onomasticon,Aššur-lamassī
+PN,i-dí-sú-in,38,28,onomasticon,Idi-Suin; Idi-suin
+PN,i-dí-su-in,38,28,onomasticon,Idi-Suin; Idi-suin
+PN,du10-ṣí-lá-a-šùr,37,33,lexicon; onomasticon,Ṭāb-ṣill-Aššur
+PN,puzur4-a-na,36,31,lexicon; onomasticon,Puzur-Anna
+PN,šu-ku-bi4-im,35,28,lexicon,Šu-Kūbu
+PN,šu-sú-in,35,28,lexicon; onomasticon,Šu-Suen
+PN,da-dí-a,35,33,lexicon; onomasticon,Dadia; Dādia
+PN,ú-zu-a,35,31,lexicon; onomasticon,Uzua
+PN,a-šur-sipa,35,31,lexicon,Aššur-rē'ī
+PN,ma-nu-ki-a-šùr,34,23,lexicon; onomasticon,Mannum-kī-Aššur
+PN,a-šur-be-el-a-wa-tim,34,30,lexicon,Aššur-bēl-awāti
+PN,šu-ki-tim,34,24,lexicon,Šukkatu
+PN,i-dí-a-bu-um,33,28,lexicon,Iddin-abu
+PN,a-ni-na,33,25,lexicon,Anninaya
+PN,sú-kà-li-a,33,30,lexicon; onomasticon,Sukkallia; Sukkalliā
+PN,sú-kà-lí-a,33,30,lexicon; onomasticon,Sukkallia; Sukkalliā
+PN,a-šùr-{d}utu-ši,32,26,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,ah-ša-lim,32,24,lexicon,Aḫ-šali
+PN,ir-ma-a-šur,32,26,lexicon; onomasticon,Irma-Aššur
+PN,ir-ma-a-šùr,32,26,lexicon; onomasticon,Irma-Aššur
+PN,a-ta-a,31,23,lexicon,Attā
+PN,i-ku-nim,31,29,lexicon,Ikūnu
+PN,ú-ṣú-ur-ša-a-šùr,31,19,lexicon; onomasticon,Uṣur-ša-Aššur
+PN,lu-lu,31,24,lexicon; onomasticon,Lulu
+PN,šu-be-lúm,31,23,lexicon,Šu-Bēlu
+PN,a-šur-ba-ni,30,28,lexicon; onomasticon,Aššur-bāni; Aššur-bānī
+PN,en-um-a-šùr-ma,30,29,lexicon; onomasticon,Ennam-Aššur
+PN,a-šur-iš-ti-kál,29,25,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šur-iš-tí-kál,29,25,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šùr-iš-tí-kál,29,25,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šùr-iš-ti-kál,29,25,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šur-ìš-tí-kál,29,25,lexicon; onomasticon,Aššuriš-tikal
+PN,a-mur-ištar-ma,29,18,lexicon; onomasticon,Amur-Ištar
+PN,a-šur-ta-ak-lá-ku,28,24,lexicon; onomasticon,Aššur-taklaku; Aššur-taklāku
+PN,sig5-pí-a-šur,28,20,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,pu-šu-ki-in,28,20,lexicon; onomasticon,Pūšu-kēn
+PN,a-šùr-gal,28,21,lexicon; onomasticon,Aššur-rabi
+PN,a-lu-lá-a,28,21,lexicon,Alulā
+PN,a-šùr-ták-lá-ku,28,19,lexicon; onomasticon,Aššur-taklaku; Aššur-taklāku
+PN,šu-hu-bur,28,21,lexicon; onomasticon,Šu-Hubur; Šu-Ḫubur
+PN,a-ku-za,28,28,lexicon,Aguza
+PN,du10-ṣí-lá-a-šur,27,24,lexicon; onomasticon,Ṭāb-ṣill-Aššur
+PN,ma-nu-ki-a-šur,26,21,lexicon; onomasticon,Mannum-kī-Aššur
+PN,i-na-ah-dingir,26,22,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,a-lá-hu-um-ma,26,25,lexicon,Ali-aḫu
+PN,ú-ṣú-ur-ša-a-šur,26,16,lexicon; onomasticon,Uṣur-ša-Aššur
+PN,i-na-a,26,22,lexicon,Innā
+PN,a-šùr-dan,26,24,lexicon; onomasticon,Aššur-dan; Aššur-dān
+PN,ku-ra,26,21,lexicon; onomasticon,Kura; Kurā
+PN,ú-ší-na-lam,25,17,lexicon,Ušinalu
+PN,{d}utu-ba-ni,25,20,lexicon; onomasticon,Šamaš-bāni; Šamaš-bānī
+PN,id-na-a,24,21,lexicon,Iddinā
+PN,i-ku-pì-a,23,21,lexicon; onomasticon,Ikūn-pīa
+PN,a-ba-ba,23,21,lexicon; onomasticon,Ababa
+PN,a-šùr-na-da,22,19,lexicon; onomasticon,Aššur-nādā
+PN,a-tá-tá,22,22,lexicon; onomasticon,Adadā
+PN,a-ta-ta,22,22,lexicon; onomasticon,Adadā
+PN,a-tá-ta,22,22,lexicon; onomasticon,Adadā
+PN,zu-ku-a,22,22,lexicon; onomasticon,Zukua
+PN,a-šur-lá-ma-sí,22,18,lexicon; onomasticon,Aššur-lamassī
+PN,ha-nu,22,12,lexicon; onomasticon,Hanu; Ḫanu; Ḫānu
+PN,ša-li-a,22,17,lexicon; onomasticon,Šalia
+PN,sá-li-a,22,17,lexicon; onomasticon,Sallia; Salliā
+PN,sà-li-a,22,17,lexicon; onomasticon,Sallia; Salliā
+PN,i-dí-ištar,22,20,onomasticon,Idi-ištar
+PN,ú-ra-a,21,20,lexicon,Urā
+PN,ša-lim-be-lí,21,15,lexicon; onomasticon,Šalim-bēlī
+PN,i-na-sú-in,21,14,lexicon,Ennam-Suen
+PN,zu-ba,21,18,lexicon; onomasticon,Zuba
+PN,lá-ma-sí,21,19,lexicon; onomasticon,Lamassī
+PN,a-lá-bi4-im,21,16,lexicon,Ali-abu
+PN,ṣí-lu-lu,20,19,lexicon; onomasticon,Ṣilulu; Ṣilūlu
+PN,ša-lim-a-šur-ma,20,18,lexicon; onomasticon,Šalim-Aššur
+PN,a-šùr-e-mu-qí,20,18,lexicon; onomasticon,Aššur-emūqī
+PN,en-na-num,20,15,lexicon,Ennānu
+PN,e-na-ah-dingir,20,18,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,ma-na-na,20,18,lexicon; onomasticon,Manana
+PN,šu-la-ba-an,20,12,lexicon; onomasticon,Šu-Laban; Šu-Labān
+PN,a-hu-wa-qar,20,19,lexicon; onomasticon,Ahu-waqar; Aḫu-waqar
+PN,ku-ni-lim,20,11,lexicon,Kunilu
+PN,púzur-a-šur,19,14,lexicon; onomasticon,Puzur-Aššur
+PN,púzur-a-šùr,19,14,lexicon; onomasticon,Puzur-Aššur
+PN,puzur4-a-šur-ma,19,18,lexicon; onomasticon,Puzur-Aššur
+PN,a-zu,19,17,lexicon; onomasticon,Azu
+PN,a-na-ah-ì-lí,19,10,lexicon; onomasticon,Anah-ili; Anaḫ-ilī
+PN,a-na-ah-ì-li,19,10,lexicon; onomasticon,Anah-ili; Anaḫ-ilī
+PN,na-áb-sú-in,19,18,lexicon; onomasticon,Nabi-Suen
+PN,a-šur-dan,19,17,lexicon; onomasticon,Aššur-dan; Aššur-dān
+PN,i-ku-pí-a-šùr,19,18,lexicon; onomasticon,Ikūn-pī-Aššur
+PN,i-ku-pì-a-šur,19,18,lexicon; onomasticon,Ikūn-pī-Aššur
+PN,i-ku-pí-a-šur,19,18,lexicon; onomasticon,Ikūn-pī-Aššur
+PN,i-ku-pì-a-šùr,19,18,lexicon; onomasticon,Ikūn-pī-Aššur
+PN,a-la-bi-im,19,16,lexicon,Ali-abu
+PN,a-lá-bi-im,19,16,lexicon,Ali-abu
+PN,en-na-sú-in-ma,19,13,lexicon,Ennam-Suen
+PN,ša-lim-ar-dí,18,13,lexicon; onomasticon,Šalim-wardī
+PN,a-na-na,18,14,lexicon,Anna-anna
+PN,šu-lá-ba-an,18,10,lexicon; onomasticon,Šu-Laban; Šu-Labān
+PN,šu-ha-ri-im,18,16,lexicon,Šu-Ḫaru
+PN,am-ri-a,17,17,onomasticon,Amriya
+PN,i-sú-ri-ik,17,15,onomasticon,Issurik
+PN,bi,17,17,onomasticon,Bizia
+PN,šu-ištar-ma,17,16,lexicon; onomasticon,Šu-Ištar
+PN,mar.tu-ba-ni,17,16,lexicon; onomasticon,Amurrum-bāni; Amurrum-bānī
+PN,ì-lí-a-lim,17,14,lexicon,Ilī-ālu
+PN,šu-lí,17,9,lexicon; onomasticon,Šuli
+PN,šu-li,17,9,lexicon; onomasticon,Šuli
+PN,a-šùr-re-ṣí,17,14,lexicon; onomasticon,Aššur-rēṣī
+PN,a-šur-re-ṣí,17,14,lexicon; onomasticon,Aššur-rēṣī
+PN,dingir-ba-ni,17,14,lexicon; onomasticon,Ilī-bāni; Ilī-bānī
+PN,ú-ku,16,10,lexicon; onomasticon,Ukua
+PN,šu-be-lúm-ma,16,11,lexicon,Šu-Bēlu
+PN,a-hu-qar,16,13,lexicon; onomasticon,Ahu-waqar; Aḫu-waqar
+PN,ú-ṣur-ša-a-šur,16,13,lexicon; onomasticon,Uṣur-ša-Aššur
+PN,be-lá-nim,16,15,lexicon,Bēlānu
+PN,i-ri-šum,16,14,lexicon,Erišu
+PN,lá-qé-pí-im,16,15,lexicon,Lā-qēpu
+PN,a-lu-a,16,14,lexicon; onomasticon,Alua
+PN,ṣí-li-a,16,11,lexicon; onomasticon,Ṣillia; Ṣilliā
+PN,lá-qé-pì-im,16,12,lexicon,Lā-qēpu
+PN,ša-lim-wa-ar-dí,15,14,lexicon; onomasticon,Šalim-wardī
+PN,a-šur-gal,15,12,lexicon; onomasticon,Aššur-rabi
+PN,la-qé-ep,15,13,lexicon,Lā-qēpu
+PN,šu-bé-lim,15,15,lexicon,Šu-Bēlu
+PN,da-da-a,15,11,onomasticon,Dada’a
+PN,áb-ša-lim,15,7,lexicon,Abum-šali
+PN,e-na-a-šur,15,10,lexicon; onomasticon,Ennam-Aššur
+PN,a-šùr-e-nam,15,10,lexicon,Aššur-enna
+PN,šu-ta-mu-zi,14,12,lexicon; onomasticon,Šu-Tammuzi
+PN,{d}en.líl-ba-ni,14,12,lexicon; onomasticon,Enlil-bāni; Enlil-bānī
+PN,ba-zi-a,14,14,lexicon; onomasticon,Bazia; Baziā
+PN,ku-da-tim,14,13,lexicon,Kudātu
+PN,bu-zu-ta-a,14,12,lexicon,Buzutā
+PN,e-lá-ma-ma,14,9,lexicon; onomasticon,Elamma
+PN,i-ri-ší-im,14,11,lexicon,Erišu
+PN,e-lá-a,13,12,lexicon,Elāya
+PN,a-lá-ha-am,13,12,lexicon,Ali-aḫu
+PN,a-šur-ták-lá-ku,13,11,lexicon; onomasticon,Aššur-taklaku; Aššur-taklāku
+PN,a-da-da,13,11,lexicon; onomasticon,Adadā
+PN,a-dá-da,13,11,lexicon; onomasticon,Adadā
+PN,en-nam-a-šur-ma,13,13,lexicon; onomasticon,Ennam-Aššur
+PN,šu-bé-lúm,13,8,lexicon,Šu-Bēlu
+PN,zu-ku-a-ma,13,13,lexicon; onomasticon,Zukua
+PN,sig5-pí-a-šur-ma,13,13,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,ku-lu-ma-a,13,10,lexicon,Kulumā
+PN,a-li-li,12,10,lexicon,Āl-ilī
+PN,i-ku-pí-a-ma,12,11,lexicon; onomasticon,Ikūn-pīa
+PN,sú-in-na-da,12,9,lexicon; onomasticon,Suen-nādā
+PN,um-mì-iš-ha-ra,12,8,lexicon; onomasticon,Ummī-Išhara; Ummī-Išḫara
+PN,um,12,12,lexicon,Amurru
+PN,a-bi-a-a,12,11,lexicon,Abiā
+PN,a-ta-a-a,12,9,lexicon,Attā
+PN,lá-ma-sà-tum,12,11,lexicon,Lamassatu
+PN,a-mur-dingir,12,9,lexicon; onomasticon,Amur-ilī
+PN,bé-lá-num,12,11,lexicon,Bēlānu
+PN,be-lá-num,12,11,lexicon,Bēlānu
+PN,da-da-nim,12,11,lexicon,Dadānu
+PN,a-na-a-na,12,9,lexicon,Anna-anna
+PN,ma-nu-ki-ì-lí-a,12,5,lexicon; onomasticon,Mannum-kī-ilia
+PN,man-a-šur,11,9,lexicon; onomasticon,Puzur-Aššur
+PN,a-sà-nim,11,9,lexicon,Asānu
+PN,a-šur-ṣú-lu-lí,11,10,lexicon; onomasticon,Aššur-ṣulūlī
+PN,a-šùr-ṣú-lu-li,11,10,lexicon; onomasticon,Aššur-ṣulūlī
+PN,a-šur-ṣú-lu-li,11,10,lexicon; onomasticon,Aššur-ṣulūlī
+PN,ku-ku-wa,11,9,lexicon; onomasticon,Kukua
+PN,ku-ra-ra,11,10,lexicon; onomasticon,Kurara
+PN,ma-ma-hi-ir-ma,11,11,lexicon; onomasticon,Man-maḫir; Man-māhir
+PN,kà-ri-a,11,10,lexicon,Qarwiā
+PN,ib-ni-{d}im,11,7,lexicon; onomasticon,Ibni-Adad
+PN,e-wa-ri-mu-ša,11,10,lexicon,Evri-muža
+PN,dingir-na-da,11,10,lexicon; onomasticon,Ilī-nādā
+PN,lugal-sú-in,11,9,lexicon,Šar-Suen
+PN,lu-zi-na,11,10,lexicon; onomasticon,Luzina
+PN,lú-zi-na,11,10,lexicon; onomasticon,Luzina
+PN,ì-lí-áš-ra-ni,11,9,lexicon; onomasticon,Ilī-ašranni
+PN,a-ni-nim,11,11,lexicon,Anninu
+PN,a-gi-a,11,8,lexicon,Agiā
+PN,ha-na-a,11,9,lexicon; onomasticon,Hanaya; Ḫanaya
+PN,ištar-pá-li-il5,11,5,lexicon; onomasticon,Ištar-pālil
+PN,{d}im-ba-ni,11,11,lexicon; onomasticon,Adad-bani; Adad-bāni; Adad-bānī
+PN,i-ku-pì-a-ma,10,10,lexicon; onomasticon,Ikūn-pīa
+PN,a-šùr-ni-im-ri,10,10,lexicon; onomasticon,Aššur-nimrī
+PN,dam-qá-a,10,7,lexicon,Damqā
+PN,ha-na-na,10,3,lexicon; onomasticon,Hanana; Ḫanana
+PN,ša-lim-a-hi-im,10,10,onomasticon,Šalim-ahum
+PN,a-šùr-<gap>,10,9,onomasticon,Aššur-<gap>
+PN,a-šur-<gap>,10,9,onomasticon,Aššur-<gap>
+PN,ha-nu-nu,10,10,lexicon,Ḫanunum
+PN,ú-ṣú-ra-nim,10,9,lexicon,Uṣur-Anu
+PN,ku-ku-lá-nim,10,10,lexicon,Kukurānu
+PN,ì-lí-iš-tí-kál,10,8,lexicon; onomasticon,Iliš-tikal
+PN,i-dí-ba-ni,10,7,lexicon; onomasticon,Idi-bani; Idi-bāni; Idi-bānī
+PN,a-šur-e-nam,10,8,lexicon,Aššur-enna
+PN,ma-ṣí-ì-lí,10,10,lexicon; onomasticon,Maṣi-ili; Maṣi-ilī
+PN,ma-num-ba-lúm-a-šùr,10,10,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,lá-ma-sà-tim,10,9,lexicon,Lamassatu
+PN,im-dí-dingir,10,8,lexicon,Imdī-ilu
+PN,e-na-sú-in,9,8,lexicon,Ennam-Suen
+PN,du-dí-ki,9,9,lexicon; onomasticon,Dudiki
+PN,li-ba-a,9,9,lexicon,Libbā
+PN,šu-da-a,9,9,lexicon,Šudā
+PN,i-lá-áš-ra-ni,9,8,lexicon; onomasticon,Ilī-ašranni
+PN,tù-um-li-a-i-im,9,9,lexicon,Tumli’ā’u
+PN,e-dí-na-a,9,9,lexicon,Iddinā
+PN,da-da,9,9,onomasticon,Dadaya
+PN,ša-lim-ma,9,5,lexicon; onomasticon,Salimma; Šalimma
+PN,ib-ni-lí,9,9,lexicon; onomasticon,Ibni-ili; Ibni-ilī
+PN,{d}ab-ba-ni,9,9,lexicon; onomasticon,Enlil-bāni; Enlil-bānī
+PN,šu-iš-ha-ra,9,7,lexicon; onomasticon,Šu-Išhara; Šu-Išḫara
+PN,ì-lí-ba-ni,9,7,lexicon; onomasticon,Ilī-bāni; Ilī-bānī
+PN,lá-qé-pu-um,9,8,lexicon,Lā-qēpu
+PN,en-na-sú-en6,9,8,lexicon,Ennam-Suen
+PN,e-la-ma-ma,9,9,lexicon; onomasticon,Elamma
+PN,a-mur-ša-ra-sà,9,6,lexicon; onomasticon,Amur-šarrassa
+PN,a-bu-a,9,7,lexicon; onomasticon,Abua
+PN,lu-zi,9,7,lexicon; onomasticon,Luzi
+PN,šu-zu-zu,9,8,lexicon; onomasticon,Šuzuzu
+PN,i-ba-a,9,8,lexicon,Ibā
+PN,gal-da-a,9,5,lexicon,Galdā
+PN,ni-mar-ištar,9,9,lexicon; onomasticon,Nimar-Ištar
+PN,ku-ku-a,9,8,lexicon; onomasticon,Kukua
+PN,bé-lúm-ba-ni,9,6,lexicon; onomasticon,Belum-bani; Bēlum-bāni; Bēlum-bānī
+PN,lugal-{d}im,9,7,lexicon; onomasticon,Šarrum-Adad
+PN,al-pì-lí,8,4,lexicon,Alpum-ilī
+PN,al-pì-li,8,4,lexicon,Alpum-ilī
+PN,ištar-pí-lá-ah,8,6,lexicon; onomasticon,Ištar-pilah; Ištar-pilaḫ
+PN,ištar-pì-lá-ah,8,6,lexicon; onomasticon,Ištar-pilah; Ištar-pilaḫ
+PN,a-šùr-pí-lá-ah,8,6,lexicon; onomasticon,Aššur-pilah; Aššur-pilaḫ
+PN,a-šùr-pì-lá-ah,8,6,lexicon; onomasticon,Aššur-pilah; Aššur-pilaḫ
+PN,a-la-bu-um,8,6,lexicon,Ali-abu
+PN,a-lá-bu-um,8,6,lexicon,Ali-abu
+PN,i-ba-a-a,8,5,lexicon,Ibā
+PN,ku-ta-a,8,8,lexicon,Kudā
+PN,ú-ṣur-ša-ištar,8,6,lexicon; onomasticon,Uṣur-ša-Ištar
+PN,{d}im.gal,8,8,lexicon; onomasticon,Adad-rabi
+PN,im-dí-lim,8,4,lexicon,Imdī-ilu
+PN,a-šur-mu-ta-pì-il5,8,7,lexicon,Aššur-muttabbil
+PN,a-mur-a-šur-ma,8,5,lexicon; onomasticon,Amur-Aššur
+PN,zi-ki-ki,8,4,lexicon,Zigigi
+PN,pé-ru-wa,8,7,lexicon,Peruwa
+PN,pè-ru-wa,8,7,lexicon,Peruwa
+PN,a-ki-a,8,4,lexicon,Agiā
+PN,dingir-kur-ub,8,5,lexicon; onomasticon,Ilī-kurub
+PN,puzur4-sú-in,8,7,lexicon; onomasticon,Puzur-Suen
+PN,sá-da-a,8,6,lexicon,Sadā
+PN,šu-ma-li-ba-a-šur,8,7,lexicon; onomasticon,Šumma-libbi-Aššur
+PN,bu-zu-a,8,4,lexicon; onomasticon,Buzua
+PN,a-šur-e-mu-qí,8,8,lexicon; onomasticon,Aššur-emūqī
+PN,pu-šu-ke-en6,8,8,lexicon; onomasticon,Pūšu-kēn
+PN,i-ku-pí-ištar,8,7,lexicon; onomasticon,Ikūn-pī-Ištar
+PN,kà-áp-sí-a,8,2,lexicon,Kapazia
+PN,puzur4-ša-du-e,8,8,lexicon; onomasticon,Puzur-Šadue; Puzur-šaduē
+PN,a-zu-ú,7,7,lexicon; onomasticon,Azu
+PN,i-tur4-dingir-ma,7,7,lexicon; onomasticon,Itūr-ilī
+PN,i-dí-a-bu-um-ma,7,7,lexicon,Iddin-abu
+PN,a-lá-hi-im-ma,7,7,lexicon,Ali-aḫu
+PN,ku-zi-zi-a-ma,7,7,lexicon; onomasticon,Kuzizia; Kuziziā
+PN,bu-ur-sú-in,7,3,lexicon; onomasticon,Būr-Suen
+PN,hu-ra-ṣa-nim,7,6,lexicon,Ḫuraṣānu
+PN,a-na-ah-dingir,7,6,lexicon; onomasticon,Anah-ili; Anaḫ-ilī
+PN,ku-bi-a,7,6,lexicon; onomasticon,Kubia; Kūbiā
+PN,ì-lí-e-mu-qí,7,6,lexicon; onomasticon,Ilī-emūqī
+PN,a-šùr-{d}utu,7,5,onomasticon,Aššur-{d}UTU-ši
+PN,a-šur-ma-sú-i,7,6,lexicon; onomasticon,Aššur-massu'ī
+PN,a-šur-ni-im-ri,7,7,lexicon; onomasticon,Aššur-nimrī
+PN,sig5-pì-a-šur-ma,7,7,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,a-ba-a,7,4,lexicon; onomasticon,Aba; Abā
+PN,{d}im-pì-lá-ah,7,7,lexicon; onomasticon,Adad-pilah; Adad-pilaḫ
+PN,{d}nin.šubur-ba-ni,7,5,lexicon; onomasticon,Ilabrat-bāni; Ilabrat-bānī
+PN,sà-ba-sí-a,7,7,lexicon; onomasticon,Sabasia; Sabasiā
+PN,sá-ba-sí-a,7,7,lexicon; onomasticon,Sabasia; Sabasiā
+PN,puzur4-a-be-eh,7,5,lexicon; onomasticon,Puzur-Abih; Puzur-Abiḫ
+PN,i-dí-sú-en6,7,7,onomasticon,Idi-Suen; Idi-suen
+PN,na-ra-am-zu,7,7,lexicon,Nar'am-Suen
+PN,ì-lí-a-lúm,7,7,lexicon,Ilī-ālu
+PN,a-šur-ni-šu,7,7,lexicon; onomasticon,Aššur-nīšu
+PN,ku-lá,7,5,onomasticon,Kulla
+PN,wa-al-dí-dingir,7,7,lexicon; onomasticon,Walad-ilī
+PN,en-nam-a-šùr-ma,7,5,lexicon; onomasticon,Ennam-Aššur
+PN,puzur4-tí-a-am-tim,7,7,lexicon,Puzur-Ti'amtu
+PN,en-na-ma-nim,7,7,lexicon,Ennamānu
+PN,{d}utu,7,6,lexicon; onomasticon,Dudu
+PN,a-nu-pí-a,7,6,lexicon,Annu-pīa
+PN,da-ra-áš,7,2,lexicon; onomasticon,Daraš
+PN,púzur.ištar,7,7,lexicon; onomasticon,Puzur-Ištar
+PN,e-ri-ší-im,7,5,lexicon,Erišu
+PN,pí-lá-ah-a-šùr,7,6,lexicon; onomasticon,Pilah-Aššur; Pilaḫ-Aššur
+PN,pí-lá-ah-a-šur,7,6,lexicon; onomasticon,Pilah-Aššur; Pilaḫ-Aššur
+PN,me-na-a,7,7,lexicon,Minā
+PN,du10-a-šur,7,7,lexicon; onomasticon,Ṭab-Aššur; Ṭāb-Aššur
+PN,du10-a-šùr,7,7,lexicon; onomasticon,Ṭab-Aššur; Ṭāb-Aššur
+PN,ú-ku-ú,7,2,lexicon; onomasticon,Ukua
+PN,i-ku-a,7,6,lexicon,Ikuani
+PN,a-gu-a,7,6,lexicon; onomasticon,Agua
+PN,pá-na-kà,7,5,lexicon,Banaga
+PN,{d}iškur-ba-ni,7,6,lexicon; onomasticon,Adad-bani; Adad-bāni; Adad-bānī
+PN,a-du-da,7,6,lexicon; onomasticon,Aduda; Adudā
+PN,ili5-ba-ni-ma,7,4,lexicon; onomasticon,Ilī-bāni; Ilī-bānī
+PN,šu-hu-bu-ur,7,6,lexicon; onomasticon,Šu-Hubur; Šu-Ḫubur
+PN,ṣí-lá-{d}im,6,5,onomasticon,Ṣillī-Adad
+PN,ištar-ba-ni,6,5,lexicon; onomasticon,Ištar-bāni; Ištar-bānī
+PN,šu-ub-ri-im,6,5,lexicon,Šubru
+PN,puzur4-{d}utu,6,2,onomasticon,Puzur4-{d}UTU
+PN,ku-zi-a,6,5,lexicon; onomasticon,Kuzia; Kuziā
+PN,a-mu-ur-ša-ra-sà,6,3,lexicon; onomasticon,Amur-šarrassa
+PN,ša-lim-wa-ar-dim,6,2,lexicon; onomasticon,Šalim-wardī
+PN,lá-ma-sí-tim,6,5,lexicon,Lamassatu
+PN,kà-ar-ší-ni,6,5,lexicon; onomasticon,Karšini
+PN,a-zu-za-a,6,5,lexicon; onomasticon,Azuza
+PN,ir-nu-id,6,5,lexicon; onomasticon,Irnuid
+PN,puzur4-e-nam,6,5,lexicon,Puzur-Enna
+PN,a-šur-ka-ši-id,6,6,lexicon; onomasticon,Aššur-kāšid
+PN,man-a-šur-ma,6,6,lexicon; onomasticon,Puzur-Aššur
+PN,dingir-šu-gal,6,6,lexicon; onomasticon,Ilšu-rabi
+PN,ṣí-li-ištar,6,6,lexicon; onomasticon,Ṣilli-Ištar; Ṣillī-Ištar
+PN,ki-zi,6,5,lexicon; onomasticon,Kizi
+PN,be-lúm-ba-ni-ma,6,6,lexicon; onomasticon,Belum-bani; Bēlum-bāni; Bēlum-bānī
+PN,a-zu-a,6,6,onomasticon,Azuwa
+PN,{d}utu.du10,6,4,lexicon; onomasticon,Šamaš-ṭāb
+PN,kàr-wa-a,6,6,lexicon,Qarwiā
+PN,ì-dí-ba-ni,6,4,lexicon; onomasticon,Idi-bani; Idi-bāni; Idi-bānī
+PN,{d}utu-a-bi,6,3,lexicon; onomasticon,Šamaš-abī
+PN,a-mu-ra-a,6,5,lexicon,Amurrā
+PN,la-qé-pí-im,6,6,lexicon,Lā-qēpu
+PN,ku-na-a,6,4,lexicon,Kunā
+PN,qá-a-tim,6,6,lexicon,Qayyātu
+PN,hi-na-a-ma,6,6,lexicon,Ḫinnā
+PN,ki-ta-a,6,4,lexicon; onomasticon,Kida; Kidā
+PN,bu-zi,6,6,lexicon; onomasticon,Buzi
+PN,ú-ṣú-ur-ša-ištar,6,6,lexicon; onomasticon,Uṣur-ša-Ištar
+PN,a-da-a,6,5,lexicon,Attā
+PN,i-dí-sú-in-ma,6,6,lexicon; onomasticon,Iddin-Suen
+PN,i-a-a,6,6,onomasticon,Yaya
+PN,ma-num-ba-lúm-a-šur,6,6,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,lá-li-im,6,5,lexicon,Lālu
+PN,en-num-a-šur,6,3,lexicon; onomasticon,Ennam-Aššur
+PN,a-bi4-ì-lí,6,4,lexicon; onomasticon,Apili
+PN,da-dí-a-ma,6,6,lexicon; onomasticon,Dadia; Dādia
+PN,šu-bé-lúm-ma,6,5,lexicon,Šu-Bēlu
+PN,a-bu-silim,6,2,lexicon,Abum-šali
+PN,en-nu-a-šur,6,1,lexicon; onomasticon,Ennam-Aššur
+PN,bur-sú-in,6,6,lexicon; onomasticon,Būr-Suen
+PN,a-šur-ma-lik-ma,6,6,lexicon; onomasticon,Aššur-malik; Aššur-mālik
+PN,šu-ku-tum-ma,5,5,lexicon,Šukkatu
+PN,lá-ma-sí-ma,5,5,lexicon; onomasticon,Lamassī
+PN,a-mur-lu-sú,5,4,lexicon; onomasticon,Amur-lūṣu
+PN,a-šur-ša-du-e,5,3,lexicon,Aššur-šadu'ē
+PN,a-šùr-ša-du-e,5,3,lexicon,Aššur-šadu'ē
+PN,áš-du,5,3,onomasticon,Aštu
+PN,puzur4-a-šùr-ma,5,5,lexicon; onomasticon,Puzur-Aššur
+PN,wa-al-dí-lim,5,4,lexicon; onomasticon,Walad-ilī
+PN,a-šur-du10-ma,5,5,lexicon; onomasticon,Aššur-ṭab; Aššur-ṭāb
+PN,bu-za-zu,5,5,lexicon; onomasticon,Buzazu; Buzāzu
+PN,šu-ma-bi4-a,5,4,lexicon; onomasticon,Šumi-abia
+PN,e-ta-a,5,4,lexicon; onomasticon,Etaya
+PN,zu-ur-zu-ur,5,5,lexicon,Zurzura
+PN,tù-ra-am-ì-lí,5,5,lexicon; onomasticon,Tūram-ilī
+PN,la-ma-sí-ma,5,5,lexicon; onomasticon,Lamassī
+PN,ú-ṣur-ša-a-šùr,5,5,lexicon; onomasticon,Uṣur-ša-Aššur
+PN,šu-ma-bi-a,5,4,lexicon; onomasticon,Šumi-abia
+PN,ga-al-ga-li-a,5,5,lexicon,Galgaliā
+PN,mu-ta,5,5,lexicon; onomasticon,Mutta
+PN,šu-pu-na-ah-šu,5,4,lexicon,Šuppu-naḫšu
+PN,šu-mì-a-bi4-a,5,5,lexicon; onomasticon,Šumi-abia
+PN,a-bu-ša-lim-ma,5,4,lexicon,Abum-šali
+PN,a-šur-iš-ta-kál,5,5,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šùr-iš-ta-kál,5,5,lexicon; onomasticon,Aššuriš-tikal
+PN,en-um-ì-lí,5,5,lexicon; onomasticon,Ennam-ilī
+PN,a-šur-iš-ta-ki-il5,5,3,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šùr-iš-ta-ki-il5,5,3,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šur-sig5,5,4,lexicon; onomasticon,Aššur-damiq
+PN,be-lu-ba-ni,5,5,lexicon; onomasticon,Belum-bani; Bēlum-bāni; Bēlum-bānī
+PN,a-zu-za,5,5,lexicon; onomasticon,Azuza
+PN,dingir-ku-ru-ub,5,5,lexicon; onomasticon,Ilī-kurub
+PN,ku-da-tum,5,5,lexicon,Kudātu
+PN,a-šùr-du10-ma,5,4,lexicon; onomasticon,Aššur-ṭab; Aššur-ṭāb
+PN,a-nu-li,5,4,lexicon; onomasticon,Anuli
+PN,kà-ku-a,5,5,lexicon; onomasticon,Kakua
+PN,e-ra-dí,5,4,lexicon,Erra-iddin
+PN,a-šùr-mì-ti,5,4,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-mì-tì,5,4,lexicon; onomasticon,Aššur-imittī
+PN,a-šùr-mì-tí,5,4,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-mì-tí,5,4,lexicon; onomasticon,Aššur-imittī
+PN,kà-sí-a,5,5,lexicon,Gaziā
+PN,a-šùr-du-ri,5,5,lexicon; onomasticon,Aššur-dūrī
+PN,a-li-a,5,5,onomasticon,Aliya
+PN,puzur4.ištar-ma,5,3,lexicon; onomasticon,Puzur-Ištar
+PN,da-lá-áš,5,4,lexicon; onomasticon,Dalaš
+PN,mu-za,5,4,lexicon; onomasticon,Muza
+PN,a-šùr-bé-el-a-wa-tim,5,5,lexicon,Aššur-bēl-awāti
+PN,am-ma,5,4,lexicon; onomasticon,Amma; Ammā
+PN,id-na-a-šur,5,5,lexicon; onomasticon,Iddin-Aššur
+PN,{d}im-pí-lá-ah,5,5,lexicon; onomasticon,Adad-pilah; Adad-pilaḫ
+PN,e-me-me,5,5,lexicon; onomasticon,Ememe
+PN,ha-da-a,5,5,lexicon,Ḫadā
+PN,sú-sá-a,5,5,lexicon,Šuzā
+PN,šu-sá-a,5,5,lexicon,Šuzā
+PN,sú-e-ta-ta,5,5,lexicon; onomasticon,Suen-dada?; Suetata
+PN,{d}utu-e-nam,5,4,lexicon,Šamaš-enna
+PN,sig5-pì-a-šur,5,4,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,bu-zi-a,5,3,onomasticon,Buziya
+PN,la-qé-pì-im,5,5,lexicon,Lā-qēpu
+PN,ha-ni,5,2,lexicon,Ḫannā
+PN,tù-ur-a-a,5,5,lexicon,Durā
+PN,a-šùr-utu-ši,5,5,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,pè-ru-a,5,4,lexicon,Peruwa
+PN,pé-ru-a,5,4,lexicon,Peruwa
+PN,puzur4-{d}iškur,5,5,lexicon; onomasticon,Puzur-Adad
+PN,ha-nu-ma,5,5,lexicon; onomasticon,Hanu; Ḫanu; Ḫānu
+PN,ú-ṣú-ur-pì-a-šur,5,2,lexicon; onomasticon,Uṣur-pī-Aššur
+PN,šál-ma-a-šùr-ma,4,4,lexicon; onomasticon,Šalim-Aššur
+PN,šu-ku-tum,4,3,lexicon,Šukkatu
+PN,a-šur-pí-lá-ah,4,3,lexicon; onomasticon,Aššur-pilah; Aššur-pilaḫ
+PN,en-na-nu-um,4,4,lexicon,Ennānu
+PN,lá-dí-a,4,4,lexicon; onomasticon,Ladia; Ladiā
+PN,iš-me-dingir,4,4,lexicon; onomasticon,Išme-ilī
+PN,kà-ar-wa-a,4,4,lexicon,Qarwiā
+PN,na-ar-ma-ak-a-šur,4,4,lexicon,Narmak Aššur ša kēnāti; Narmak-Aššur
+PN,ša-ta-na-ma,4,4,lexicon,Šāt-Anna
+PN,a-ha-tim,4,4,lexicon; onomasticon,Ahatu; Aḫātu
+PN,il5-ba-ni,4,3,lexicon; onomasticon,Ilī-bāni; Ilī-bānī
+PN,ar-ší-ah,4,4,lexicon; onomasticon,Arši-ah; Arši-aḫ
+PN,i-zi-za-am-ì-lí,4,4,lexicon; onomasticon,Izizzam-ilī
+PN,pí-lá-ah-ištar-ma,4,4,lexicon; onomasticon,Pilah-Ištar; Pilaḫ-Ištar
+PN,ma-ri-it-hi-im,4,4,lexicon,Maritḫu
+PN,ištar,4,4,lexicon,Ištar
+PN,a-šùr-ìš-tí-kál-ma,4,4,lexicon; onomasticon,Aššuriš-tikal
+PN,a-šur-iš-tí-kál-ma,4,4,lexicon; onomasticon,Aššuriš-tikal
+PN,e-ni-ša-ri-im,4,4,lexicon,Enišaru
+PN,šu-be-lam,4,4,lexicon,Šu-Bēlu
+PN,kà-tí-lá,4,4,lexicon,Qatila
+PN,dingir-pí-lá-ah,4,3,lexicon; onomasticon,Ilī-pilah; Ilī-pilaḫ
+PN,ku-ul-ma-ku-ul-ma,4,3,lexicon,Kulma-kulma
+PN,a-šùr-ma-sú-i,4,3,lexicon; onomasticon,Aššur-massu'ī
+PN,a-šùr-kà-ší-id,4,4,lexicon; onomasticon,Aššur-kāšid
+PN,ša-mu-ha,4,3,lexicon,Šammuḫa
+PN,i-na-ar,4,3,lexicon; onomasticon,Inar
+PN,šu-a-a,4,4,lexicon,Šu-Aya
+PN,sú-a-a,4,4,lexicon,Šu-Aya
+PN,šu-lá-áb-ra-at,4,4,lexicon; onomasticon,Šu-Ilabrat
+PN,tù-ud-ha-li-a,4,4,lexicon,Tudḫaliya
+PN,uš-ha-ta,4,4,lexicon,Ušiḫata
+PN,i-dí-a-šur-ma,4,4,lexicon; onomasticon,Iddin-Aššur
+PN,i-ri-šu-um,4,4,lexicon,Erišu
+PN,zu-zu,4,3,lexicon; onomasticon,Zuzua; Zuzuā
+PN,e-na-ma-nim,4,4,lexicon,Ennamānu
+PN,šu-mì-a-bi-a,4,4,lexicon; onomasticon,Šumi-abia
+PN,e-ni-ša-ru-um,4,4,lexicon,Enišaru
+PN,i-dí-lim,4,3,lexicon,Idī-ili
+PN,šu-ku-ba-am,4,4,lexicon,Šu-Kūbu
+PN,da-da-a-ma,4,4,lexicon; onomasticon,Dada; Dadā
+PN,ku-la,4,4,lexicon; onomasticon,Kula
+PN,ì-lí-uṣ-ra-ni,4,3,lexicon; onomasticon,Ilī-uṣranni
+PN,bé-lá-nim,4,4,lexicon,Bēlānu
+PN,i-dí-{d}mar.tu,4,3,onomasticon,Iddin-Amurrum
+PN,a-šur-pì-lá-ah,4,3,lexicon; onomasticon,Aššur-pilah; Aššur-pilaḫ
+PN,da-la-áš,4,3,lexicon; onomasticon,Dalaš
+PN,a-nu-pí-a-ma,4,2,lexicon,Annu-pīa
+PN,e-ni-iš-ta-ru-um,4,4,lexicon,Eništaru
+PN,i-dí-ku-bi4-im,4,4,lexicon,Iddin-Kūbu
+PN,ás-qú-dim,4,4,lexicon,Asqūdu
+PN,ma-nu-um-šu-um-šu,4,4,lexicon; onomasticon,Mannum-šumšu
+PN,a-šùr-ša-dí-li,4,3,lexicon; onomasticon,Aššur-šad-ilī
+PN,tù-li,4,4,lexicon; onomasticon,Tuli
+PN,bu-ri-im,4,4,lexicon; onomasticon,Būr-Adad
+PN,šál-ma-a-šur-ma,4,4,lexicon; onomasticon,Šalim-Aššur
+PN,a-al-du10-ma,4,4,lexicon; onomasticon,Al-ṭab; Al-ṭāb; Āl-ṭāb
+PN,kà-du-ta-lá,4,1,lexicon; onomasticon,Kadutala
+PN,ì-lí-mì-tí,4,1,lexicon; onomasticon,Ilī-imittī
+PN,en-na-num-ma,4,4,lexicon,Ennānu
+PN,a-gu5-a,4,4,lexicon; onomasticon,Agua
+PN,da-a-a,4,4,lexicon; onomasticon,Daya; Dāya
+PN,kàr-ri-a,4,4,lexicon,Qarwiā
+PN,ú-lu,4,4,lexicon; onomasticon,Ulu
+PN,a-na-na-ma,4,4,lexicon,Anna-anna
+PN,ku-uk-ra,4,3,lexicon; onomasticon,Kukra
+PN,šu-pí-ah-šu,4,1,lexicon; onomasticon,Šuppiahšu; Šuppiaḫšu
+PN,šu-pì-ah-šu,4,1,lexicon; onomasticon,Šuppiahšu; Šuppiaḫšu
+PN,ša-lim-ištar,4,3,lexicon; onomasticon,Šalim-Ištar
+PN,i-ku-num,4,4,lexicon,Ikūnu
+PN,ma-nu-um-ki-a-šùr,4,4,lexicon; onomasticon,Mannum-kī-Aššur
+PN,a-šur-i-mì-tí-ma,4,4,lexicon; onomasticon,Aššur-imittī
+PN,a-šur-i-mì-ti-ma,4,4,lexicon; onomasticon,Aššur-imittī
+PN,na-na-a,4,3,lexicon; onomasticon,Nanā
+PN,puzur4-a-na-ma,4,4,lexicon; onomasticon,Puzur-Anna
+PN,na-ki-le-ed,4,3,lexicon,Nakiled
+PN,šu-ma-li-ba-a-šùr,4,4,lexicon; onomasticon,Šumma-libbi-Aššur
+PN,a-šu-wa-an,4,1,lexicon; onomasticon,Ašuwan
+PN,a-šur-utu-ši,4,4,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,a-šùr-sig5,4,4,lexicon; onomasticon,Aššur-damiq
+PN,lu-lu-ú,4,3,lexicon; onomasticon,Lulu
+PN,kur-ub-sú-in,4,2,lexicon; onomasticon,Kurub-Suen
+PN,a-šùr-utu-ma,4,1,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,ša-ta-na,4,4,lexicon,Šāt-Anna
+PN,zu-zu-a,4,2,lexicon; onomasticon,Zuzua; Zuzuā
+PN,ša-lim-bé-lí,4,3,lexicon; onomasticon,Šalim-bēlī
+PN,iš-ma-a-šur,4,4,lexicon; onomasticon,Išme-Aššur
+PN,ma-lá-ba,4,3,lexicon; onomasticon,Malaba
+PN,ší-ša-ra,4,4,lexicon; onomasticon,Šišara
+PN,kà-a-tim,4,4,lexicon,Qayyātu
+PN,i-dí-a-šùr-ma,4,4,lexicon; onomasticon,Iddin-Aššur
+PN,ištar-il5-šu,4,3,lexicon; onomasticon,Ištar-ilšu
+PN,en-nu-um-a-šur,4,3,lexicon; onomasticon,Ennam-Aššur
+PN,ma-nu-ba,4,3,lexicon; onomasticon,Manuba
+PN,ha-na-na-ru-um,4,2,lexicon,Ḫanna-nāru
+PN,i-na-ah-dingir-ma,4,3,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,tù-ta-a,4,3,onomasticon,Tutaya
+PN,šu-lá,4,1,lexicon; onomasticon,Šula
+PN,ga-na-be-li,4,1,lexicon,Gana-bēlī
+PN,šu-la,4,1,lexicon; onomasticon,Šula
+PN,sú-la,4,1,lexicon; onomasticon,Zula
+PN,ir-ma-a-šùr-ma,4,3,lexicon; onomasticon,Irma-Aššur
+PN,hu-na-da-du-a,4,1,lexicon; onomasticon,Hunadadua; Ḫunadadua
+PN,ba-za-za-a,4,1,lexicon; onomasticon,Bazaza; Bazāza
+PN,du-du,4,1,lexicon; onomasticon,Dudu
+PN,lá-ta-a,4,2,lexicon,Ladā
+PN,ma-nu-ba-lúm-a-šur,3,3,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,tí-bu-lá,3,2,lexicon; onomasticon,Tibula
+PN,a-mur-lu-ṣú,3,2,lexicon; onomasticon,Amur-lūṣu
+PN,li-la,3,3,lexicon; onomasticon,Lila
+PN,i-dí-ku-bu-um,3,3,lexicon,Iddin-Kūbu
+PN,li-lá,3,3,lexicon; onomasticon,Lila
+PN,a-šu-ú-ma-an,3,3,lexicon; onomasticon,Ašu'uman
+PN,sá-ma-a,3,3,lexicon,Samā; Šamā
+PN,ša-ma-a,3,3,lexicon,Samā; Šamā
+PN,sà-ma-a,3,3,lexicon,Samā; Šamā
+PN,dingir.sipa,3,3,lexicon; onomasticon,Ilī-rē'ī
+PN,a-šur-du-gul,3,3,lexicon; onomasticon,Aššur-dugul
+PN,sú-e-a,3,3,lexicon; onomasticon,Sueyya
+PN,a-ku-a,3,3,lexicon; onomasticon,Agua
+PN,man.ištar,3,3,lexicon; onomasticon,Puzur-Ištar
+PN,{d}im.gal-ma,3,3,lexicon; onomasticon,Adad-rabi
+PN,puzur4.sa.tu,3,3,lexicon; onomasticon,Puzur-Šadue; Puzur-šaduē
+PN,da-na-ma,3,3,lexicon,Dānā
+PN,bu-ṣí-a,3,3,lexicon; onomasticon,Buṣiā; Būṣia
+PN,a-ba-ba-a-ma,3,3,lexicon; onomasticon,Ababa
+PN,i-sá-a,3,3,lexicon; onomasticon,Isa; Isā; Iša
+PN,i-ša-a,3,3,lexicon; onomasticon,Isa; Isā; Iša
+PN,lá-qé-ep-ma,3,3,lexicon,Lā-qēpu
+PN,dingir-pì-lá-ah,3,2,lexicon; onomasticon,Ilī-pilah; Ilī-pilaḫ
+PN,hu-du-be-li,3,3,lexicon; onomasticon,Hudu-bēlī; Ḫudu-bēlī
+PN,di-di-a,3,3,lexicon; onomasticon,Didia
+PN,šu-ku-tim,3,3,lexicon,Šukkatu
+PN,bu-ur-a-šùr,3,2,lexicon; onomasticon,Būr-Aššur
+PN,li-ip-ta-nim,3,2,lexicon,Lipit-Ani
+PN,ili5-we-da-ku,3,3,lexicon; onomasticon,Ilī-wēdāku
+PN,sig5-pí-i-a-šur-ma,3,3,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,e-na-ah-dingir-ma,3,3,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,ku-ku-ú,3,3,lexicon; onomasticon,Kuku; Kukū
+PN,ṣí-lu-uš-da-gan,3,3,lexicon; onomasticon,Ṣilluš-Dagān
+PN,ṣí-lu-uš-da-gán,3,3,lexicon; onomasticon,Ṣilluš-Dagān
+PN,a-zu-ta-a,3,3,lexicon,Azutā
+PN,mì-šu-ra-bi,3,3,lexicon,Mēšar-rabi
+PN,en-na-sú-en,3,3,lexicon,Ennam-Suen
+PN,{d}a-šur-{d}utu-ši,3,3,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,en-nam-a-a,3,3,lexicon,Ennamā
+PN,ša-da-na,3,1,lexicon,Šāt-Anna
+PN,en-um-{d}im,3,3,lexicon; onomasticon,Ennam-Adad
+PN,ì-lí-dan-ma,3,3,lexicon; onomasticon,Ilī-dān
+PN,a-šur-re-ṣí-ma,3,2,lexicon; onomasticon,Aššur-rēṣī
+PN,ší-li-ú-ma-an,3,3,lexicon,Šili-uman
+PN,a-šur-mu-ta-bi4-il5,3,2,lexicon,Aššur-muttabbil
+PN,sà-ak-li-a,3,3,lexicon; onomasticon,Saklia; Sakliā
+PN,sá-ak-li-a,3,3,lexicon; onomasticon,Saklia; Sakliā
+PN,sá-ak-lí-a,3,3,lexicon; onomasticon,Saklia; Sakliā
+PN,lá-ba-na-da,3,3,lexicon; onomasticon,Laban-nādā
+PN,a-sa-su,3,3,lexicon; onomasticon,Asasu
+PN,{d}utu-ba-ni-ma,3,2,lexicon; onomasticon,Šamaš-bāni; Šamaš-bānī
+PN,a-mu-ra,3,3,lexicon,Amurrā
+PN,i-šar-ki-da-a-šur,3,3,lexicon,Išār-kitt-Aššur
+PN,gal-a-šur,3,1,lexicon; onomasticon,Rabi-Aššur
+PN,uš-ma-a,3,3,lexicon,Ušmā
+PN,us-ma-a,3,3,lexicon,Ušmā
+PN,e-na-sú-in-ma,3,3,lexicon,Ennam-Suen
+PN,i-na-sú-in-ma,3,3,lexicon,Ennam-Suen
+PN,a-šur-ma-sú-wi,3,3,lexicon; onomasticon,Aššur-massu'ī
+PN,i-dí-sú-en,3,3,lexicon; onomasticon,Iddin-Suen
+PN,ma-nu-ba-lúm-a-šur-ma,3,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,sig5-pì-i-a-šùr,3,2,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,la-qé-pu-um,3,3,lexicon,Lā-qēpu
+PN,puzur4,3,3,lexicon,Puzuru
+PN,ip-hu-ru-um,3,3,lexicon,Ipḫuru
+PN,i-ku-mì-šar,3,3,lexicon,Ikūn-mēšar
+PN,bu-zu-zi-im,3,3,onomasticon,Buzuzum
+PN,puzur4.dingir,3,3,lexicon; onomasticon,Puzur-ilī
+PN,dingir.illat,3,2,lexicon; onomasticon,Ilī-ellat
+PN,a-ku-tim,3,2,lexicon,Akūtu
+PN,dingir-mu-ta-bi-il5,3,2,lexicon,Ilī-mutabbil
+PN,qar-da-a,3,3,lexicon,Qardā
+PN,sú-sà-a-a,3,3,lexicon,Šuzā
+PN,du-šu-ba,3,1,lexicon; onomasticon,Tušuba
+PN,ku-zi-zi,3,1,lexicon; onomasticon,Kuzizi
+PN,šu-ni-il5-ga,3,1,lexicon; onomasticon,Šunilka
+PN,da-da-a-a,3,3,lexicon; onomasticon,Dada; Dadā
+PN,a-ra-ší,3,3,lexicon; onomasticon,Arašu
+PN,šu-bé-lam,3,3,lexicon,Šu-Bēlu
+PN,a-ta-ah-šu,3,3,lexicon; onomasticon,Atahšu; Ataḫšu
+PN,i-dí-{d}utu,3,2,lexicon; onomasticon,Iddin-Šamaš
+PN,nim-ma,3,3,lexicon,Nimā
+PN,ba-za-za,3,3,lexicon; onomasticon,Bazaza; Bazāza
+PN,ha-bu-a-lá,3,3,lexicon; onomasticon,Hapuala; Ḫapuala
+PN,sig5-pì-i-a-šur,3,3,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,kà-<gap>,3,2,onomasticon,Kaza
+PN,ša-ba-ha-nim,3,3,lexicon,Šabaḫānu
+PN,ú-sà-ri-a,3,3,lexicon,Uṣariya
+PN,a-šur-ba-ni-ma,3,3,lexicon; onomasticon,Aššur-bāni; Aššur-bānī
+PN,ha-pì-ah-šu,3,3,lexicon; onomasticon,Hapiahšu; Ḫapiaḫšu
+PN,a-ta-tí-a,3,3,lexicon; onomasticon,Adadia
+PN,a-bu-um-dingir,3,3,lexicon,Abum-ilu
+PN,ha-al-gi-a-šu,3,2,lexicon; onomasticon,Halkiašu; Ḫalkiašu
+PN,e-ni-iš-ta-ri-im,3,3,lexicon,Eništaru
+PN,a-ta-a-ma,3,3,lexicon,Attā
+PN,en-na-nam,3,3,lexicon,Ennānu
+PN,a-ba-ta-na-nim,3,2,lexicon,Abatanānu
+PN,púzur-a-šùr-ma,3,2,lexicon; onomasticon,Puzur-Aššur
+PN,ša-lim-ìr-dí,3,2,lexicon; onomasticon,Šalim-wardī
+PN,šu-kà-lim,3,2,lexicon,Sukkallu; Šukkallu
+PN,er-nu-id,3,3,lexicon; onomasticon,Irnuid
+PN,lá-ta-ra-ak,3,3,lexicon; onomasticon,Latarak
+PN,a-šur-la-ma-sí,3,3,lexicon; onomasticon,Aššur-lamassī
+PN,šu-pu-nu-ma-an,3,3,onomasticon,Šupunuman
+PN,ha-ar-ša,3,2,lexicon; onomasticon,Harša; Ḫarša
+PN,e-na-a-šùr,3,2,lexicon; onomasticon,Ennam-Aššur
+PN,ili5-pì-ú-ṣur,3,2,lexicon; onomasticon,Ilī-pī-uṣur
+PN,a-šùr-ba-ni-ma,3,2,lexicon; onomasticon,Aššur-bāni; Aššur-bānī
+PN,šu-kà-tám,3,3,lexicon,Šukkatu
+PN,a-de8-lá-at,3,3,lexicon; onomasticon,Adad-ellat
+PN,a-ší-a-at,3,2,lexicon; onomasticon,Ašiad
+PN,li-ip-ta-num,3,3,lexicon,Lipit-Ani
+PN,ku-ni-lúm,3,3,lexicon,Kunilu
+PN,iṣ-mì-dí-lim,3,1,lexicon,Iṣmid-ilu
+PN,šé-lu-um-ar-dí,3,3,lexicon,Šelum-ardī
+PN,ba-ba-ší-ba,3,1,lexicon; onomasticon,Babašiba
+PN,zu-ú-a,3,3,lexicon,Zuā
+PN,e-nam-a-šùr,3,3,lexicon; onomasticon,Ennam-Aššur
+PN,da-ra-ší,3,2,lexicon; onomasticon,Daraš
+PN,da-ra-ši,3,2,lexicon; onomasticon,Daraši
+PN,pí-lá-ah-a-šur-ma,3,2,lexicon; onomasticon,Pilah-Aššur; Pilaḫ-Aššur
+PN,ki-li-a,3,3,lexicon,Kiliā
+PN,šu-li-a,3,3,lexicon,Zuliā
+PN,da-mu-ma,3,3,lexicon; onomasticon,Damuma
+PN,iš-pu-na-ah-šu,3,3,lexicon; onomasticon,Išpunahšu; Išpunaḫšu
+PN,man-a-šùr-ma,3,3,lexicon; onomasticon,Puzur-Aššur
+PN,ki-kà-ar-ša-an,3,3,lexicon; onomasticon,Kikaršan
+PN,ha-pu-a-šu,3,3,lexicon,Ḫapiaššu
+PN,ba-ba-li,3,3,lexicon,Babali
+PN,i-dí-ku-bi-im,3,3,lexicon,Iddin-Kūbu
+PN,a-šur-e-mu-qí-ma,3,1,lexicon; onomasticon,Aššur-emūqī
+PN,a-šur-dùl,3,2,lexicon; onomasticon,Aššur-ṣulūlī
+PN,a-šùr-dùl,3,2,lexicon; onomasticon,Aššur-ṣulūlī
+PN,ma-nu-ki-dingir-a,3,3,lexicon; onomasticon,Mannum-kī-ilia
+PN,du10-ṣí-li-a-šur,3,3,lexicon; onomasticon,Ṭāb-ṣill-Aššur
+PN,ku-da-dim,3,2,lexicon,Kudātu
+PN,i-lá-li-iš-kán,3,3,lexicon,Elališka
+PN,e-dí-in-a-šùr,3,3,lexicon; onomasticon,Iddin-Aššur
+PN,bi-lá,3,3,lexicon,Bila
+PN,e-dí-in-a-šur,3,3,lexicon; onomasticon,Iddin-Aššur
+PN,ma-ma-na,3,3,lexicon; onomasticon,Mamana
+PN,ba-ba-lá-nim,3,2,lexicon,Babalānu
+PN,tù-ra-am-dingir,3,2,lexicon; onomasticon,Tūram-ilī
+PN,i-ku-pì-ištar,3,2,lexicon; onomasticon,Ikūn-pī-Ištar
+PN,la-qé-ep-ma,3,2,lexicon,Lā-qēpu
+PN,èr-ra-ili5,3,2,lexicon; onomasticon,Erra-ilī
+PN,zi-a,3,3,lexicon; onomasticon,Zia
+PN,šu-be-lim-ma,3,3,lexicon,Šu-Bēlu
+PN,sá-sí-a,3,3,lexicon; onomasticon,Sasia; Sasiā; Šašia
+PN,sà-sí-a,3,3,lexicon; onomasticon,Sasia; Sasiā; Šašia
+PN,ša-ší-a,3,3,lexicon; onomasticon,Sasia; Sasiā; Šašia
+PN,na-zi,3,3,lexicon; onomasticon,Nazi
+PN,šu-nu-nu-ma,3,3,lexicon; onomasticon,Šu-Nunu
+PN,ga-al-dá-a,3,2,lexicon,Galdā
+PN,ba-la,3,3,lexicon,Balā
+PN,e-ni-iš-ta-ra-am,3,2,lexicon,Eništaru
+PN,ba-a,3,2,lexicon; onomasticon,Baya
+PN,li-ip-tí-ištar,3,3,lexicon; onomasticon,Lipit-Ištar
+PN,um-ma-za,3,2,lexicon; onomasticon,Ummaza
+PN,kà-ta-tim,3,3,lexicon,Qātātu
+PN,tù-ra-mì-ili5,3,3,lexicon; onomasticon,Tūram-ilī
+PN,ma-nu-um-ki-ì-lí,3,1,lexicon; onomasticon,Mannum-kī-ilia
+PN,up-ha-qí-im,3,3,lexicon,Ubḫaku
+PN,mì-šu-gal,3,3,lexicon,Mēšar-rabi
+PN,{d}im,3,3,lexicon,Adad
+PN,man-a-na,3,3,lexicon; onomasticon,Puzur-Anna
+PN,ma-num-ba-lúm-a-šur-ma,3,3,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,šu-a-nu-um,3,2,lexicon,Šu-Anu
+PN,ki-bá-al,3,2,lexicon; onomasticon,Kibal
+PN,ki-ba-al,3,2,lexicon; onomasticon,Kibal
+PN,du-ma-na,3,1,lexicon; onomasticon,Tumana
+PN,a-šùr-utu-ši-ma,3,1,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,{d}utu-tap-pá-i,2,2,lexicon; onomasticon,Šamaš-tappā'ī
+PN,ni-ta-ah-šu-šar,2,1,lexicon,Nitaḫšušar
+PN,be-e-be,2,2,lexicon; onomasticon,Bebe
+PN,a-bi4-lá,2,2,lexicon; onomasticon,Abela
+PN,dingir-áš-ra-ni,2,2,lexicon; onomasticon,Ilī-ašranni
+PN,{d}im-ṣú-lu-li,2,2,lexicon; onomasticon,Adad-ṣululi; Adad-ṣululī; Adad-ṣulūlī
+PN,a-šu,2,2,lexicon; onomasticon,Ašu
+PN,a-la-hu-um-ma,2,2,lexicon,Ali-aḫu
+PN,mu-mu-lá-nim,2,2,lexicon,Mumulānu
+PN,puzur4-a-mur,2,1,lexicon; onomasticon,Puzur-Amurru
+PN,kà-nu-tum,2,2,lexicon,Kannūtu
+PN,a-na-ah-ì-lí-ma,2,2,lexicon; onomasticon,Anah-ili; Anaḫ-ilī
+PN,tù-ra-a,2,2,lexicon,Durā
+PN,ša-tí-li,2,2,lexicon; onomasticon,Šat-ili; Šāt-ilī
+PN,sá-ah-ri-ì-lí,2,2,onomasticon,Saher-ilī
+PN,a-lu-ú-a,2,2,lexicon; onomasticon,Alua
+PN,me-ra-ni,2,2,onomasticon,Mērānu
+PN,kà-li-i,2,2,lexicon; onomasticon,Kali
+PN,i-a-li-a,2,1,onomasticon,Iyalia
+PN,a-bu-um-ša-lim,2,2,lexicon,Abum-šali
+PN,hu-ma,2,2,lexicon; onomasticon,Huma; Ḫuma
+PN,i-iš-ta-ku-ša-ar,2,1,lexicon; onomasticon,Išta-kuššar
+PN,na-ki-le-a-ad,2,1,lexicon,Nakiled
+PN,me-na-nim,2,2,lexicon,Menānu
+PN,bu-da-tim,2,2,lexicon,Budādu
+PN,puzur4-ma-lá-sú,2,1,lexicon,Puzur-malasu
+PN,a-bu-bu,2,2,lexicon; onomasticon,Abubu
+PN,a-šur-bé-el-a-wa-tim,2,2,lexicon,Aššur-bēl-awāti
+PN,ša-ar-pá,2,1,onomasticon,Šarpa
+PN,sig5-pí-a-šùr,2,2,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,ša-lim-bé-li,2,1,lexicon; onomasticon,Šalim-bēlī
+PN,puzur4-we-er,2,2,lexicon; onomasticon,Puzur-Wēr
+PN,hu-ni-a,2,2,lexicon,Ḫunniā
+PN,e-ša-ra,2,1,lexicon; onomasticon,Ešara
+PN,a-ba-ba-ma,2,2,lexicon; onomasticon,Ababa
+PN,hu-du-be-lí,2,2,lexicon; onomasticon,Hudu-bēlī; Ḫudu-bēlī
+PN,dí-dí-a,2,2,lexicon; onomasticon,Didia
+PN,i-bi4-sú-a,2,2,lexicon; onomasticon,Ibbi-Suen
+PN,ku-ús-ku-sí-im,2,2,lexicon,Kuzkuzu
+PN,a-mur-i-a,2,1,lexicon; onomasticon,Amuria
+PN,tù-i-mu-um,2,1,lexicon,Tuīmu
+PN,e-nu-mì-ili5,2,2,lexicon; onomasticon,Ennam-ilī
+PN,a-lu-wa-ma,2,2,lexicon; onomasticon,Alua
+PN,ìr-ad-i-li-šu,2,2,lexicon,Warad-ilšu
+PN,a-nu-pì-ištar,2,1,lexicon; onomasticon,Annu-pī-Ištar
+PN,a-nu-pí-ištar,2,1,lexicon; onomasticon,Annu-pī-Ištar
+PN,a-na-li,2,2,lexicon; onomasticon,Anali
+PN,a-na-lí,2,2,lexicon; onomasticon,Anali
+PN,ha-di,2,2,lexicon; onomasticon,Hadi; Ḫadi
+PN,na-bi-sú-in,2,2,lexicon; onomasticon,Nabi-Suen
+PN,a-šùr-e-nam-ma,2,2,lexicon,Aššur-enna
+PN,i-zi-za-am-dingir,2,2,lexicon,Izēzam-ilī
+PN,e-lá-li-a,2,2,onomasticon,Elaliya
+PN,puzur4-{d}muš,2,2,lexicon; onomasticon,Puzur-Nirah; Puzur-Niraḫ
+PN,ha-šu-i,2,2,onomasticon,Hašuwa
+PN,wa-lá-a,2,2,lexicon,Walā
+PN,na-áb-sú-en,2,2,lexicon; onomasticon,Nabi-Suen
+PN,en-na-zu,2,2,lexicon,Ennam-Suen
+PN,i-la-li-ú-ma-an,2,2,lexicon; onomasticon,Ilaliuman
+PN,i-lá-li-ú-ma-an,2,2,lexicon; onomasticon,Ilaliuman
+PN,a-šùr-gal-ma,2,2,lexicon; onomasticon,Aššur-rabi
+PN,lá-qí-pì-im,2,2,lexicon,Lā-qēpu
+PN,pá-ha-ar,2,2,lexicon,Paḫar
+PN,i-na-a-a,2,2,lexicon,Innā
+PN,i-ni-ša-ru-um,2,1,lexicon,Enišaru
+PN,pu-qí-dí,2,2,lexicon; onomasticon,Bukkidi
+PN,kur-ub-ištar-ma,2,2,lexicon; onomasticon,Kurub-Ištar
+PN,bu-ṣú-a,2,2,lexicon; onomasticon,Buzua
+PN,puzur4-a-bé-eh,2,2,lexicon; onomasticon,Puzur-Abih; Puzur-Abiḫ
+PN,hi-ta-ni,2,2,lexicon,Ḫidani
+PN,na-áp-ra-kà,2,2,lexicon; onomasticon,Nabraka
+PN,na-ap-ra-kà,2,2,lexicon; onomasticon,Nabraka
+PN,a-ku-ú-a,2,2,lexicon; onomasticon,Agua
+PN,tù-wa-tù-ú-i,2,2,lexicon; onomasticon,Tuwituwi
+PN,ša-ar-ni-ga-a-šu,2,2,lexicon; onomasticon,Šarnikašu
+PN,wa-al-hi-iš-na,2,2,lexicon; onomasticon,Walhišna; Walḫišna
+PN,sá-ma,2,2,lexicon,Samā; Šamā
+PN,ì-lí-iš-ta-kál,2,2,lexicon; onomasticon,Iliš-tikal
+PN,la-ma-sà-tum,2,2,lexicon,Lamassatu
+PN,du10-pí-a-šùr,2,1,lexicon; onomasticon,Ṭāb-pī-Aššur
+PN,du10-pí-a-šur,2,1,lexicon; onomasticon,Ṭāb-pī-Aššur
+PN,ištar-ra-bi4-at-ma,2,2,lexicon; onomasticon,Ištar-rabiat
+PN,kur-ub-a-šur,2,2,lexicon; onomasticon,Kurub-Aššur
+PN,i-šu-hi-im,2,2,lexicon,Išuḫu
+PN,a-šur-andul,2,2,lexicon; onomasticon,Aššur-ṣulūlī
+PN,a-šùr-andul,2,2,lexicon; onomasticon,Aššur-ṣulūlī
+PN,šu-sú-en6,2,2,lexicon; onomasticon,Šu-Suen
+PN,ri-ma-nim,2,2,lexicon,Rīm-Anu
+PN,ì-lí-uṣ-ra-ni-ma,2,1,lexicon; onomasticon,Ilī-uṣranni
+PN,i-ku-a-a,2,2,lexicon,Ikuani
+PN,en-na-a-šur,2,2,lexicon; onomasticon,Ennam-Aššur
+PN,ir-ad-ì-lí-šu,2,2,lexicon,Warad-ilšu
+PN,ku-ni-la,2,2,lexicon; onomasticon,Kunila
+PN,ni-ni,2,2,lexicon; onomasticon,Nini
+PN,mì-šar-gal,2,2,lexicon,Mēšar-rabi
+PN,bu-zu-li-a,2,2,lexicon; onomasticon,Buzuliya; Buzulīya
+PN,bu-zu-lí-a,2,2,lexicon; onomasticon,Buzuliya; Buzulīya
+PN,wa-ší-ib-ru-ba-ni,2,2,lexicon; onomasticon,Wašiburubani
+PN,ba-al-ṭù-im,2,2,lexicon,Balṭui
+PN,ta-am-ni-a,2,2,lexicon; onomasticon,Tamnia
+PN,du-ùh-ni-iš,2,2,lexicon; onomasticon,Tuhniš; Tuḫniš
+PN,tù-um-li-a-im,2,2,lexicon,Tumli’ā’u
+PN,ha-ar-šu-nu-ma-an,2,2,lexicon; onomasticon,Šaršunuman
+PN,wa-li-a,2,2,lexicon; onomasticon,Walia; Waliā
+PN,dingir-mu-ta-bi4-il5,2,2,lexicon,Ilī-mutabbil
+PN,šar-bu-nu-a,2,2,lexicon; onomasticon,Šarabunua
+PN,ga-al-ga-li-a-ma,2,2,lexicon,Galgaliā
+PN,ha-ar-šu-um-nu-ma-an-ma,2,1,lexicon; onomasticon,Haršunuman; Ḫaršunuman
+PN,ištar-lá-ma-sí-ma,2,2,lexicon; onomasticon,Ištar-lamassī
+PN,ú-zu-bi4-iš-ki-im,2,2,lexicon,Uṣup-išku
+PN,tù-ma-na,2,2,lexicon; onomasticon,Tumana
+PN,zu-ú,2,2,lexicon,Zu
+PN,en-nu-um-dingir,2,2,lexicon; onomasticon,Ennam-ilī
+PN,ili5-ma-al-ki,2,2,lexicon; onomasticon,Ilī-malkī
+PN,id-na-a-šùr,2,2,lexicon; onomasticon,Iddin-Aššur
+PN,ì-lí-a-ma,2,2,lexicon,Eliā
+PN,dingir-ba-ni-ma,2,2,lexicon; onomasticon,Ilī-bāni; Ilī-bānī
+PN,ar-ta-ma,2,2,lexicon; onomasticon,Artama
+PN,a-šur-mu-ta-pí-il5,2,2,lexicon,Aššur-muttabbil
+PN,ha-ti-a,2,2,lexicon; onomasticon,Hattia; Ḫattia
+PN,ú-ṣa-ri-a,2,1,lexicon,Uṣariya
+PN,ma-nu-um-ba-lúm-a-šur,2,2,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,é-a-ba-áš-tí,2,1,lexicon; onomasticon,Ea-bāštī
+PN,e-a-ba-áš-tí,2,1,lexicon; onomasticon,Ea-bāštī
+PN,sá-ta-a,2,2,lexicon,Sadā
+PN,a-šur-gal-ma,2,2,lexicon; onomasticon,Aššur-rabi
+PN,a-mur-na-hu-uš,2,2,lexicon,Amur-naḫuš
+PN,ma-áš-hi-li,2,2,lexicon; onomasticon,Maših-ilī; Mašiḫ-ilī
+PN,a-šur-utu-ši-ma,2,2,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,ha-pí-ah-šu,2,2,lexicon; onomasticon,Hapiahšu; Ḫapiaḫšu
+PN,áš-du-na-da,2,2,lexicon,Ašdu-nādā
+PN,ší-ma-at-ištar,2,2,lexicon; onomasticon,Šimat-Ištar; Šīmat-Ištar
+PN,a-šùr-mu-ta-pì-il5,2,2,lexicon,Aššur-muttabbil
+PN,i-dí-a-bi4-im-ma,2,2,lexicon,Iddin-abu
+PN,a-šur-kà-ší-id,2,2,lexicon; onomasticon,Aššur-kāšid
+PN,mu-ta-lim,2,2,lexicon,Mutālu
+PN,za-ar-ni-qí-im,2,2,lexicon,Zarniqu
+PN,um-mì-iš-ha-ra-ma,2,2,lexicon; onomasticon,Ummī-Išhara; Ummī-Išḫara
+PN,puzur4-a-mu-ri-im,2,2,lexicon; onomasticon,Puzur-Amurru
+PN,ba-bi-lim,2,2,lexicon,Babali
+PN,bu-zu-zu,2,2,lexicon,Buzuzu
+PN,du-um-qá-a,2,2,lexicon,Dumqā
+PN,šu-ma-li-ib-ší,2,1,lexicon; onomasticon,Šuma-libši
+PN,a-ší-it,2,2,lexicon; onomasticon,Ašiad
+PN,bu-la-li,2,2,lexicon; onomasticon,Bulali
+PN,e-la-lí,2,2,lexicon; onomasticon,Elāli
+PN,e-me-er-tim,2,1,lexicon,Emmertu
+PN,ku-ku-ra-nim,2,2,lexicon,Kukurānu
+PN,a-šùr-mu-ta-bi4-il5,2,2,lexicon,Aššur-muttabbil
+PN,ṣí-lu-šu-da-ga-an,2,2,lexicon; onomasticon,Ṣilluš-Dagān
+PN,be-lá-nu-um,2,2,lexicon,Bēlānu
+PN,li-ip-it-ištar-ma,2,1,lexicon; onomasticon,Lipit-Ištar
+PN,li-ip-it-ištar,2,2,lexicon; onomasticon,Lipit-Ištar
+PN,šu-ma-a,2,2,lexicon; onomasticon,Šuma; Šumā
+PN,na-áb-sú-en6,2,2,lexicon; onomasticon,Nabi-Suen
+PN,da-nu-um-ì-lí,2,2,lexicon; onomasticon,Dannum-ilī
+PN,puzur4-ì-lí,2,2,lexicon; onomasticon,Puzur-ilī
+PN,e-na-na-tum,2,2,lexicon,Ennanātu
+PN,a-sà-num-ma,2,2,lexicon,Asānu
+PN,a-ma-a,2,2,lexicon; onomasticon,Amma; Ammā
+PN,ša-lim-a-hu-um,2,2,onomasticon,Šalim-ahum
+PN,ša-zu-a,2,2,lexicon; onomasticon,Šazua
+PN,a-šùr-sipa-ma,2,2,lexicon,Aššur-rē'ī
+PN,bu-li-na,2,2,lexicon; onomasticon,Pulina
+PN,a-ra-wa,2,2,lexicon; onomasticon,Arawa
+PN,a-na-a-na-ma,2,2,lexicon,Anna-anna
+PN,a-lu-a-ma,2,2,lexicon; onomasticon,Alua
+PN,šál-mah,2,2,onomasticon,Šalim-ahum
+PN,bé-lu-um-ba-ni,2,2,lexicon; onomasticon,Belum-bani; Bēlum-bāni; Bēlum-bānī
+PN,ma-nu-um-ki-a-šur,2,2,lexicon; onomasticon,Mannum-kī-Aššur
+PN,šu-hu-bur-ma,2,2,lexicon; onomasticon,Šu-Hubur; Šu-Ḫubur
+PN,šu-hu-ur-pí-a,2,2,lexicon; onomasticon,Šuhurpia; Šuḫurpiā
+PN,šu-hu-ur-pì-a,2,2,lexicon; onomasticon,Šuhurpia; Šuḫurpiā
+PN,a-bi-ba-áš-tí,2,1,lexicon; onomasticon,Abī-baštī
+PN,a-bi4-ba-áš-tí,2,1,lexicon; onomasticon,Abī-baštī
+PN,pí-lá-ah-a-šùr-ma,2,1,lexicon; onomasticon,Pilah-Aššur; Pilaḫ-Aššur
+PN,a-šùr-ma-lik-ma,2,2,lexicon; onomasticon,Aššur-malik; Aššur-mālik
+PN,šu-da-ga-an,2,2,lexicon; onomasticon,Šu-Dagān
+PN,sú-li-a,2,2,lexicon,Zuliā
+PN,i-šar-be-lí,2,2,lexicon; onomasticon,Išar-bēlī; Išār-bēlī
+PN,tù-ur-a-šùr,2,2,lexicon; onomasticon,Tūr-Aššur
+PN,a-lu-la-a,2,2,lexicon,Alulā
+PN,a-šùr-ra-bi,2,2,lexicon; onomasticon,Aššur-rabi
+PN,a-šur-ra-bi,2,2,lexicon; onomasticon,Aššur-rabi
+PN,hu-dí-da,2,2,lexicon; onomasticon,Hudida; Ḫudida
+PN,a-da-lá-al,2,2,lexicon,Atallal
+PN,da-am-qá-a,2,1,lexicon,Damqā
+PN,ma-nu-kà-bi4-a,2,1,lexicon,Mannum-kī-abiya
+PN,{d}utu.sipa,2,2,lexicon; onomasticon,Šamaš-rē'ī
+PN,en-na-ni-a,2,2,lexicon; onomasticon,Ennani
+PN,lu-zi-i,2,2,lexicon; onomasticon,Luzi
+PN,ha-ar-ša-a,2,2,lexicon; onomasticon,Harša; Ḫarša
+PN,wa-li-iš-ra,2,2,lexicon; onomasticon,Wališra
+PN,ha-dí-tim,2,1,lexicon,Ḫadītu
+PN,a-šùr-iš-tí-kál-ma,2,2,lexicon; onomasticon,Aššuriš-tikal
+PN,šu-ku-ku,2,2,lexicon; onomasticon,Šukuku
+PN,a-šùr-mu-ta-bi-il5,2,2,lexicon,Aššur-muttabbil
+PN,ma-nu-a,2,2,lexicon; onomasticon,Mannua
+PN,e-ri-šum,2,2,lexicon,Erišu
+PN,mu-šu-e-ni,2,2,lexicon,Mušuweni
+PN,{d}iškur.illat,2,2,lexicon; onomasticon,Adad-ellat
+PN,i-tur4-a-num,2,1,lexicon,Itūr-Anu
+PN,šu-ra-ma,2,1,lexicon; onomasticon,Šurama
+PN,ú-ta-hi,2,2,lexicon,Uta-aḫu
+PN,i-pí-li-is,2,2,lexicon; onomasticon,Ippilis; Ippiliš
+PN,ba-al-ṭù-šar,2,1,lexicon,Balṭušar
+PN,bi-ta-a,2,2,lexicon; onomasticon,Bitawa
+PN,a-šùr-utu,2,1,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,púzur-a-na,2,2,lexicon; onomasticon,Puzur-Anna
+PN,ir-ma-a-šur-ma,2,1,lexicon; onomasticon,Irma-Aššur
+PN,im-dí-dan,2,1,lexicon; onomasticon,Imdī-dān
+PN,i-dí-na-bi-im,2,2,lexicon,Iddin-abu
+PN,a-šùr-mu-ta-pí-il5,2,2,lexicon,Aššur-muttabbil
+PN,ša-at-a-na,2,2,lexicon,Šāt-Anna
+PN,ha-dí-a-šu,2,1,lexicon,Ḫattiaššu
+PN,a-šùr-i-mì-tí-ma,2,2,lexicon; onomasticon,Aššur-imittī
+PN,me-ra-lí,2,1,lexicon; onomasticon,Mera-ilī
+PN,ha-lá-bi4-im,2,2,lexicon,Ḫalabu
+PN,dan-a-šur-ma,2,2,lexicon; onomasticon,Dan-Aššur; Dān-Aššur
+PN,tí-il5-tí-tí-iš,2,1,lexicon; onomasticon,Tiltitiš
+PN,ba-bi4-lim,2,2,lexicon,Babali
+PN,sú-sà-a,2,2,lexicon,Šuzā
+PN,šu-a-num,2,2,lexicon,Šu-Anu
+PN,a-mur-zu,2,2,lexicon; onomasticon,Amur-Suen
+PN,ša-am,2,2,lexicon,Šam
+PN,a-na-ah-ištar-ma,2,1,lexicon; onomasticon,Anah-Ištar; Anaḫ-Ištar
+PN,a-nu-pì-a,2,2,lexicon,Annu-pīa
+PN,i-sú-sud,2,2,lexicon; onomasticon,Issu-arik
+PN,ša-li-ma,2,2,lexicon; onomasticon,Salimma; Šalimma
+PN,a-bu-sà,2,1,lexicon; onomasticon,Abuza
+PN,ku-ur-ku-ur,2,2,lexicon; onomasticon,Kurkur
+PN,ša-lim-be-li,2,2,lexicon; onomasticon,Šalim-bēlī
+PN,e-na-num,2,2,lexicon,Ennānu
+PN,kà-al-kà,2,2,lexicon; onomasticon,Kalka
+PN,ta-ri-ku-da,2,1,lexicon; onomasticon,Tarikuda
+PN,i-dí-da-gán,2,2,lexicon; onomasticon,Iddin-Dagan; Iddin-Dagān; Iddin-Dāgan
+PN,a-ni-na-a,2,2,lexicon,Anninaya
+PN,ku-na-na-a,2,1,lexicon; onomasticon,Kunania; Kunāniā
+PN,sú-in-sipa,2,2,lexicon; onomasticon,Suen-rē'ī
+PN,a-ku-kà,2,1,lexicon; onomasticon,Akuka
+PN,a-ku-ka,2,1,lexicon; onomasticon,Akuka
+PN,tù-ur-ha-lá,2,2,lexicon; onomasticon,Turhala; Turḫala
+PN,ṣí-lá-da-ad,2,2,lexicon,Ṣill-Adad
+PN,i-dí-na-bi4-im,2,2,lexicon,Iddin-abu
+PN,i-dí-da,2,2,lexicon; onomasticon,Idida
+PN,ni-wa-lá,2,2,lexicon; onomasticon,Niwala
+PN,iš-ta-ah-šu,2,2,lexicon,Ištaḫšu
+PN,ba-ba-zu-a,2,2,lexicon; onomasticon,Babazua
+PN,ir-i-bi-im,2,2,lexicon; onomasticon,Iribu
+PN,ha-pu-a-la,2,1,lexicon; onomasticon,Hapuala; Ḫapuala
+PN,ha-pu-a-lá,2,1,lexicon; onomasticon,Hapuala; Ḫapuala
+PN,a-lá-a-ma,2,1,lexicon; onomasticon,Alama
+PN,ga-zi-a,2,2,lexicon,Gaziā
+PN,kán-war-ta,2,2,lexicon,Kanwarta
+PN,bu-zu-ur,2,1,lexicon,Puzuru
+PN,{d}nin.šubur,2,1,lexicon,Ilabrat
+PN,na-ar-me-a,2,2,lexicon,Nar'am-Ea
+PN,ku-ur-zi-a,2,2,lexicon,Kurziā
+PN,a-bi-ì-lí,2,2,lexicon; onomasticon,Apili
+PN,šu-ni-sà-ba,2,2,lexicon,Šu-Nisaba
+PN,a-ni-num,2,2,lexicon; onomasticon,Anini
+PN,iz-kà-nim,2,2,lexicon,Iskānu
+PN,en-nam-ì-lí,2,2,lexicon; onomasticon,Ennam-ilī
+PN,i-zi-iz-mì-šar,2,2,lexicon,Iziz-Mēšar
+PN,kà-pá-tí-a,2,2,lexicon,Kabādiā
+PN,a-ta-a-a-ma,2,2,lexicon,Attā
+PN,a-zi-da,2,2,lexicon; onomasticon,Azida
+PN,ur-ší-ší-ma,2,1,lexicon; onomasticon,Uršiši
+PN,ur-ší-ší,2,2,lexicon; onomasticon,Uršiši
+PN,na-na,2,2,lexicon; onomasticon,Nanā
+PN,be-kà-a,2,2,lexicon,Begā
+PN,ili5-tù-ra-am,2,2,lexicon,Ilī-tūra
+PN,in-ba-a-šur,2,2,lexicon; onomasticon,Inab-Aššur
+PN,a-šur-na-da-ma,2,1,lexicon; onomasticon,Aššur-nādā
+PN,ma-lá-kà-a,2,2,lexicon,Malakā
+PN,du-du-ú,2,2,lexicon; onomasticon,Dudu
+PN,a-nu-nu-a,2,1,lexicon; onomasticon,Anunua
+PN,a-ba,2,2,lexicon; onomasticon,Aba; Abā
+PN,en-num-be-lim,2,2,lexicon,Ennam-Bēlu
+PN,hu-li-a,2,1,lexicon; onomasticon,Hulia; Ḫulia
+PN,sú-en6-na-da,2,1,lexicon; onomasticon,Suen-nādā
+PN,ni-dí-ba-ni,2,2,lexicon; onomasticon,Idi-bani; Idi-bāni; Idi-bānī
+PN,kà-zi-a,2,2,lexicon,Gaziā
+PN,re-ší-a,2,2,lexicon,Rēš-Ea
+PN,ili5-we-da-ak,2,1,lexicon; onomasticon,Ilī-wēdāku
+PN,i-šar-ki-da-a-šùr,2,2,lexicon,Išār-kitt-Aššur
+PN,ha-na-na-ri-im,2,2,lexicon,Ḫanna-nāru
+PN,{d}mar.tu-ba-ni-ma,2,1,lexicon; onomasticon,Amurrum-bāni; Amurrum-bānī
+PN,sú-in-il5-šu,2,2,lexicon,Suen-ilšu
+PN,ir-i-bi4-im,2,2,lexicon; onomasticon,Iribu
+PN,hu-ša-na-lim,2,1,lexicon,Ḫušanālu
+PN,a-lu-ta-ni,2,1,lexicon; onomasticon,Alutani
+PN,ša-al-ma,2,2,lexicon; onomasticon,Šalma
+PN,zi-il5-pu-ri-a,2,1,lexicon,Zilpuria
+PN,bu-ṣí,2,1,lexicon; onomasticon,Buzi
+PN,sig5-pì-a-šùr,2,2,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,ha-bi,2,1,lexicon,Ḫapi
+PN,a-li-a-ma,2,2,lexicon; onomasticon,Alia
+PN,sú-in,2,2,lexicon,Suen
+PN,e-me-ni,2,2,lexicon; onomasticon,Emeni
+PN,ha-šu-ú-ma-an,2,1,lexicon,Ḫaššu-uman
+PN,dan-a-šùr-ma,2,1,lexicon; onomasticon,Dan-Aššur; Dān-Aššur
+PN,a-gi-a-ma,2,1,lexicon,Agiā
+PN,a-šé-a-ad,2,1,lexicon; onomasticon,Ašiad
+PN,ba-ri-me-a,2,1,lexicon,Barimeā
+PN,a-še-a-ad,2,1,lexicon; onomasticon,Ašiad
+PN,a-sà-num,2,1,lexicon,Asānu
+PN,a-sá-num,2,1,lexicon,Asānu
+PN,ma-ší,2,2,lexicon; onomasticon,Maši
+PN,ú-nu-ba,2,1,lexicon; onomasticon,Unuba
+PN,i-ri-šu-ma,2,1,lexicon,Erišu
+PN,ša-ta-áš-me-tim-ma,2,1,lexicon,Ša-Tašmētu
+PN,zu-za-a,2,1,lexicon; onomasticon,Zuza; Zuzā
+PN,a-šùr-la-ma-sí,2,1,lexicon; onomasticon,Aššur-lamassī
+PN,e-nu-re-ṣí-im,2,1,lexicon,Ennam-rēṣu
+PN,na-ni-a,2,2,lexicon; onomasticon,Nania
+PN,šu-mì-a-ar,2,1,lexicon; onomasticon,Šumiawar
+PN,i-ri-šum-ma,2,1,lexicon,Erišu
+PN,a-bi-we-du,2,1,lexicon,Abī-wēdu
+PN,šu-ma-a-bi4-a,2,1,lexicon; onomasticon,Šumi-abia
+PN,li-bi-ištar,2,1,lexicon; onomasticon,Libbi-Ištar
+PN,a-bi-a-nim,2,1,lexicon,Abī-Anu
+PN,a-bi-a-nu-um,2,2,lexicon,Abī-Anu
+PN,a-šùr-be-el-ma-al-ki-im,1,1,lexicon,Aššur-bēl-malki
+PN,a-šur-be-el-ma-al-ki-im,1,1,lexicon,Aššur-bēl-malki
+PN,a-tù-ri-a,1,1,lexicon; onomasticon,Aduria
+PN,ma-ni-um-ba-lúm-a-šùr,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,ha-nu-ú,1,1,lexicon; onomasticon,Hanu; Ḫanu; Ḫānu
+PN,a-šur-be-el-sa.tu,1,1,lexicon,Aššur-bēl-šaduē
+PN,ša-ak-ṣí-im,1,1,lexicon,Šakṣu
+PN,ha-na-ni-a,1,1,lexicon,Ḫannāniā
+PN,bu-bu-ra-num-ma,1,1,lexicon,Burburānu
+PN,ba-dí-a,1,1,lexicon; onomasticon,Badia; Badiā
+PN,ša-lim-wa-ar-dim-ma,1,1,lexicon; onomasticon,Šalim-wardī
+PN,a-sá-num-ma,1,1,lexicon,Asānu
+PN,zi-kur-{d}im,1,1,lexicon; onomasticon,Zikur-Adad
+PN,šál-mì-hi-im,1,1,lexicon; onomasticon,Šalim-ahu; Šalim-aḫu
+PN,šál-mi-hi-im,1,1,lexicon; onomasticon,Šalim-ahu; Šalim-aḫu
+PN,a-ku-za-nim,1,1,lexicon,Aguzānu
+PN,kà-lu-ba,1,1,lexicon; onomasticon,Kaluba
+PN,ṭá-bi4-a-nim,1,1,lexicon,Ṭāb-pī-Anu
+PN,i-dí-ku-bu-ma,1,1,lexicon,Iddin-Kūbu
+PN,ha-ri-im-tim,1,1,lexicon,Ḫarimtu
+PN,mì-šar-ra-bí,1,1,lexicon,Mēšar-rabi
+PN,eb-ri-mu-ša,1,1,lexicon,Evrimuša
+PN,ku-tù-bi-iš,1,1,lexicon; onomasticon,Kudubiš
+PN,ha-té-e,1,1,lexicon,Ḫatte
+PN,ṣa-ah-ri-ì-lí,1,1,lexicon,Saḫri-ilī
+PN,kà-ar-ni-kà-šu,1,1,lexicon,Karnikašu
+PN,wa-al-dí-lúm,1,1,lexicon; onomasticon,Walad-ilī
+PN,tù-ùh-tù-ha-nim,1,1,lexicon,Tuḫtuḫannu
+PN,za-ak-ta-a,1,1,lexicon,Zagdā
+PN,ha-bi-a,1,1,lexicon; onomasticon,Hapia; Ḫapiā
+PN,bu-bu-ra-nu-um,1,1,lexicon,Burburānu
+PN,ta-ta,1,1,lexicon; onomasticon,Dada; Dadā
+PN,i-lu-a-ma,1,1,lexicon; onomasticon,Ilua
+PN,a-ki-ma-tum,1,1,lexicon,Adi-mātu
+PN,en-na-ma-a-šùr,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,ta-na-wi-iš-tí,1,1,lexicon; onomasticon,Tanawa-išti
+PN,a-šùr-e-li-tí,1,1,lexicon; onomasticon,Aššur-ellitī
+PN,áb-la-ma-sí,1,1,lexicon,Abum-lamassī
+PN,ni-mar-sú-in,1,1,lexicon; onomasticon,Nimar-Suen
+PN,áb-lá-ma-sí,1,1,lexicon,Abum-lamassī
+PN,a-mu-ru-ba-ni,1,1,lexicon; onomasticon,Amurrum-bāni; Amurrum-bānī
+PN,šu-ku-bu-ma,1,1,lexicon,Šu-Kūbu
+PN,ki-zi-e,1,1,lexicon; onomasticon,Kizi
+PN,kam-ma-li-a,1,1,lexicon,Gamaliā
+PN,e-nu-um-we-er,1,1,lexicon,Ennam-Wēr
+PN,a-šur-ma-sú-i-ma,1,1,lexicon; onomasticon,Aššur-massu'ī
+PN,ba-ší-lam,1,1,lexicon,Baši-ilu
+PN,e-dí-na-a-šùr,1,1,lexicon; onomasticon,Iddin-Aššur
+PN,ha-ar-lu-ú,1,1,lexicon; onomasticon,Harlu; Ḫarlu
+PN,ša-ša-al-kà,1,1,lexicon; onomasticon,Šašalika
+PN,ìr-ad-ì-lí-šu,1,1,lexicon,Warad-ilšu
+PN,en-na-ah-ì-lí,1,1,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,e-ra-mu-ša,1,1,lexicon,Evri-muža
+PN,ab-ša-lim,1,1,lexicon,Abum-šali
+PN,dí-dì-a-a,1,1,lexicon; onomasticon,Didia
+PN,tap-hi-ri,1,1,lexicon,Tapḫiri
+PN,ha-ar-zi-ga,1,1,lexicon; onomasticon,Harzika; Ḫarzika
+PN,a-ru-na-ah-šu-ma,1,1,lexicon; onomasticon,Arunahšu; Arunaḫšu
+PN,bé-lá-tum-ma,1,1,lexicon,Bēlātu
+PN,aq-ta,1,1,lexicon; onomasticon,Agta
+PN,šu-ma-bi-a-ma,1,1,lexicon; onomasticon,Šumi-abia
+PN,šu-ma-li-bi4-a-šur,1,1,lexicon; onomasticon,Šumma-libbi-Aššur
+PN,šu-ma-li-bi4-a-šùr,1,1,lexicon; onomasticon,Šumma-libbi-Aššur
+PN,{d}iškur.dùl-ma,1,1,lexicon; onomasticon,Adad-ṣululi; Adad-ṣululī; Adad-ṣulūlī
+PN,bu-ur-a-šur,1,1,lexicon; onomasticon,Būr-Aššur
+PN,na-zi-i,1,1,lexicon; onomasticon,Nazi
+PN,ta-ra-am-ku-bi-ma,1,1,lexicon,Tarām-Kūbu
+PN,ì-lí-we-da-ku,1,1,lexicon; onomasticon,Ilī-wēdāku
+PN,i-na-ah-ì-lí,1,1,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,ha-na-a-ma,1,1,lexicon; onomasticon,Hanaya; Ḫanaya
+PN,e-šu-ba-ni,1,1,lexicon,Ešu-bānī
+PN,a-lu-ú,1,1,lexicon; onomasticon,Alu
+PN,i-ze-za-am-dingir,1,1,lexicon; onomasticon,Izizzam-ilī
+PN,a-du-du-ú,1,1,lexicon; onomasticon,Adudu
+PN,i-ku-pí-a-šùr-ma,1,1,lexicon; onomasticon,Ikūn-pī-Aššur
+PN,a-lá,1,1,lexicon; onomasticon,Ala; Alā
+PN,a-dí-la-at,1,1,lexicon; onomasticon,Adad-ellat
+PN,me-a-ri,1,1,onomasticon,Miari
+PN,e-me-me-i,1,1,lexicon; onomasticon,Ememe
+PN,i-na-sú-en6,1,1,lexicon,Ennam-Suen
+PN,zi-ki-im,1,1,lexicon,Ziku
+PN,ku-ni-lúm-ma,1,1,lexicon,Kunilu
+PN,bu-na,1,1,lexicon; onomasticon,Puna
+PN,e-na-hi-li,1,1,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,ša-pu-na-ah-šu,1,1,lexicon,Šuppu-naḫšu
+PN,wa-lá-ma,1,1,lexicon; onomasticon,Walama
+PN,du-nu-um-na,1,1,lexicon,Tunumnaš
+PN,wa-al-ku,1,1,lexicon; onomasticon,Walkua
+PN,hu-da,1,1,onomasticon,Huta
+PN,du-mu-uq-ištar,1,1,lexicon; onomasticon,Dumuq-Ištar
+PN,ás-qú-dí-a,1,1,lexicon; onomasticon,Asqūdia
+PN,li-bur-be-lí,1,1,lexicon,Libur-bēli
+PN,ás-qú-di-a,1,1,lexicon; onomasticon,Asqūdia
+PN,lu-ra-áb-a-ku,1,1,lexicon; onomasticon,Lurabaku
+PN,e-li-a,1,1,lexicon,Eliā
+PN,a-šùr-be-el-a-wa-tí,1,1,lexicon,Aššur-bēl-awāti
+PN,il5-šu-dan,1,1,lexicon; onomasticon,Ilšu-dan; Ilšu-dān
+PN,a-le-e-ma,1,1,lexicon; onomasticon,Ale
+PN,ku-ur-bi4-li-ma,1,1,lexicon; onomasticon,Kurub-ilī
+PN,li-ip-ta-ni,1,1,lexicon,Lipit-Ani
+PN,tí-wa-da-i-im,1,1,lexicon,Tiwatai
+PN,a-še-ed,1,1,lexicon; onomasticon,Ašiad
+PN,{d}en.zu-na-da,1,1,lexicon; onomasticon,Suen-nādā
+PN,a-šé-ed,1,1,lexicon; onomasticon,Ašiad
+PN,i-tur4-ki-in,1,1,lexicon,Itūr-kēn
+PN,tù-um-li-i-a-im,1,1,lexicon,Tumli’ā’u
+PN,ir-ì-lí,1,1,lexicon; onomasticon,Warad-ilī
+PN,ku-ru-ú,1,1,lexicon,Kurū
+PN,ku-ru-ma,1,1,lexicon,Kurū
+PN,ša-da-ah-šu,1,1,lexicon; onomasticon,Šadahšu; Šadaḫšu
+PN,ší-ma-ší-tí-ša,1,1,lexicon; onomasticon,Šimašitiša
+PN,šu-bé-lum,1,1,lexicon,Šu-Bēlu
+PN,a-šur-ta-ak-la-ku,1,1,lexicon; onomasticon,Aššur-taklaku; Aššur-taklāku
+PN,ra-áb-a-šur,1,1,lexicon; onomasticon,Rabi-Aššur
+PN,ni-mar-zu,1,1,lexicon; onomasticon,Nimar-Suen
+PN,en-nu-um-sú-in,1,1,lexicon,Ennam-Suen
+PN,iš-ma-a-šùr-ma,1,1,lexicon; onomasticon,Išme-Aššur
+PN,šu-la-áb-ra-at,1,1,lexicon; onomasticon,Šu-Ilabrat
+PN,ta-ar-hu-a-lá,1,1,lexicon; onomasticon,Tarhuala; Tarḫuala
+PN,a-šùr-i-dí-in,1,1,lexicon; onomasticon,Aššur-iddin
+PN,a-šur-i-dí-in,1,1,lexicon; onomasticon,Aššur-iddin
+PN,ší-ik-tí-ha-šu-ut,1,1,lexicon; onomasticon,Šiktihašut; Šiktiḫašut
+PN,zu-zu-ú,1,1,lexicon; onomasticon,Zuzua; Zuzuā
+PN,iš-ma-a-šùr,1,1,lexicon; onomasticon,Išme-Aššur
+PN,wa-ar-dí-i-li-šu,1,1,lexicon,Warad-ilšu
+PN,ma-nu-ba-al-ma-a-šur,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,tù-wa-tù-wi,1,1,lexicon; onomasticon,Tuwituwi
+PN,pá-ar-kà,1,1,lexicon; onomasticon,Parka
+PN,ku-sí-lá-nim,1,1,lexicon,Kuzilānu
+PN,i-ba,1,1,lexicon,Ibā
+PN,ì-li-a-lúm,1,1,lexicon,Ilī-ālu
+PN,ur-ad-a-šur,1,1,lexicon; onomasticon,Warad-Aššur
+PN,ì-lí-illat-tí,1,1,lexicon; onomasticon,Ilī-ellitī
+PN,kà-a,1,1,lexicon,Qawā
+PN,ba-ba-a,1,1,lexicon,Babā
+PN,ì-lí-ìš-tí-kál,1,1,lexicon; onomasticon,Iliš-tikal
+PN,im-ra-mu-ša,1,1,lexicon,Imramuša
+PN,i-da-zu,1,1,lexicon; onomasticon,Ida-Suen
+PN,ku-sú-sà-ri-im,1,1,lexicon,Kuzuzāru
+PN,ša-ra-ak-šu-na,1,1,lexicon; onomasticon,Šarakšuna
+PN,du10-pí-a-šùr-ma,1,1,lexicon; onomasticon,Ṭāb-pī-Aššur
+PN,sú-sà-nim,1,1,lexicon,Susānu
+PN,{d}im.sig5,1,1,lexicon; onomasticon,Adad-damiq
+PN,pu-zu-ur-ku-nu,1,1,lexicon; onomasticon,Puzurkunu
+PN,ì-lí-li-dí,1,1,lexicon; onomasticon,Ilī-ellitī
+PN,sí-ku-hi-im,1,1,lexicon,Zukuḫu
+PN,ma-ri-ih-šu,1,1,lexicon,Mariḫšu
+PN,zi-ki,1,1,lexicon,Zigi
+PN,šu-lí-ma,1,1,lexicon; onomasticon,Šuli
+PN,sà-ak-ta-a,1,1,lexicon,Zagdā
+PN,ma-num-ki-a-šur,1,1,lexicon; onomasticon,Mannum-kī-Aššur
+PN,ku-bi4-di,1,1,onomasticon,Kubidi
+PN,ku-bi4-dí,1,1,lexicon,Kūbum-idī
+PN,dingir-uṣ-ra-ni-ma,1,1,lexicon; onomasticon,Ilī-uṣranni
+PN,bi-kà,1,1,lexicon,Begā
+PN,i-na-ah,1,1,lexicon; onomasticon,Inah; Inaḫ
+PN,e-na-ma-a-šur,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,e-na-ma-a-šùr,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,ku-ni-lá,1,1,lexicon; onomasticon,Kunila
+PN,i-lá-áb-ra-at-ba-ni,1,1,lexicon; onomasticon,Ilabrat-bāni; Ilabrat-bānī
+PN,ma-lik-e-nam,1,1,lexicon,Malik-enna
+PN,a-ta-ta-ma,1,1,lexicon; onomasticon,Adadā
+PN,im-dí-lúm,1,1,lexicon,Imdī-ilu
+PN,ku-bi-dí,1,1,lexicon,Kūbum-idī
+PN,ì-li-a-lim,1,1,lexicon,Ilī-ālu
+PN,na-ra-áb-sú-in,1,1,lexicon,Nar'am-Suen
+PN,a-ba-<gap>,1,1,onomasticon,Aba-<gap>
+PN,ku-li-ia,1,1,lexicon; onomasticon,Kulia; Kuliā
+PN,puzur4-li-a,1,1,lexicon,Puzur-iliya
+PN,en-um-be-lim,1,1,lexicon,Ennam-Bēlu
+PN,na-ar-ma-ak-a-šùr,1,1,lexicon,Narmak Aššur ša kēnāti; Narmak-Aššur
+PN,e-na-ah-ì-lí,1,1,lexicon; onomasticon,Inah-ilī; Inaḫ-ilī
+PN,áš-ta-ah-šu-šar,1,1,lexicon,Aštaḫšušar
+PN,ta-nu-uš-ta,1,1,onomasticon,Tanušti
+PN,ba-sá-a,1,1,lexicon,Bazā
+PN,ba-sà-a,1,1,lexicon,Bazā
+PN,sí-lu-lu,1,1,lexicon; onomasticon,Ṣilulu; Ṣilūlu
+PN,šé-pí-ištar,1,1,lexicon; onomasticon,Šēp-Ištar
+PN,ku-ku-za-nim,1,1,lexicon,Kukkuzānu
+PN,ki-li-il5-zu-um,1,1,lexicon,Kililsu
+PN,sà-sà-tim,1,1,lexicon,Zazatu
+PN,dingir-šu-ra-bi4,1,1,lexicon; onomasticon,Ilšu-rabi
+PN,a-šùr-mu-ta-pì-il5-ma,1,1,lexicon,Aššur-muttabbil
+PN,a-du-du,1,1,lexicon; onomasticon,Adudu
+PN,a-lu,1,1,lexicon; onomasticon,Alu
+PN,a-šur-be-el-ša-du-e,1,1,lexicon,Aššur-bēl-šaduē
+PN,lá-qé-pá-am,1,1,lexicon,Lā-qēpu
+PN,a-šùr-lá-ma-ša,1,1,lexicon; onomasticon,Aššur-lamašša
+PN,e-lá-lí-ma,1,1,lexicon; onomasticon,Elāli
+PN,ma-li-ik-dingir,1,1,lexicon; onomasticon,Malik-ilšu
+PN,i-zi-me-iz-šar,1,1,lexicon,Iziz-Mēšar
+PN,ú-ṣur-a-num,1,1,lexicon,Uṣur-Anu
+PN,du-šu-ba-ma,1,1,lexicon,Tušaba
+PN,kà-áš-ší,1,1,lexicon; onomasticon,Kašši
+PN,tal-ha-ma,1,1,lexicon; onomasticon,Talhama; Talḫama
+PN,ha-ar-šu-ma-an,1,1,lexicon; onomasticon,Haršunuman; Ḫaršunuman
+PN,ku-ra-a,1,1,lexicon; onomasticon,Kura; Kurā
+PN,ú-lá-a,1,1,lexicon,Ulā
+PN,ar-ší-ah-šu,1,1,lexicon,Arši-aḫšu
+PN,a-la-hi-im-ma,1,1,lexicon,Ali-aḫu
+PN,ha-ší-ú-ma-an,1,1,lexicon; onomasticon,Hašiuman; Ḫašiuman
+PN,ša-lim-ištar-ma,1,1,lexicon; onomasticon,Šalim-Ištar
+PN,ba-šu,1,1,lexicon,Bašu
+PN,ku-za-ri,1,1,lexicon; onomasticon,Kuzari; Kuzāri
+PN,a-šur-na-id,1,1,lexicon; onomasticon,Aššur-nādā
+PN,a-šùr-na-id,1,1,lexicon; onomasticon,Aššur-nādā
+PN,a-na-lí-ma,1,1,lexicon; onomasticon,Anali
+PN,a-li-tim,1,1,lexicon; onomasticon,Alitum
+PN,ur-me-ša,1,1,lexicon,Urmeša
+PN,a-ba-ra-a,1,1,lexicon,Abarā
+PN,puzur4-lá-áb-ra-at,1,1,lexicon; onomasticon,Puzur-Ilabrat
+PN,šu-a-šur-ma,1,1,lexicon; onomasticon,Šu-Aššur
+PN,be-la-nim,1,1,lexicon,Bēlānu
+PN,hu-ur-šu-nu-ma-an,1,1,lexicon; onomasticon,Haršunuman; Ḫaršunuman
+PN,a-pu-ut-ri-a,1,1,lexicon; onomasticon,Abutria
+PN,i-di-a-šur,1,1,lexicon; onomasticon,Iddin-Aššur
+PN,a-ta-ah-šu-ú,1,1,lexicon; onomasticon,Atahšu; Ataḫšu
+PN,tù-ud-hi-li-a,1,1,lexicon,Tudḫaliya
+PN,hu-ra-ta,1,1,lexicon; onomasticon,Hurada; Ḫurada
+PN,ha-al-ki-a-šu,1,1,lexicon; onomasticon,Halkiašu; Ḫalkiašu
+PN,kà-ra-wa,1,1,lexicon,Qarwiā
+PN,ha-ar-ta,1,1,lexicon; onomasticon,Harta; Ḫarta
+PN,da-ak-ni-iš,1,1,lexicon; onomasticon,Taknis; Takniš
+PN,hi-šar,1,1,lexicon; onomasticon,Hišar; Ḫišar
+PN,a-ra-ší-a-ku-um,1,1,lexicon,Arašiaku
+PN,da-ga-ma-al-ki-im,1,1,lexicon,Dagān-malku
+PN,ha-al-ga,1,1,lexicon; onomasticon,Halka; Ḫalka
+PN,ba-ra-nim,1,1,lexicon,Bararanu
+PN,{d}im-pí-la-ah,1,1,lexicon; onomasticon,Adad-pilah; Adad-pilaḫ
+PN,ta-ar-hi-ša-an,1,1,lexicon,Tarḫišan
+PN,al-wa,1,1,lexicon,Walā
+PN,šu-eš-ha-ra,1,1,lexicon; onomasticon,Šu-Išhara; Šu-Išḫara
+PN,ili5-bi-na-ni,1,1,lexicon; onomasticon,Ilī-binanni
+PN,en-na-su-en,1,1,lexicon,Ennam-Suen
+PN,ha-dí-tum,1,1,lexicon,Ḫadītu
+PN,púzur,1,1,lexicon,Puzuru
+PN,ma-li-tí-il5,1,1,lexicon; onomasticon,Malitili
+PN,ha-ma-li-a,1,1,lexicon; onomasticon,Hamala; Ḫamala
+PN,ú-ṣur-pì-a-šur,1,1,lexicon; onomasticon,Uṣur-pī-Aššur
+PN,a-lá-bi4-ma,1,1,lexicon,Ali-abu
+PN,ú-li-id,1,1,lexicon; onomasticon,Ulida
+PN,ša-da-aq-tí,1,1,lexicon; onomasticon,Šaddagdi
+PN,ku-bi-a-a,1,1,lexicon; onomasticon,Kubia; Kūbiā
+PN,be-lá-lá-a,1,1,lexicon,Belalā
+PN,ga-na-a,1,1,lexicon,Ganā
+PN,a-šur-sipa-ma,1,1,lexicon,Aššur-rē'ī
+PN,zi-ra,1,1,lexicon; onomasticon,Ziri
+PN,ha-tù-ma,1,1,lexicon; onomasticon,Hadu; Ḫadu
+PN,na-ni,1,1,lexicon; onomasticon,Nani
+PN,a-lu-lu,1,1,lexicon,Alulua
+PN,šu-be-lam5,1,1,lexicon,Šu-Bēlu
+PN,kà-ku-uš,1,1,onomasticon,Kakuš
+PN,ší-mì-be-li,1,1,lexicon,Šime-bēlī
+PN,ú-ra-a-a,1,1,lexicon,Urā
+PN,ma-li-a,1,1,lexicon; onomasticon,Malia
+PN,a-ša-ša-bi,1,1,lexicon,Ašašabi
+PN,pu-nu-a,1,1,lexicon,Punua
+PN,dan-na-a-šùr,1,1,lexicon; onomasticon,Dan-Aššur; Dān-Aššur
+PN,dan-na-a-šur,1,1,lexicon; onomasticon,Dan-Aššur; Dān-Aššur
+PN,wa-li-wa-li,1,1,lexicon; onomasticon,Waliwali
+PN,ma-li-ki-il5-šu,1,1,lexicon; onomasticon,Malik-ilšu
+PN,ku-zi-a-ma,1,1,lexicon; onomasticon,Kuzia; Kuziā
+PN,i-na-a-ma,1,1,lexicon,Innā
+PN,a-šur-ša-du-ì-lí,1,1,lexicon; onomasticon,Aššur-šad-ilī
+PN,bé-lá-num-ma,1,1,lexicon,Bēlānu
+PN,kur-ub-a-a,1,1,lexicon,Kurbā
+PN,a-šùr-ša-dí-li-ma,1,1,lexicon; onomasticon,Aššur-šad-ilī
+PN,ú-ṣú-ra-num,1,1,lexicon,Uṣur-Anu
+PN,a-bi-we-du-um,1,1,lexicon,Abī-wēdu
+PN,sú-hu-ur-pì-a-lá,1,1,lexicon; onomasticon,Zuhurbiala; Zuḫurbiala
+PN,ší-il5-ma-šu,1,1,lexicon; onomasticon,Šilmašu
+PN,ištar-pì-lá-ah-ma,1,1,lexicon; onomasticon,Ištar-pilah; Ištar-pilaḫ
+PN,ištar.dingir-šu,1,1,lexicon; onomasticon,Ištar-ilšu
+PN,a-da,1,1,lexicon,Attā
+PN,nu-ur-dingir-šu,1,1,lexicon,Nūr-ilšu
+PN,ì-lí-pí-ú-ṣur,1,1,lexicon; onomasticon,Ilī-pī-uṣur
+PN,qà-a-a-tim,1,1,lexicon,Qayyātu
+PN,ṣé-eh-ri-ì-lí,1,1,lexicon,Saḫri-ilī
+PN,e-wa-ru-mu-ša,1,1,lexicon,Evri-muža
+PN,bu-la-lí,1,1,lexicon; onomasticon,Bulali
+PN,na-hi-iš-tim,1,1,lexicon,Naḫištu
+PN,ša-at-ì-lí,1,1,lexicon; onomasticon,Šat-ili; Šāt-ilī
+PN,be-lá-sú-nu,1,1,lexicon; onomasticon,Bēlassunu
+PN,ú-sá-ri-a,1,1,lexicon,Uṣariya
+PN,wa-ar-da-nim,1,1,lexicon,Wardānu
+PN,bé-lá-sú-nu,1,1,lexicon; onomasticon,Bēlassunu
+PN,a-du-du-wa,1,1,lexicon; onomasticon,Adudua
+PN,ni-wi-ma,1,1,lexicon,Nimā
+PN,šu-pé-e-nu-ma-an,1,1,lexicon,Šuppi-numan
+PN,be-la-nu-um-ma,1,1,lexicon,Bēlānu
+PN,dingir-ma-lik,1,1,lexicon; onomasticon,Ilī-mālik
+PN,e-nam-sú-in,1,1,lexicon,Ennam-Suen
+PN,za-li-dí-ma,1,1,lexicon; onomasticon,Zalidi
+PN,en-um-dingir,1,1,lexicon; onomasticon,Ennam-ilī
+PN,bu-sí-a,1,1,lexicon; onomasticon,Buṣiā; Būṣia
+PN,a-mu-ru-um-ba-ni,1,1,lexicon; onomasticon,Amurrum-bāni; Amurrum-bānī
+PN,ú-na-bi4,1,1,lexicon; onomasticon,Unaba
+PN,sú-en6-sig5,1,1,lexicon; onomasticon,Suen-damiq
+PN,im-da-hi,1,1,lexicon; onomasticon,Imdahi; Imdaḫi
+PN,kà-a-a,1,1,lexicon,Qawā
+PN,šu-sà-a,1,1,lexicon,Šuzā
+PN,a-dí-dá,1,1,lexicon; onomasticon,Adida
+PN,ip-hu-ri-im,1,1,lexicon,Ipḫuru
+PN,lá-ba-lá-da,1,1,lexicon,Labalada
+PN,ha-da-i-kur,1,1,lexicon; onomasticon,Hadikur; Ḫadikur
+PN,a-šur-lá-ma-sí-ma,1,1,lexicon; onomasticon,Aššur-lamassī
+PN,šu-ha-ni-iš,1,1,lexicon; onomasticon,Šu-Haniš; Šu-Ḫaniš
+PN,šu-ul-lá-ma,1,1,lexicon; onomasticon,Šu-Lama
+PN,ku-zu-za-ri-im,1,1,lexicon,Kuzuzāru
+PN,du-um-qí-a,1,1,lexicon,Dumqia
+PN,ta-bi4-a-šùr,1,1,onomasticon,Tābi-Aššur
+PN,ṭá-bi4-a-šur,1,1,lexicon; onomasticon,Ṭab-Aššur; Ṭāb-Aššur
+PN,im-lik-a-šùr,1,1,lexicon; onomasticon,Imlik-Aššur
+PN,ha-ir-uš-tim,1,1,lexicon,Ḫairušti
+PN,bu-za-num,1,1,lexicon,Buṣanu
+PN,bu-za-nim,1,1,lexicon,Buṣanu
+PN,ma-lá-wa-áš-he,1,1,lexicon; onomasticon,Malšawašhi; Malšawašḫi
+PN,kà-lá-mu-ur,1,1,lexicon; onomasticon,Kalamur
+PN,e-nu-um-iš-ta-ru-um,1,1,lexicon; onomasticon,Ennam-Ištar
+PN,ištar-la-ma-sí,1,1,lexicon; onomasticon,Ištar-lamassī
+PN,ù-ku-ú,1,1,lexicon; onomasticon,Ukua
+PN,wa-al-dí-lu-um,1,1,lexicon; onomasticon,Walad-ilī
+PN,en-na-na-tum,1,1,lexicon,Ennanātu
+PN,hu-na-hu-na,1,1,onomasticon,Hunahuna
+PN,sà-ah-ru-da-nim,1,1,lexicon; onomasticon,Zaharudana; Zaḫarudana
+PN,i-zi-zi-a,1,1,lexicon; onomasticon,Izizia
+PN,i-kà-a,1,1,lexicon; onomasticon,Ika; Ikā
+PN,pì-lá-ah-a-šur,1,1,lexicon; onomasticon,Pilah-Aššur; Pilaḫ-Aššur
+PN,ki-dí-im,1,1,lexicon,Kidu
+PN,ba-sá-sá,1,1,lexicon; onomasticon,Bazaza; Bazāza
+PN,{d}en-líl-ba-ni,1,1,lexicon; onomasticon,Enlil-bāni; Enlil-bānī
+PN,pá-ni-ni,1,1,lexicon; onomasticon,Panini
+PN,a-da-a-ma,1,1,lexicon,Attā
+PN,ru-tí-a,1,1,lexicon,Rutia
+PN,zi-da-ni,1,1,lexicon,Zitani
+PN,a-nu-gu-tí,1,1,lexicon; onomasticon,Anuguti
+PN,ša-té-a,1,1,lexicon; onomasticon,Šāt-Ea
+PN,hu-la-na-a,1,1,lexicon; onomasticon,Hulana; Ḫulana
+PN,a-nu-gu-ti,1,1,lexicon; onomasticon,Anuguti
+PN,na-na-hi,1,1,lexicon; onomasticon,Nanahi; Nanaḫi
+PN,du-du-li,1,1,lexicon,Tuttuli
+PN,lu-hu-du-ma-an,1,1,lexicon; onomasticon,Luhaduman; Luḫaduman
+PN,du-li-a,1,1,lexicon; onomasticon,Dulia
+PN,ha-bu-a-la,1,1,lexicon; onomasticon,Hapuala; Ḫapuala
+PN,kà-lu-a,1,1,onomasticon,Karuwa
+PN,la-ma-sú-tum,1,1,lexicon,Lamassatu
+PN,en-nam-ištar-ma,1,1,lexicon; onomasticon,Ennam-Ištar
+PN,na-hi-iš-tum-ma,1,1,lexicon,Naḫištu
+PN,ì-lí-dí-na,1,1,lexicon; onomasticon,Ilī-iddin
+PN,e-nam-a-šur,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,{d}utu-ták-lá-ku,1,1,lexicon; onomasticon,Šamaš-taklāku
+PN,a-le-ma,1,1,lexicon; onomasticon,Ale
+PN,a-šur-utu,1,1,lexicon; onomasticon,Aššur-šamši; Aššur-šamšī
+PN,a-mu-ur-ša-ra-sà-ma,1,1,lexicon; onomasticon,Amur-šarrassa
+PN,ku-ku-a-ma,1,1,lexicon; onomasticon,Kukua
+PN,tù-tù-ú,1,1,lexicon; onomasticon,Dudu
+PN,a-dí-da-ma,1,1,lexicon; onomasticon,Adida
+PN,sí-li-ištar,1,1,lexicon; onomasticon,Ṣilli-Ištar; Ṣillī-Ištar
+PN,e-zé,1,1,lexicon,Ezia
+PN,na-ku,1,1,lexicon,Naku
+PN,ša-ru-ki-in,1,1,lexicon; onomasticon,Šarrum-kēn
+PN,nu-na-hi-du-ni,1,1,lexicon,Nunaḫiduni
+PN,ma-nu-ki-dingir,1,1,lexicon; onomasticon,Mannum-kī-ilia
+PN,{d}iškur-pì-lá-ah,1,1,lexicon; onomasticon,Adad-pilah; Adad-pilaḫ
+PN,kà-bi4-a,1,1,lexicon,Gabiā
+PN,ib-ki-im,1,1,lexicon,Ibqu
+PN,ìr-ra-a,1,1,lexicon,Errā
+PN,a-šur-ra-bi-ma,1,1,lexicon; onomasticon,Aššur-rabi
+PN,{d}iškur-ṣú-lu-li,1,1,lexicon; onomasticon,Adad-ṣululi; Adad-ṣululī; Adad-ṣulūlī
+PN,ú-ba-a,1,1,lexicon,Ubā
+PN,a-du-du-a,1,1,lexicon; onomasticon,Adudua
+PN,ha-na,1,1,lexicon,Ḫannā
+PN,šu-ma-li-bi-a-šur,1,1,lexicon; onomasticon,Šumma-libbi-Aššur
+PN,šu-ma-li-bi-a-šùr,1,1,lexicon; onomasticon,Šumma-libbi-Aššur
+PN,ah-ma-a,1,1,lexicon,Aḫmā
+PN,tí-za-ru-ma-an,1,1,lexicon,Tizar-uman
+PN,ú-a,1,1,lexicon; onomasticon,Uwa
+PN,ì-lí-pì-ú-ṣur,1,1,lexicon; onomasticon,Ilī-pī-uṣur
+PN,ma-nu-kà-a-bi4-a,1,1,lexicon,Mannum-kī-abiya
+PN,ta-ah-sí,1,1,lexicon; onomasticon,Dahsi; Daḫsi
+PN,dì-dì-a,1,1,lexicon; onomasticon,Didia
+PN,ma-nu-ki-li-a,1,1,lexicon; onomasticon,Mannum-kī-ilia
+PN,ha-ta-a-ah-šu,1,1,lexicon,Ḫadaḫšu
+PN,pé-ru-a-ah-šu,1,1,lexicon; onomasticon,Peruwahšu; Peruwaḫšu
+PN,ur-du-um,1,1,lexicon,Wardu
+PN,ú-ṣú-ur-ší-ištar,1,1,lexicon; onomasticon,Uṣur-ša-Ištar
+PN,pè-ru-a-ah-šu,1,1,onomasticon,Perwahšu
+PN,en-nam-aš-šùr,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,kà-zu,1,1,lexicon,Gazua
+PN,kà-zu-ba,1,1,lexicon; onomasticon,Kazuba
+PN,a-šu-wa-an-zi,1,1,lexicon,Aššuwanzi
+PN,ku-ra-áš-mì-iš,1,1,lexicon; onomasticon,Kurašmiš
+PN,še-zu-ur,1,1,lexicon; onomasticon,Šezur
+PN,šé-zu-ur,1,1,lexicon; onomasticon,Šezur
+PN,ku-ku-ú-a,1,1,lexicon; onomasticon,Kukua
+PN,zu-a,1,1,lexicon,Zuā
+PN,a-bu-na,1,1,lexicon; onomasticon,Abuna
+PN,a-šu-a-an,1,1,lexicon; onomasticon,Ašuwan
+PN,ga-sú,1,1,lexicon,Gazua
+PN,en.líl-ba-ni,1,1,lexicon; onomasticon,Enlil-bāni; Enlil-bānī
+PN,ili5-tab.ba,1,1,lexicon; onomasticon,Ilī-tappā
+PN,ša-ar-ni-ga-šu,1,1,lexicon; onomasticon,Šarnikašu
+PN,hu-lu-ba,1,1,lexicon; onomasticon,Haluba; Ḫaluba
+PN,ha-bi-a-nim,1,1,lexicon,Ḫapiānu
+PN,a-gi-a-a,1,1,lexicon,Agiā
+PN,ha-nu-ba,1,1,lexicon; onomasticon,Hanupa; Ḫanupa
+PN,pì-lá-ah-a-šùr,1,1,lexicon; onomasticon,Pilah-Aššur; Pilaḫ-Aššur
+PN,lá-qí-ip,1,1,lexicon,Lā-qēpu
+PN,sú-ku-ku,1,1,lexicon; onomasticon,Šukuku
+PN,lugal-sú-en6,1,1,lexicon,Šar-Suen
+PN,a-bu-qar,1,1,lexicon,Abum-waqar
+PN,ta-ha-zi-ra,1,1,lexicon,Taḫazira
+PN,da-né-a,1,1,lexicon; onomasticon,Dan-Ea; Dān-Ea
+PN,šu-sú-en-ma,1,1,lexicon; onomasticon,Šu-Suen
+PN,šu-sú-in-ma,1,1,lexicon; onomasticon,Šu-Suen
+PN,ša-ri-ša,1,1,lexicon; onomasticon,Šariša; Šarišā
+PN,ú-sú-me-e,1,1,lexicon,Usmû
+PN,ú-ší-ha-tim,1,1,lexicon,Ušiḫata
+PN,a-šùr-ni-šu,1,1,lexicon; onomasticon,Aššur-nīšu
+PN,ku-um-da-nim,1,1,lexicon,Kumdānu
+PN,be-lá-nu-um-ma,1,1,lexicon,Bēlānu
+PN,ma-nu-um-ba-lum-a-šur,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,a-šur-re-i,1,1,lexicon,Aššur-rē'ī
+PN,a-šùr-re-i,1,1,onomasticon,Aššur-re’i; Aššur-rē’ī
+PN,ku-lu-ú,1,1,lexicon; onomasticon,Kulu
+PN,la-ma-sí-tim,1,1,lexicon,Lamassatu
+PN,u-ṣú-ur-ša-a-šur,1,1,lexicon; onomasticon,Uṣur-ša-Aššur
+PN,ir-am-a-šur,1,1,lexicon; onomasticon,Irma-Aššur
+PN,ir-am-a-šùr,1,1,lexicon; onomasticon,Irma-Aššur
+PN,a-šur-dùl-ma,1,1,lexicon; onomasticon,Aššur-ṣulūlī
+PN,a-šur-andul-ma,1,1,lexicon; onomasticon,Aššur-ṣulūlī
+PN,a-šur-ša-dí-li,1,1,lexicon; onomasticon,Aššur-šad-ilī
+PN,um-ma-sá,1,1,lexicon; onomasticon,Ummaza
+PN,am-ur-ištar,1,1,lexicon; onomasticon,Amur-Ištar
+PN,a-ma-ru-um,1,1,lexicon,Ammāru
+PN,qá-i-a,1,1,lexicon,Qawā
+PN,in-na-a,1,1,lexicon,Innā
+PN,dam-qá-tum,1,1,lexicon,Damqātu
+PN,ip-pa-lu,1,1,lexicon; onomasticon,Ippalu
+PN,e-mu-a,1,1,lexicon; onomasticon,Emua
+PN,ú-ṣur-ša-a-šùr-ma,1,1,lexicon; onomasticon,Uṣur-ša-Aššur
+PN,sú-is-ha-ra,1,1,lexicon; onomasticon,Šu-Išhara; Šu-Išḫara
+PN,sig5-pí-a-šùr-ma,1,1,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,i-šu-hu-um,1,1,lexicon,Išuḫu
+PN,ma-nu-ki-a-šur-ma,1,1,lexicon; onomasticon,Mannum-kī-Aššur
+PN,i-dí-na-a,1,1,lexicon,Iddinā
+PN,ni-ni-ma,1,1,lexicon; onomasticon,Nini
+PN,ù-lu,1,1,lexicon; onomasticon,Ulu
+PN,sig5-pí-i-a-šur,1,1,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,bu-ut-qum,1,1,lexicon,Butqu
+PN,a-nu-um-ì-lí,1,1,lexicon; onomasticon,Anum-ilī
+PN,ha-ta-ah-šu,1,1,lexicon,Ḫadaḫšu
+PN,ṣí-lá-bi4-im,1,1,lexicon,Ṣilli-abu
+PN,zi-qí-qí,1,1,lexicon,Zigigi
+PN,i-tù-ur-dingir,1,1,lexicon; onomasticon,Itūr-ilī
+PN,ša-at-a-šùr,1,1,lexicon; onomasticon,Šāt-Aššur
+PN,ša-at-a-šur,1,1,lexicon; onomasticon,Šāt-Aššur
+PN,ib-na-a,1,1,lexicon,Ibnā
+PN,bi-sá-a,1,1,lexicon,Bisā
+PN,lá-ma-<gap>,1,1,onomasticon,Lama-<gap>
+PN,ha-ar-lá,1,1,lexicon; onomasticon,Harla; Ḫarla
+PN,ša-li-wa-ar-dí,1,1,lexicon; onomasticon,Šalimmuh; Šalimmuḫ
+PN,puzur4-ša-du-we,1,1,lexicon; onomasticon,Puzur-Šadue; Puzur-šaduē
+PN,a-ší-ú-ma-an,1,1,lexicon; onomasticon,Wašiuman
+PN,tí-da,1,1,lexicon; onomasticon,Dida; Didā
+PN,a-ra-ší-ha-tal,1,1,lexicon,Araššig-Atal
+PN,ki-a,1,1,lexicon,Kia
+PN,ku-ku-wa-ma,1,1,lexicon; onomasticon,Kukua
+PN,a-la-ba-am,1,1,lexicon,Ali-abu
+PN,a-bi-lá,1,1,lexicon; onomasticon,Abela
+PN,a-bi-la,1,1,lexicon; onomasticon,Abela
+PN,la-dí-a-am-ma,1,1,lexicon; onomasticon,Ladia; Ladiā
+PN,bé-lúm-ba-ni-ma,1,1,lexicon; onomasticon,Belum-bani; Bēlum-bāni; Bēlum-bānī
+PN,lá-li-a-ma,1,1,lexicon; onomasticon,Lalia
+PN,ú-ri-šu-uš,1,1,lexicon; onomasticon,Uršiši
+PN,pár-kà,1,1,lexicon; onomasticon,Parka
+PN,ha-ša-le,1,1,lexicon,Ḫašale
+PN,ša-da-ag-dí,1,1,lexicon; onomasticon,Šaddagdi
+PN,ša-da-ag-di,1,1,lexicon; onomasticon,Šaddagdi
+PN,ištar-pí-la-ah-ma,1,1,lexicon; onomasticon,Ištar-pilah; Ištar-pilaḫ
+PN,šu-zu-zu-ma,1,1,lexicon; onomasticon,Šuzuzu
+PN,me-ra-lì,1,1,lexicon; onomasticon,Mera-ilī
+PN,ah-ba-áš-tí-ma,1,1,lexicon,Aḫ-bāštī
+PN,kà-bi-a,1,1,lexicon,Gabiā
+PN,iš-ma-a-šur-ma,1,1,lexicon; onomasticon,Išme-Aššur
+PN,zu-re-i,1,1,lexicon; onomasticon,Suen-rē'ī
+PN,a-šùr-du-gu5-ul,1,1,lexicon; onomasticon,Aššur-dugul
+PN,e-lá-a-ma,1,1,lexicon,Elāya
+PN,a-šùr-ma-sú-wi,1,1,lexicon; onomasticon,Aššur-massu'ī
+PN,wa-wa-li,1,1,lexicon; onomasticon,Wawali
+PN,nu-na-pì-iš,1,1,lexicon,Nunapiš
+PN,nu-ur-zu,1,1,lexicon; onomasticon,Nūr-Suen
+PN,da-di-a,1,1,lexicon; onomasticon,Dadia; Dādia
+PN,sú-in-na-da-ma,1,1,lexicon; onomasticon,Suen-nādā
+PN,a-zu-kà-a,1,1,lexicon; onomasticon,Azuka; Azukā
+PN,puzur4-a-mu-ri-ma,1,1,lexicon; onomasticon,Puzur-Amurru
+PN,a-šùr-ša-dí-lí-ma,1,1,lexicon; onomasticon,Aššur-šad-ilī
+PN,e-nu-um-be-lim,1,1,lexicon,Ennam-Bēlu
+PN,ba-qú-ni-im,1,1,lexicon,Baqqunu
+PN,hu-bu-zi,1,1,lexicon,Ḫubuzi
+PN,ku-uš-mu-um,1,1,lexicon,Kušmu
+PN,ištar-ba-áš-tí,1,1,lexicon; onomasticon,Ištar-bāštī
+PN,bé-lí-a-ma,1,1,lexicon; onomasticon,Bēlia; Bēliā
+PN,ha-tí-tum-ma,1,1,lexicon,Ḫadītu
+PN,ma-nu-um-ba-lu-a-šùr,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,kà-na-ni,1,1,lexicon; onomasticon,Kanani; Kanāni
+PN,pì-,1,1,onomasticon,Pititi
+PN,lu-li-i-a,1,1,lexicon,Lulia
+PN,{d}im.illat-at,1,1,lexicon; onomasticon,Adad-ellat
+PN,ta-ra-wa-zi,1,1,lexicon; onomasticon,Darawazi
+PN,ma-nu-um-me,1,1,lexicon,Mannume
+PN,bu-da-a,1,1,lexicon; onomasticon,Buda; Budā
+PN,e-na-su-in,1,1,lexicon,Ennam-Suen
+PN,ištar-tù-li-id,1,1,lexicon; onomasticon,Ištar-tūlid
+PN,ku-us-ku-sí-im,1,1,lexicon,Kuzkuzu
+PN,áb-du-a-ta-ma,1,1,lexicon; onomasticon,Abduata
+PN,sá-li,1,1,lexicon; onomasticon,Sali
+PN,ab-du-ma,1,1,lexicon,Abdu
+PN,kàr-wa,1,1,lexicon,Qarwiā
+PN,šu-mì-a-wi,1,1,lexicon; onomasticon,Šumiawa
+PN,la-li-im,1,1,lexicon,Lālu
+PN,ú-zu-bi4-iš-ku-um,1,1,lexicon,Uṣup-išku
+PN,li-li,1,1,lexicon,Lillu
+PN,ku-bi-ku,1,1,lexicon,Kubiku
+PN,dingir-e-mu-qí,1,1,lexicon; onomasticon,Ilī-emūqī
+PN,ki-ki-a,1,1,lexicon,Kikia
+PN,kà-ma-li-a,1,1,lexicon,Gamaliā
+PN,ta-bi-a,1,1,lexicon; onomasticon,Tabia
+PN,a-lu-lu-ur,1,1,lexicon; onomasticon,Alulur
+PN,ta-ri-iš-ma-tum,1,1,lexicon,Tariš-mātu
+PN,a-bu-za,1,1,lexicon; onomasticon,Abuza
+PN,iš-me-lim,1,1,lexicon; onomasticon,Išme-ilī
+PN,a-kà-dí-a-ma,1,1,lexicon; onomasticon,Akatia
+PN,u4-ra-ni,1,1,lexicon; onomasticon,Urāni
+PN,wa-ša-na-lam,1,1,lexicon,Ušinalu
+PN,ìr-ad-a-šùr,1,1,lexicon; onomasticon,Warad-Aššur
+PN,a-šùr-kàr-wa,1,1,lexicon; onomasticon,Aššur-karwa
+PN,ma-nu,1,1,lexicon,Mannu
+PN,i-šar-ki-it-a-šùr,1,1,lexicon,Išār-kitt-Aššur
+PN,šu-ul-mì-ša-a-šùr,1,1,lexicon; onomasticon,Šulmum-ša-Aššur
+PN,ku-a-li,1,1,lexicon,Kualu
+PN,sí-li-a,1,1,lexicon; onomasticon,Ṣillia; Ṣilliā
+PN,a-zu-ta-a-a,1,1,lexicon,Azutā
+PN,na-áb-sú-in-ma,1,1,lexicon; onomasticon,Nabi-Suen
+PN,a-gu5-ú-a,1,1,lexicon; onomasticon,Agua
+PN,ma-sà-a,1,1,lexicon; onomasticon,Maza; Mazā
+PN,ta-ki-i,1,1,lexicon,Daqqu
+PN,ṭá-ki-i,1,1,lexicon,Daqqu
+PN,i-di-a-bi4-im,1,1,lexicon,Iddin-abu
+PN,ì-lí-tù-ra-am,1,1,lexicon,Ilī-tūra
+PN,hu-ma-ša-na,1,1,lexicon,Ḫumašana
+PN,ì-lí-úṣ-ra-ni,1,1,lexicon; onomasticon,Ilī-uṣranni
+PN,en-na-a-šùr,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,qàr-da-a,1,1,lexicon,Qardā
+PN,sú-en-na-da,1,1,lexicon; onomasticon,Suen-nādā
+PN,ku-ni-li,1,1,lexicon; onomasticon,Kunila
+PN,ki-ta,1,1,lexicon; onomasticon,Kida; Kidā
+PN,é-lá-ma,1,1,lexicon; onomasticon,Elamma
+PN,en-na-núm,1,1,lexicon,Ennānu
+PN,ak-ta,1,1,lexicon; onomasticon,Agta
+PN,na-na-a-ma,1,1,lexicon; onomasticon,Nanā
+PN,lu-ra-bi4-a-ku,1,1,lexicon; onomasticon,Lurabaku
+PN,a-ni-ni-im,1,1,lexicon,Anninu
+PN,ma-nu-ba-lu-a-šur,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,pu-us-qá-nim,1,1,lexicon,Pušqānu
+PN,dan-dingir,1,1,lexicon; onomasticon,Dan-ili; Dān-ilī
+PN,šu-ma-am-ni-ir-ší,1,1,lexicon; onomasticon,Šumam-lirši
+PN,pu-uš-qá-nim,1,1,lexicon,Pušqānu
+PN,ku-ki-dí,1,1,lexicon,Kukidi
+PN,e-lá-ba-a,1,1,lexicon,Elabā
+PN,ì-lí-ba-ni-ma,1,1,lexicon; onomasticon,Ilī-bāni; Ilī-bānī
+PN,ša-ba-na-tum,1,1,lexicon,Šabanātu
+PN,ba-ši,1,1,lexicon; onomasticon,Baši
+PN,šu-lu-um-ur-dí,1,1,lexicon; onomasticon,Šalim-wardī
+PN,ša-lim-wa-ar-du,1,1,lexicon; onomasticon,Šalim-wardī
+PN,ša-lim-ma-hi-im,1,1,lexicon; onomasticon,Šalim-ahu; Šalim-aḫu
+PN,ší-ma-ta-nim,1,1,lexicon,Šimat-Anu
+PN,du-ni-a,1,1,lexicon,Dunniā
+PN,zu-ni-a,1,1,lexicon; onomasticon,Zunia; Zuniā
+PN,a-ga,1,1,lexicon; onomasticon,Aga; Agā
+PN,i-dí-na-bu-um-ma,1,1,lexicon,Iddin-abu
+PN,man.sa.tu,1,1,lexicon; onomasticon,Puzur-Šadue; Puzur-šaduē
+PN,du-uk-li,1,1,lexicon; onomasticon,Dukli
+PN,ni-wa-la,1,1,lexicon; onomasticon,Niwala
+PN,a-šùr-gi-im-lí-ma,1,1,lexicon; onomasticon,Aššur-gimlī
+PN,i-dí-ku-bi,1,1,lexicon,Iddin-Kūbu
+PN,ú-zu-bi-iš-kum,1,1,lexicon,Uṣup-išku
+PN,ša-a-am,1,1,lexicon,Šam
+PN,a-šur-du-ri,1,1,lexicon; onomasticon,Aššur-dūrī
+PN,ta-ší-im-ma,1,1,lexicon; onomasticon,Tašima
+PN,ki-nam-a-šùr,1,1,lexicon; onomasticon,Kēna-Aššur
+PN,tù-ur-ištar,1,1,lexicon; onomasticon,Tūr-Ištar
+PN,ba-ba-lim,1,1,lexicon,Babali
+PN,a-bu-mì-lúm-ma,1,1,lexicon,Abum-ilu
+PN,pa-zu-zu,1,1,lexicon; onomasticon,Pazuzu
+PN,pá-zu-zu,1,1,lexicon; onomasticon,Pazuzu
+PN,šé-ep-ištar-ma,1,1,lexicon; onomasticon,Šēp-Ištar
+PN,hu-a,1,1,lexicon,Ḫua
+PN,ištar-pu-úz-ri,1,1,lexicon; onomasticon,Ištar-puzrī
+PN,zi-kur-ì-lí,1,1,lexicon; onomasticon,Zikur-ilī
+PN,ba-lá,1,1,lexicon,Balā
+PN,i-dí-ištar-ma,1,1,lexicon; onomasticon,Iddin-Ištar
+PN,i-dí-ku-ba-am,1,1,lexicon,Iddin-Kūbu
+PN,ú-ṣur-ša-ištar-ma,1,1,lexicon; onomasticon,Uṣur-ša-Ištar
+PN,a-di-da,1,1,lexicon; onomasticon,Adida
+PN,šu-li-i,1,1,lexicon; onomasticon,Šuli
+PN,tù-ta-a-ma,1,1,lexicon; onomasticon,Duda; Dudā
+PN,i-sá-li-a,1,1,lexicon; onomasticon,Isālia
+PN,ar-nu-id,1,1,lexicon; onomasticon,Arnuid
+PN,{d}muš-mu-ta-bi-il5,1,1,lexicon,Niraḫ-muttabbil
+PN,nu-ur-sú-in,1,1,lexicon; onomasticon,Nūr-Suen
+PN,bur-ištar,1,1,lexicon; onomasticon,Būr-Ištar
+PN,e-na-na-at-a-šùr,1,1,lexicon; onomasticon,Ennanāt-Aššur
+PN,tù-ùh-tù-ha-ni,1,1,lexicon,Tuḫtuḫannu
+PN,a-ra-ša,1,1,lexicon; onomasticon,Arašu
+PN,ú-šu-ha-ta,1,1,lexicon,Ušiḫata
+PN,a-ku-ku,1,1,lexicon,Akuku
+PN,a-ba-sí-a,1,1,lexicon,Abazia
+PN,za-za,1,1,lexicon; onomasticon,Zaza; Zazā
+PN,en-nu-um-be-lúm,1,1,lexicon,Ennam-Bēlu
+PN,{d}li-i-ba-a,1,1,lexicon,Libbā
+PN,ili5-mì-tí,1,1,lexicon; onomasticon,Ilum-imittī
+PN,ù-ṣú-ur-ša-ištar,1,1,lexicon; onomasticon,Uṣur-ša-Ištar
+PN,šé-pá-lim,1,1,lexicon,Šēp-āli
+PN,ku-lu-uk-lu,1,1,lexicon; onomasticon,Kuluklu
+PN,ì-lí-tab.ba,1,1,lexicon; onomasticon,Ilī-tappā
+PN,en-na-be-lí,1,1,lexicon,Ennam-Bēlu
+PN,bu-zu-zu-um,1,1,onomasticon,Buzuzum
+PN,tù-pì-zi,1,1,lexicon,Tupezi
+PN,a-sú-a,1,1,lexicon; onomasticon,Azua
+PN,a-šu-a,1,1,lexicon; onomasticon,Ašua
+PN,a-šùr-ni-šu-um,1,1,lexicon; onomasticon,Aššur-nīšu
+PN,bu-ur-ištar,1,1,lexicon; onomasticon,Būr-Ištar
+PN,ku-ur-ku-ri-im,1,1,lexicon,Kurkūru
+PN,zu-mu-ú,1,1,lexicon,Zumua
+PN,kà-ar-zi-li-li,1,1,lexicon; onomasticon,Karzilili
+PN,{d}utu-ṣú-lu-li,1,1,lexicon,Šamaš-ṣululī
+PN,sà-sa-lim,1,1,lexicon,Zazalu
+PN,ur-da-a-šur,1,1,lexicon; onomasticon,Warad-Aššur
+PN,ma-lik-dingir-šu,1,1,lexicon; onomasticon,Malik-ilšu
+PN,du-uk-ší-im,1,1,lexicon,Dukšu
+PN,i-da-a,1,1,onomasticon,Idaya; Idāya
+PN,kà-ki-a,1,1,lexicon,Kakkiā
+PN,za-ga-al-i,1,1,lexicon; onomasticon,Zagalu
+PN,i-dí-in-ni-ra-ah,1,1,lexicon; onomasticon,Iddin-Nirah; Iddin-Niraḫ
+PN,e-a,1,1,lexicon,Ea
+PN,ša-ra-ma-té-en,1,1,lexicon,Šarra-matēn
+PN,{d}en.zu,1,1,lexicon,Suen
+PN,{d}kal,1,1,lexicon,Kurunta
+PN,ni-ma,1,1,lexicon,Nimā
+PN,ku-ra-<gap>,1,1,onomasticon,Kura-<gap>
+PN,a-mu-ur-ša-ra-sú,1,1,lexicon; onomasticon,Amur-šarrassa
+PN,zi-zi-zi-i,1,1,lexicon; onomasticon,Zizizi
+PN,ni-sà-ba,1,1,lexicon,Nisaba
+PN,ha-lu-a,1,1,lexicon,Ḫaluwa
+PN,du-li,1,1,lexicon; onomasticon,Tuli
+PN,a-nu-ni-tim,1,1,lexicon,Anuniti
+PN,a-šu-ri-tim,1,1,lexicon,Aššuritu
+PN,iš-ta-ar,1,1,lexicon,Ištar
+PN,{d}utu-ub-lá-am,1,1,lexicon,Šamaš-ubla
+PN,za-hu-lá,1,1,lexicon,Zaḫula
+PN,ir-i-bu-um,1,1,lexicon; onomasticon,Iribu
+PN,ma-du-wa,1,1,lexicon,Madua
+PN,i-dí-dingir,1,1,lexicon,Iddin-ilu
+PN,ta-li,1,1,lexicon,Tali
+PN,ni-ku-ur,1,1,lexicon,Nikur
+PN,kà-ba-a,1,1,lexicon,Kabā
+PN,ba-da-tí-a,1,1,lexicon,Badadu
+PN,a-áb-du-a-ta,1,1,lexicon; onomasticon,Abduata
+PN,hu-tí-a,1,1,onomasticon,Hutia
+PN,tí-wa-ša-hi-ar,1,1,lexicon,Tiwašaḫiar
+PN,hu-ta-ar,1,1,lexicon,Ḫudari
+PN,tù-šu,1,1,lexicon; onomasticon,Tušu
+PN,a-lá-kà,1,1,lexicon; onomasticon,Alayakaya
+PN,sà-ah-ri-lí,1,1,lexicon,Saḫri-ilī
+PN,ku-ku-lá-num,1,1,lexicon,Kukurānu
+PN,i-ri-ší-im-ma,1,1,lexicon,Erišu
+PN,puzur4-ni-ra-ah,1,1,lexicon; onomasticon,Puzur-Nirah; Puzur-Niraḫ
+PN,a-ni-nam,1,1,lexicon; onomasticon,Aninam
+PN,ú-ra,1,1,lexicon,Urā
+PN,a-sá-a,1,1,lexicon; onomasticon,Asa; Asā
+PN,a-sà-a,1,1,lexicon; onomasticon,Asa; Asā
+PN,i-du-a,1,1,lexicon; onomasticon,Idua
+PN,ha-ar-šu-nu-ma-an-ma,1,1,lexicon; onomasticon,Haršunuman; Ḫaršunuman
+PN,ša-lim-wa-ar-dí-e,1,1,lexicon; onomasticon,Šalim-wardī
+PN,en-um-a-a,1,1,lexicon,Ennamā
+PN,dí-la-a,1,1,lexicon,Dilā
+PN,ba-lu-a,1,1,lexicon; onomasticon,Balua
+PN,ili5-me-ta-ak,1,1,lexicon; onomasticon,Ilī-mētak
+PN,a-du-dum,1,1,lexicon; onomasticon,Adudu
+PN,ga-nu-nu-ma,1,1,lexicon,Kannunu
+PN,a-mur-na-hu-uš-ma,1,1,lexicon,Amur-naḫuš
+PN,ba-ba-lá,1,1,lexicon; onomasticon,Babala
+PN,ili5-mì-šar,1,1,lexicon,Ilī-mēšar
+PN,sú-hu-ki-im,1,1,lexicon,Zukuḫu
+PN,ta-ri-iš-ma-tim,1,1,lexicon,Tariš-mātu
+PN,ha-wi-li-im,1,1,lexicon; onomasticon,Hawilia; Ḫawilia
+PN,zu-na-na-dí,1,1,lexicon,Zunanadi
+PN,hi-pá,1,1,lexicon,Ḫiba
+PN,la-ma-sí,1,1,lexicon; onomasticon,Lamassī
+PN,lu-zi-ni,1,1,lexicon; onomasticon,Luzina
+PN,i-da,1,1,lexicon; onomasticon,Ida; Idā
+PN,en-nam-sú-in,1,1,lexicon,Ennam-Suen
+PN,dá-mì-iq-pì-a-šur-ma,1,1,lexicon; onomasticon,Damiq-pi-Aššur; Damiq-pī-Aššur
+PN,en-na-nàm,1,1,lexicon,Ennānu
+PN,be-lum-ra-bi4,1,1,lexicon; onomasticon,Bēlum-rabi
+PN,be-lum-ra-bi4-ma,1,1,lexicon; onomasticon,Bēlum-rabi
+PN,puzur4-lá-ah,1,1,lexicon; onomasticon,Puzur-lah; Puzur-laḫ
+PN,za-ak-ri-im,1,1,lexicon,Zakru
+PN,ìr-ì-lí-šu,1,1,lexicon,Warad-ilšu
+PN,in-ba-a-šùr,1,1,lexicon; onomasticon,Inab-Aššur
+PN,a-a-a,1,1,lexicon; onomasticon,Aya
+PN,a-šur-kàr-wa,1,1,lexicon; onomasticon,Aššur-karwa
+PN,ša-ak-tù-nu-a,1,1,onomasticon,Šaktunuwa
+PN,zi-ri,1,1,lexicon; onomasticon,Ziri
+PN,i-bi4-zu,1,1,lexicon; onomasticon,Ibbi-Suen
+PN,ma-num-ba-lum-a-šùr,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,a-ri-a,1,1,lexicon; onomasticon,Aria
+PN,a-zi-da-a,1,1,lexicon; onomasticon,Azida
+PN,li-pì-it-ištar,1,1,lexicon; onomasticon,Lipit-Ištar
+PN,ṣú-li-a,1,1,lexicon,Zuliā
+PN,ma-nu-um-ba-lúm-a-šùr,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,ab-ša-lim-ma,1,1,lexicon,Abum-šali
+PN,ša-lim-a-ar-dí,1,1,lexicon; onomasticon,Šalim-wardī
+PN,ni-zi-im,1,1,lexicon,Nizu
+PN,šu-en.líl-ma,1,1,lexicon; onomasticon,Šu-Enlil
+PN,šu-en.líl,1,1,lexicon; onomasticon,Šu-Enlil
+PN,a-zu-na-a,1,1,lexicon; onomasticon,Azuna; Azunā
+PN,šu-ul-mu-ša-a-šùr,1,1,onomasticon,Šulmuša-Aššur
+PN,šu-ul-mu-ša-a-šur,1,1,lexicon; onomasticon,Šulmum-ša-Aššur
+PN,ili5-pì-ú-ṣú-ur,1,1,lexicon; onomasticon,Ilī-pī-uṣur
+PN,e-nu-um-a-šur,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,pì-lá-ah-a-nim,1,1,lexicon,Pilaḫ-Anu
+PN,šu-ul-mì-im-ša-a-šur,1,1,lexicon; onomasticon,Šulmum-ša-Aššur
+PN,a-gi5-a,1,1,lexicon,Agiā
+PN,ha-ma-ar,1,1,lexicon; onomasticon,Hamar; Ḫamar
+PN,šu-na-a,1,1,lexicon,Šunau
+PN,e-wa-ar-nim,1,1,lexicon,Ewarnu
+PN,a-šur-ta-ak-lá-ak,1,1,lexicon; onomasticon,Aššur-taklaku; Aššur-taklāku
+PN,tù-ša-lá,1,1,lexicon; onomasticon,Tušala
+PN,tù-ša-la,1,1,onomasticon,Tušara
+PN,ú-ra-ha-zi,1,1,lexicon,Uraḫazi
+PN,a-bi4-e-dim,1,1,lexicon,Abī-wēdu
+PN,ta-mu-ri-a,1,1,lexicon; onomasticon,Tamuria; Tamuriā
+PN,šu-{d}utu,1,1,lexicon; onomasticon,Šu-Šamaš
+PN,sí-ki-le-i,1,1,lexicon; onomasticon,Sikili
+PN,ha-na-nim,1,1,lexicon; onomasticon,Hannānum; Ḫannānum
+PN,a-lá-bu-um-ma,1,1,lexicon,Ali-abu
+PN,ì-lí-iš-tí-kál-ma,1,1,lexicon; onomasticon,Iliš-tikal
+PN,ú-zu-ú-a,1,1,lexicon; onomasticon,Uzua
+PN,hu-ru-bi,1,1,lexicon; onomasticon,Hurubi; Ḫurubi
+PN,en-nu-re-ṣí-im,1,1,lexicon,Ennam-rēṣu
+PN,en-nu-re-ṣa-ma,1,1,lexicon,Ennam-rēṣu
+PN,a-zu-za-a-ma,1,1,lexicon; onomasticon,Azuza
+PN,zi-zi-im,1,1,lexicon,Zizu
+PN,e-lam-ma,1,1,lexicon; onomasticon,Elamma
+PN,ha-šu-i-li,1,1,lexicon; onomasticon,Hašuili; Ḫašuili
+PN,mu-a-ni-kà,1,1,lexicon; onomasticon,Muanika
+PN,a-zu-ul,1,1,lexicon; onomasticon,Azul
+PN,šu-li-ma-an,1,1,lexicon; onomasticon,Šuliman
+PN,a-zi-ta-ri-a,1,1,lexicon; onomasticon,Azitaria
+PN,lu-ur-me-a,1,1,onomasticon,Lurmia
+PN,ha-šu-ì-lí,1,1,lexicon; onomasticon,Hašuili; Ḫašuili
+PN,ta-zi-za,1,1,lexicon; onomasticon,Taziza
+PN,ká-zi-a,1,1,lexicon,Gaziā
+PN,ga-ta-tim,1,1,lexicon,Qātātu
+PN,a-šur-en-nam,1,1,lexicon,Aššur-enna
+PN,ha-am-ha-am-tim,1,1,lexicon,Ḫamḫamtu
+PN,a-mu-ú-a,1,1,lexicon; onomasticon,Amua
+PN,a-da-da-a,1,1,lexicon; onomasticon,Adadā
+PN,be-be-e,1,1,lexicon; onomasticon,Bebe
+PN,mar-ku-tí,1,1,lexicon; onomasticon,Markuti
+PN,i-la-a-a,1,1,lexicon,Ilā
+PN,kà-lá-na-šar,1,1,lexicon; onomasticon,Kalanašar
+PN,uš-ta-ah-šu-šar,1,1,lexicon; onomasticon,Uštahšušar; Uštaḫšušar
+PN,en-na-ma,1,1,lexicon,Innā
+PN,šu-hu-bu-ur-ma,1,1,lexicon; onomasticon,Šu-Hubur; Šu-Ḫubur
+PN,ta-áš-me-tum,1,1,lexicon,Tašmētu
+PN,{d}e-šu-ba-ni,1,1,lexicon,Ešu-bānī
+PN,be-lá-num-ma,1,1,lexicon,Bēlānu
+PN,dingir-ra-bi,1,1,lexicon; onomasticon,Ilī-rabi
+PN,sà-ba-sí-a-ma,1,1,lexicon; onomasticon,Sabasia; Sabasiā
+PN,ba-qú-nim,1,1,lexicon,Baqqunu
+PN,ì-lí-iš-ti-kál,1,1,lexicon; onomasticon,Iliš-tikal
+PN,da-dim,1,1,lexicon,Dādu
+PN,ú-zu,1,1,lexicon,Uzu
+PN,ki-da,1,1,lexicon; onomasticon,Kida; Kidā
+PN,šu-kà-tim,1,1,lexicon,Šukkatu
+PN,ṣa-lá-mì-im-ma,1,1,lexicon,Ṣalamu
+PN,a-ku,1,1,lexicon; onomasticon,Aku
+PN,a-šùr-im-mì-tí,1,1,lexicon; onomasticon,Aššur-imittī
+PN,a-lá-bu-ma,1,1,lexicon,Ali-abu
+PN,zu-zu-wa,1,1,lexicon; onomasticon,Zuzua; Zuzuā
+PN,za-li-dí,1,1,lexicon; onomasticon,Zalidi
+PN,lá-qé-pu-ma,1,1,lexicon,Lā-qēpu
+PN,dan-ni-lí,1,1,lexicon; onomasticon,Dan-ili; Dān-ilī
+PN,wa-šu-na-lam5-ma,1,1,lexicon,Ušinalu
+PN,puzur4.sá.tu,1,1,lexicon; onomasticon,Puzur-Šadue; Puzur-šaduē
+PN,wa-ar-dí-li-šu,1,1,lexicon,Warad-ilšu
+PN,e-dí-a-šur,1,1,lexicon; onomasticon,Iddin-Aššur
+PN,en-na-bi-lam,1,1,lexicon,Ennam-Bēlu
+PN,a-šur-mu-ta-bi4-il5-ma,1,1,lexicon,Aššur-muttabbil
+PN,iš-du-ki-in,1,1,lexicon; onomasticon,Išdu-kēn
+PN,kur-bi4-ì-lí-ma,1,1,lexicon; onomasticon,Kurub-ilī
+PN,ì-li-ma-lik,1,1,lexicon; onomasticon,Ilī-mālik
+PN,bu-ut-qí-im,1,1,lexicon,Butqu
+PN,e-ri-mu-ša,1,1,lexicon,Evri-muža
+PN,kà-ba-tim,1,1,lexicon,Kapādu
+PN,bi-za-lá,1,1,lexicon,Bezala
+PN,bi-zi-lá,1,1,lexicon,Bezila
+PN,ma-nu-ba-lu-um-a-šur,1,1,lexicon; onomasticon,Mannum-balum-Aššur; Mannum-bālum-Aššur
+PN,e-ni-<gap>,1,1,onomasticon,Eni-<gap>
+PN,a-šur-ma-sú-wi-ma,1,1,lexicon; onomasticon,Aššur-massu'ī
+PN,i-pí-lí-is,1,1,lexicon; onomasticon,Ippilis; Ippiliš
+PN,dug-ṣí-li-a-šur,1,1,lexicon; onomasticon,Ṭāb-ṣill-Aššur
+PN,šu-pè-e-nu-ma-an,1,1,lexicon,Šuppi-numan
+PN,be-lu-lu-ma,1,1,lexicon; onomasticon,Bilulu
+PN,tù-wa-ra-a-ah-šu,1,1,lexicon,Tuwar-aḫšu
+PN,a-šùr-da-an,1,1,lexicon; onomasticon,Aššur-dan; Aššur-dān
+PN,ú-ba-ar-za-a,1,1,lexicon,Ubarzā
+PN,áš-du-na-ni,1,1,lexicon,Ašdunāni
+PN,ba-za-za-a-a,1,1,lexicon; onomasticon,Bazaza; Bazāza
+PN,hu-ur-du-na-ni,1,1,lexicon; onomasticon,Hurdunani; Ḫurdunani
+PN,na-na-li-i,1,1,lexicon; onomasticon,Nanali; Nanalī
+PN,ha-šu-ta-a-li-i,1,1,lexicon; onomasticon,Hašutayali; Ḫašutayali
+PN,du-me-ni,1,1,lexicon; onomasticon,Dumeni
+PN,ú-a-na-me-a,1,1,lexicon; onomasticon,Uwanamea
+PN,kà-za-ak-zi-tí-iš,1,1,lexicon; onomasticon,Kazakzitiš
+PN,ar-ši-ah,1,1,lexicon; onomasticon,Arši-ah; Arši-aḫ
+PN,ku-lu-ma-an,1,1,onomasticon,Kuluman
+PN,ga-lu,1,1,lexicon,Galulu
+PN,ki-li-nu-ma-an,1,1,lexicon,Kilinuman
+PN,ṣí-li-a-ma,1,1,lexicon; onomasticon,Ṣillia; Ṣilliā
+PN,uš-ha-dí,1,1,lexicon,Ušiḫata
+PN,ku-bi-e-a,1,1,lexicon; onomasticon,Kubia; Kūbiā
+PN,{d}a-šur-sipa,1,1,lexicon,Aššur-rē'ī
+PN,a-ba-ba-a-a-ma,1,1,lexicon; onomasticon,Ababa
+PN,ba-ba-a-a,1,1,lexicon,Babā
+PN,ší-na-na-tim,1,1,lexicon,Šinunuti
+PN,ku-du-du-ma,1,1,lexicon; onomasticon,Kududu
+PN,kà-na-a,1,1,lexicon,Ganā
+PN,pí-it-ha-na,1,1,lexicon; onomasticon,Pithana; Pitḫana
+PN,pì-it-ha-na,1,1,lexicon; onomasticon,Pithana; Pitḫana
+PN,pì-lá-ah-sú-in,1,1,lexicon,Pilaḫ-Suen
+PN,ka-zi-a,1,1,lexicon,Gaziā
+PN,{d}utu-na-ṣí-ir,1,1,lexicon; onomasticon,Šamaš-nāṣir
+PN,e-nu-bé-lúm,1,1,lexicon,Ennam-Bēlu
+PN,da-dí-im,1,1,lexicon; onomasticon,Dada; Dadā
+PN,ku-da-nim,1,1,lexicon,Kudānu
+PN,a-šur-dan-ma,1,1,lexicon; onomasticon,Aššur-dan; Aššur-dān
+PN,ku-ku-zi-a,1,1,lexicon,Kukkuziā
+PN,a-šùr-be-el-ša-du-e,1,1,lexicon,Aššur-bēl-šaduē
+PN,pu-ta,1,1,onomasticon,Puta
+PN,al-wa-na,1,1,lexicon; onomasticon,Alwana
+PN,ha-pì-a-ah-šu,1,1,lexicon; onomasticon,Hapiahšu; Ḫapiaḫšu
+PN,ha-pí-a-ah-šu,1,1,lexicon; onomasticon,Hapiahšu; Ḫapiaḫšu
+PN,a-lá-bí-im,1,1,lexicon,Ali-abu
+PN,a-mur-a-a,1,1,lexicon,Amurrā
+PN,ku-za-zi-im,1,1,lexicon,Kuzāzu
+PN,sú-ú-a-a,1,1,lexicon,Zuā
+PN,ma-sà-a-a,1,1,lexicon; onomasticon,Maza; Mazā
+PN,ú-ṣú-ur-pì-a-šùr,1,1,lexicon; onomasticon,Uṣur-pī-Aššur
+PN,ha-ar-šu-um-nu-ma-an,1,1,lexicon; onomasticon,Haršunuman; Ḫaršunuman
+PN,ki-da-ah-šu,1,1,lexicon; onomasticon,Kidahšu; Kidaḫšu
+PN,puzur4-a-bi4-ih,1,1,lexicon; onomasticon,Puzur-Abih; Puzur-Abiḫ
+PN,du10-ì-lí,1,1,lexicon; onomasticon,Ṭāb-ilī
+PN,a-ba-ba-a-a-i,1,1,lexicon,Ababayai
+PN,i-tur4-a-a,1,1,lexicon,Itūrā
+PN,da-ni-a,1,1,lexicon; onomasticon,Dan-Ea; Dān-Ea
+PN,a-šùr-ša-dí-dingir,1,1,lexicon; onomasticon,Aššur-šad-ilī
+PN,lú-ùh-ra-ah-na,1,1,lexicon,Laḫraḫna
+PN,kà-a-tí-im,1,1,lexicon,Qayyātu
+PN,tù-ra-mì-il5-ma,1,1,lexicon; onomasticon,Tūram-ilī
+PN,ša-ma,1,1,lexicon,Samā; Šamā
+PN,la-ba-ar-ša,1,1,lexicon; onomasticon,Labarša
+PN,lá-ba-ar-ša,1,1,lexicon; onomasticon,Labarša
+PN,ha-da-ú-ni,1,1,lexicon,Ḫadauni
+PN,ú-zu-ub-iš-ku-um,1,1,lexicon,Uṣup-išku
+PN,ú-sà-ni-im,1,1,lexicon,Usānu
+PN,en-na-ma-núm,1,1,lexicon,Ennamānu
+PN,a-lá-hu-ma,1,1,lexicon,Ali-aḫu
+PN,be-lí-du10,1,1,lexicon; onomasticon,Bēlī-ṭāb
+PN,bé-lí-du10,1,1,lexicon; onomasticon,Bēlī-ṭāb
+PN,ša-at-a-na-ma,1,1,lexicon,Šāt-Anna
+PN,pá-ru-ur-tim,1,1,lexicon,Pārurtu
+PN,ša-lim-wa-ar-dí-ma,1,1,lexicon; onomasticon,Šalim-wardī
+PN,ha-ni-im,1,1,lexicon; onomasticon,Hanu; Ḫanu; Ḫānu
+PN,šu-up-ip-ra,1,1,lexicon; onomasticon,Šuppibra
+PN,ha-be,1,1,lexicon,Ḫapi
+PN,za-ba,1,1,lexicon; onomasticon,Zaba
+PN,kà-as-kà-nu-i-il5,1,1,lexicon; onomasticon,Kaskanuil
+PN,pí-lá-ha-a-nim,1,1,lexicon,Pilaḫ-Anu
+PN,ṣí-lu-uš-da-ga-an,1,1,lexicon; onomasticon,Ṣilluš-Dagān
+PN,a-lá-ku,1,1,lexicon; onomasticon,Alaku
+PN,ba-al-ṭù-a,1,1,lexicon; onomasticon,Balṭua
+PN,a-la-ku,1,1,lexicon; onomasticon,Alaku
+PN,ti-dí-i,1,1,lexicon; onomasticon,Titi
+PN,hu-ra-ṣa-num,1,1,lexicon,Ḫuraṣānu
+PN,ma-ta,1,1,lexicon,Madā
+PN,a-šur-be-el-ša-du-i,1,1,lexicon,Aššur-bēl-šaduē
+PN,a-na-a,1,1,lexicon,Anna
+PN,be-lá-sú,1,1,lexicon; onomasticon,Belazu
+PN,tù-ra-mì-li,1,1,lexicon; onomasticon,Tūram-ilī
+PN,ma-ar-ša-na,1,1,lexicon; onomasticon,Maršana
+PN,a-bu-silim-ma,1,1,lexicon,Abum-šali
+PN,šu-pi-lu-li-a,1,1,lexicon; onomasticon,Šuppilulia
+PN,šu-pí-lu-li-a,1,1,lexicon; onomasticon,Šuppilulia
+PN,šu-pì-lu-li-a,1,1,lexicon; onomasticon,Šuppilulia
+PN,ma-ru-ša-lá,1,1,lexicon; onomasticon,Marušala
+PN,a-al-wa-na,1,1,lexicon; onomasticon,Alwana
+PN,šu-hu-nim,1,1,lexicon,Šuḫinu
+PN,na-áb-su-in,1,1,lexicon; onomasticon,Nabi-Suen
+PN,da-da-ni,1,1,lexicon,Dadāniā
+PN,sà-ah-ri-ì-lí,1,1,lexicon,Saḫri-ilī
+PN,ku-ku-zi,1,1,lexicon; onomasticon,Kukuzi
+PN,lá-li,1,1,lexicon; onomasticon,Lali
+PN,la-lí,1,1,lexicon; onomasticon,Lali
+PN,iṣ-mì-id-dingir,1,1,lexicon,Iṣmid-ilu
+PN,a-hu-a-šu,1,1,lexicon,Aḫu-aḫšu
+PN,ha-ta-a-ni,1,1,lexicon,Ḫadānu
+PN,na-bi-zu,1,1,lexicon; onomasticon,Nabi-Suen
+PN,a-šùr-gi-im-li,1,1,lexicon; onomasticon,Aššur-gimlī
+PN,ha-la-bi-im,1,1,lexicon,Ḫalabu
+PN,ha-ab-tù-ni-ìš,1,1,lexicon,Ḫabduniš
+PN,bu-lá-li,1,1,lexicon; onomasticon,Bulali
+PN,su-ku-ku,1,1,lexicon; onomasticon,Šukuku
+PN,šu-hi-nim,1,1,lexicon,Šuḫinu
+PN,i-dí-mar.tu,1,1,lexicon; onomasticon,Iddin-Amurru
+PN,šu-da-gán,1,1,lexicon; onomasticon,Šu-Dagān
+PN,i-li-li,1,1,lexicon; onomasticon,Ilili
+PN,ú-zi-ni-im,1,1,lexicon,Uzinu
+PN,a-šur-ni-iw-ri,1,1,lexicon; onomasticon,Aššur-nimrī
+PN,ku-zi-la-nim,1,1,lexicon,Kuzilānu
+PN,nu-ur-ištar,1,1,lexicon; onomasticon,Nūr-Ištar
+PN,da-ak-ni-bi4-im,1,1,lexicon,Taqin-abu
+PN,ma-nu-ki-e-lí-a,1,1,lexicon; onomasticon,Mannum-kī-ilia
+PN,en-na-ni-im,1,1,lexicon,Ennānu
+PN,a-ni-i-a-ni-ma,1,1,lexicon; onomasticon,Aniwani
+PN,ik-ra-a,1,1,onomasticon,Ikraya
+PN,sí-ha-ar-ì-lí,1,1,lexicon,Ṣaḫir-ilī
+PN,en-num-a-šùr,1,1,lexicon; onomasticon,Ennam-Aššur
+PN,e-lá-num,1,1,lexicon; onomasticon,Elanuma
+PN,ša-ak-ri-ú-ma-an,1,1,lexicon; onomasticon,Šakriuman
+PN,iš-ha-ra,1,1,lexicon,Išḫara
+PN,be-lúm-ba-lim,1,1,lexicon; onomasticon,Belum-bani; Bēlum-bāni; Bēlum-bānī
+PN,mu-ti-a-šùr,1,1,lexicon; onomasticon,Mūtī-Aššur
+PN,mu-tí-a-šur,1,1,lexicon; onomasticon,Mūtī-Aššur
+PN,wa-al-ha-áš-na,1,1,lexicon; onomasticon,Walhišna; Walḫišna
+PN,a-hu-wa-qar-ma,1,1,lexicon; onomasticon,Ahu-waqar; Aḫu-waqar
+PN,pá-ru-ur-tum-ma,1,1,lexicon,Pārurtu
+PN,tal-wa-na,1,1,lexicon,Taluana
+PN,ì-lí-re-i,1,1,lexicon; onomasticon,Ilī-rē'ī
+PN,la-qé-eb,1,1,lexicon,Lā-qēpu
+PN,puzur4-ba-ni-ni,1,1,lexicon; onomasticon,Puzur-pān-ili
+PN,{d}iškur-pí-la-ah,1,1,lexicon; onomasticon,Adad-pilah; Adad-pilaḫ
+PN,šé-ep-a-lim,1,1,lexicon,Šēp-āli
+PN,nu-ri-i-li,1,1,lexicon; onomasticon,Nūr-ilī
+PN,a-šur-eš-tí-kál,1,1,lexicon; onomasticon,Aššuriš-tikal
+PN,ib-ni-sú-in,1,1,lexicon; onomasticon,Ibni-Suen
+PN,a-šùr-eš-tí-kál,1,1,lexicon; onomasticon,Aššuriš-tikal
+PN,sà-ah-ri-dingir,1,1,lexicon,Saḫri-ilī
+PN,kur-ub-a-šùr,1,1,lexicon; onomasticon,Kurub-Aššur
+PN,bé-li-a-ma,1,1,lexicon; onomasticon,Bēlia; Bēliā
+PN,man-ša-du-e,1,1,lexicon; onomasticon,Puzur-Šadue; Puzur-šaduē
+PN,e-na-na-ta-am,1,1,lexicon,Ennanātu
+PN,a-bi4-a-ni-im,1,1,lexicon,Abī-Anu
+PN,ma-la-ba,1,1,lexicon; onomasticon,Malaba
+PN,{d}muš-mu-ta-bíl,1,1,lexicon,Niraḫ-muttabbil
+PN,a-am-ku-wa,1,1,lexicon,Amkuwa
+PN,ku-na-ni-li,1,1,onomasticon,Kunanili
+PN,ša-hi-iš-nu-ma-an,1,1,lexicon; onomasticon,Šahišnuman; Šaḫišnuman
+PN,iš-pu-nu-ma-an,1,1,lexicon; onomasticon,Išpunuman
+PN,i-dí-a,1,1,lexicon; onomasticon,Idia
+PN,ša-ha-ar-lí,1,1,lexicon; onomasticon,Šaharli; Šaḫarli
+PN,sà-ha-ar-li,1,1,lexicon,Saḫri-ilī
+PN,lá-dí-a-ma,1,1,lexicon; onomasticon,Ladia; Ladiā
+PN,a-šùr-nim-ri-ma,1,1,lexicon; onomasticon,Aššur-nimrī
+PN,ku-zi-lá-nim,1,1,lexicon,Kuzilānu
+PN,{d}ištar-pí-lá-ah,1,1,lexicon; onomasticon,Ištar-pilah; Ištar-pilaḫ
+PN,a-lu-lá-a-ma,1,1,lexicon,Alulā
+PN,ba-ší-li,1,1,lexicon,Baši-ilu
+PN,šu-ì-lí-a,1,1,lexicon; onomasticon,Šu-ilī
+PN,bu-ra-li-im,1,1,lexicon; onomasticon,Būram-ilī
+PN,ha-mì-za-nim,1,1,lexicon,Ḫamiṣānu
+PN,ú-zu-a-ma,1,1,lexicon; onomasticon,Uzua
+PN,i-zi-za-am-i-li,1,1,lexicon; onomasticon,Izizzam-ilī
+PN,ú-kà-pì-na-hi,1,1,lexicon,Ukappin-aḫi
+PN,šu-ku-tí-im,1,1,lexicon,Šukkatu
+PN,a-šur-mu-ta-píl,1,1,lexicon,Aššur-muttabbil
+PN,i-dí-a-bu-ma,1,1,lexicon,Iddin-abu
+PN,sà-sà-a,1,1,lexicon; onomasticon,Zaza; Zazā
+PN,kà-lu-a-ma,1,1,lexicon; onomasticon,Galua
+PN,dí-li-a,1,1,lexicon; onomasticon,Daliā
+PN,tù-ra-mì-il5,1,1,lexicon; onomasticon,Tūram-ilī
+PN,ba-al-ṭù-um,1,1,lexicon,Balṭu
+PN,e-ze-e,1,1,lexicon,Ezia
+PN,ṣú-ba,1,1,lexicon; onomasticon,Zuba
+PN,hu-ša-hi-im,1,1,lexicon,Ḫušaḫi
+PN,tù-ma-na-a,1,1,lexicon; onomasticon,Tumana
+PN,ke-na-ma,1,1,lexicon,Kēnā
+PN,ma-ṣi-ì-lí,1,1,lexicon; onomasticon,Maṣi-ili; Maṣi-ilī
+PN,i-li-a-ma,1,1,lexicon,Eliā
+PN,a-ni-nu-um,1,1,lexicon; onomasticon,Anini
+PN,dan-a-a,1,1,lexicon,Dānā
+PN,en-na-su-in,1,1,lexicon,Ennam-Suen
+PN,lugal-ki-in-ma,1,1,lexicon; onomasticon,Šarrum-kēn
+PN,áš-du-na-kà,1,1,lexicon,Ašdu-nādā
+PN,ka-ku-a,1,1,lexicon; onomasticon,Kakua
+PN,na-ra-am-a-šùr,1,1,lexicon,Nar'am-Aššur
+PN,šu-ku-bi-ma,1,1,lexicon,Šu-Kūbu
+PN,tù-ra-mì-ili5-ma,1,1,lexicon; onomasticon,Tūram-ilī
+PN,la-qé-pu-um-ma,1,1,lexicon,Lā-qēpu
+PN,ha-dí-a-ni7,1,1,lexicon; onomasticon,Hadiani; Ḫadiani
+PN,i-sí-hi-im,1,1,lexicon,Iziḫu
+PN,du-ur-a-šur,1,1,lexicon; onomasticon,Tūr-Aššur
+PN,a-bar-sí-sí-im,1,1,lexicon; onomasticon,Abarsisum; Abarzizum
+PN,i-dí-ìr-ra,1,1,lexicon; onomasticon,Idari
+PN,e-na-a-nim,1,1,lexicon,Ennānu
+PN,puzur4-{d}mu,1,1,lexicon; onomasticon,Puzur-Nirah; Puzur-Niraḫ
+PN,pu-ur-sí-sí-im,1,1,lexicon,Burzizi
+PN,a-bu-sa-lim,1,1,lexicon,Abum-šali
+PN,ṣé-eh-ri-lí,1,1,lexicon,Saḫri-ilī
+PN,il5-me-ta-ku,1,1,lexicon; onomasticon,Ilī-wēdāku
+PN,sig5-a-a,1,1,lexicon,Damqā
+PN,a-ni-wa-a-ni-ma,1,1,lexicon; onomasticon,Aniwani
+PN,i-šar-be-li,1,1,lexicon; onomasticon,Išar-bēlī; Išār-bēlī
+PN,a-bi4-dingir,1,1,lexicon; onomasticon,Apili
+PN,el-pì-dingir,1,1,lexicon,Alpum-ilī
+PN,ha-zu-a-lá,1,1,lexicon,Ḫazualla
+PN,ba-lu-ni,1,1,lexicon,Baluni
+PN,pí-lá-ah-ša.ša,1,1,lexicon,Pilaḫ-šaduē
+PN,na-ab-sú-in,1,1,lexicon; onomasticon,Nabi-Suen
+PN,be-lu-dan,1,1,lexicon,Bēlu-dan
+PN,e-dí-ší-in,1,1,lexicon,Edišin
+PN,a-ba-a-a,1,1,onomasticon,Abāya
+PN,e-ri-dingir,1,1,lexicon,Eri-ilu
+PN,a-be-la,1,1,lexicon; onomasticon,Abela
+PN,na-dí-bu-um,1,1,lexicon,Nadibu
+PN,a-ka-bi,1,1,lexicon,Agabi
+PN,i-nu-um-ištar,1,1,lexicon; onomasticon,Ennam-Ištar
+PN,a-be-lá,1,1,lexicon; onomasticon,Abela
+PN,ša-ru-ma-té-en,1,1,lexicon,Šarra-matēn
+PN,ú-qú-ur,1,1,lexicon,Waqur
+PN,šu-iš-ha-ra-ma,1,1,lexicon; onomasticon,Šu-Išhara; Šu-Išḫara
+PN,ta-ta-ma,1,1,lexicon; onomasticon,Dada; Dadā
+PN,du-du-na,1,1,lexicon; onomasticon,Duduna
+PN,dingir-ma-a-šur,1,1,lexicon; onomasticon,Ilumma-Aššur
+PN,dingir-i-dí,1,1,lexicon; onomasticon,Ilī-idī
+PN,ki-il5-i-a,1,1,lexicon,Kiliā
+PN,lá-ma-sà-tum-ma,1,1,lexicon,Lamassatu
+PN,a-kà-zi,1,1,lexicon; onomasticon,Akazi
+PN,a-bu-a-a,1,1,lexicon; onomasticon,Abua
+PN,a-dí-da-a,1,1,lexicon; onomasticon,Adida
+PN,a-zi-a,1,1,lexicon,Azia
+PN,ištar-ra-bi4-a-at,1,1,lexicon; onomasticon,Ištar-rabiat
+PN,e-la-a,1,1,lexicon,Elāya
+PN,er-ra-ili5,1,1,lexicon; onomasticon,Erra-ilī
+PN,id-na-a-ma,1,1,lexicon,Iddinā
+PN,im-li-kà-a,1,1,lexicon,Imlikā
+PN,i-dí-da-ga-an,1,1,lexicon; onomasticon,Iddin-Dagan; Iddin-Dagān; Iddin-Dāgan
+PN,dingir-tap-pá-a,1,1,lexicon; onomasticon,Ilī-tappā
+PN,i-di-sú-in,1,1,lexicon; onomasticon,Iddin-Suen
+PN,lá-am-ni-a-nim,1,1,lexicon,Lamni-Anu
+PN,e-lá-lí-ni-ú-ma-an,1,1,lexicon; onomasticon,Elaniuman
+PN,e-nu-um-bé-lim,1,1,lexicon,Ennam-Bēlu
+PN,hu-ša-li,1,1,lexicon; onomasticon,Hušali; Ḫušali
+PN,dingir-pì-la-ah,1,1,lexicon; onomasticon,Ilī-pilah; Ilī-pilaḫ
+PN,bu-šu-šu,1,1,lexicon; onomasticon,Bušušu
+PN,bu-sú-sú,1,1,lexicon,Buzuzu
+PN,i-dí-èr-ra,1,1,lexicon; onomasticon,Iddin-Erra
+PN,qá-a-a-tim,1,1,lexicon,Qayyātu
+PN,i-dí-ér-ra,1,1,lexicon; onomasticon,Iddin-Erra
+PN,il5-tap-pá,1,1,lexicon; onomasticon,Ilī-tappā
+PN,ì-lí-na,1,1,lexicon; onomasticon,Ilina
+PN,i-a-an-tal-ga,1,1,lexicon,Iantalga
+PN,bur-sú-en6,1,1,lexicon; onomasticon,Būr-Suen
+PN,ì-lí-iš-ta-ki-il5,1,1,lexicon; onomasticon,Iliš-tikal
+PN,a-du,1,1,lexicon,Addu
+PN,kur-bi-a-a,1,1,lexicon,Kurbiā
+PN,i-lá-áš-ra-ni-ma,1,1,lexicon; onomasticon,Ilī-ašranni
+PN,i-ku-pí-ištar-ma,1,1,lexicon; onomasticon,Ikūn-pī-Ištar
+GN,kà-ni-iš,118,102,lexicon,Kaneš
+GN,wa-ah-šu-ša-na,53,48,lexicon,Waḫšušana
+GN,dur4-hu-mì-it,34,30,lexicon,Durḫumit
+GN,pu-ru-uš-ha-dim,30,26,lexicon,Purušḫattu
+GN,ha-hi-im,28,26,lexicon,"Ḫaḫḫu, Ḫaḫḫa; Ḫaḫḫum"
+GN,kà-né-eš,26,21,lexicon,Kaneš
+GN,hu-ra-ma,25,21,lexicon,Ḫurama; Ḫurma
+GN,bu-ru-uš-ha-dim,20,16,lexicon,Purušḫattu
+GN,ku-bu-ur-na-at,17,16,lexicon,Kuburnat
+GN,ša-lá-tù-ar,15,13,lexicon,"Salatiwara, Šalladuwar; Šalatuwar"
+GN,za-al-pá,13,13,lexicon,Zalpa
+GN,ha-na-ak-na-ak,11,9,lexicon,Ḫanaknak
+GN,wa-áš-ha-ni-a,11,7,lexicon,Wašḫaniya
+GN,ša-lá-tù-wa-ar,11,8,lexicon,"Salatiwara, Šalladuwar; Šalatuwar"
+GN,kà-ni-iš-ma,10,10,lexicon,Kaneš
+GN,kà-ni-iš-ki,10,10,lexicon,Kaneš
+GN,tí-me-el-ki-a,10,10,lexicon,Timelkiya
+GN,du-ur-hu-mì-it,9,8,lexicon,Durḫumit
+GN,bu-ru-uš-ha-tim,9,8,lexicon,Purušḫattu
+GN,kà-ni-ìš,9,9,lexicon,Kaneš
+GN,ha-tim,9,8,lexicon,Ḫattu
+GN,ku-ša-ra,8,7,lexicon,"Kušara, Kussara; Kuššara"
+GN,tí-mì-il5-ki-a,7,6,lexicon,Timelkiya
+GN,kà-ni-iš{ki},7,7,lexicon,Kaneš
+GN,ú-lá-ma,6,6,lexicon,Ulama
+GN,ta-wi-ni-a,6,5,lexicon,Tawiniya
+GN,ma-a-ma,6,5,lexicon,Mamaya; Mamma
+GN,té-ga-ra-ma,6,6,lexicon,Tegarama
+GN,tù-ùh-pí-a,5,4,lexicon,Tuḫpiya
+GN,ma-ma-a,5,4,lexicon,Mamaya; Mamma
+GN,tù-ùh-pì-a,5,4,lexicon,Tuḫpiya
+GN,ša-lá-tù-a-ar,5,2,lexicon,"Salatiwara, Šalladuwar; Šalatuwar"
+GN,lu-hu-za-tí-a,4,4,lexicon,Luḫuzattiya
+GN,ku-bur-na-at,4,3,lexicon,Kuburnat
+GN,lu-hu-sà-dí-a,4,4,lexicon,Luḫuzattiya
+GN,tù-um-li-a,4,4,lexicon,Tumeliya; Tumliya
+GN,tí-iš-mur-na,3,3,lexicon,Tišmurna
+GN,ta-al-ha-at,3,2,lexicon,Talḫat
+GN,kà-ni-eš,3,3,lexicon,Kaneš
+GN,na-ah-ri-a,3,3,lexicon,Neḫriya; Niḫriya
+GN,ma-ma,3,3,lexicon,Mamaya; Mamma
+GN,tal-ha-at,3,3,lexicon,Talḫat
+GN,tù-ur-hu-mì-it,3,2,lexicon,Durḫumit
+GN,tur4-hu-mì-it,3,2,lexicon,Durḫumit
+GN,ší-na-hu-tim,2,2,lexicon,"Šanaḫwitta, Sanaḫwitta; Šinaḫuttum"
+GN,ša-lá-tí-wa-ar,2,2,lexicon,"Salatiwara, Šalladuwar; Šalatuwar"
+GN,ú-ša,2,2,lexicon,Ušša
+GN,ma-ma-i-im,2,2,lexicon,Mammā'u
+GN,dur4-hu-mi-it,2,2,lexicon,Durḫumit
+GN,ur-šu,2,2,lexicon,"Ursa'um, Ursu, Urussa, Warsuwa; Uršu"
+GN,ba-at-na,2,2,lexicon,Badna
+GN,ša-la-tù-ar,2,2,lexicon,"Salatiwara, Šalladuwar; Šalatuwar"
+GN,tù-ku-ub-tù,2,2,lexicon,Tukuptu
+GN,ú-ni-ip-sí-im,2,2,lexicon,Unapse; Unapše; Unipsum
+GN,né-na-ša-a,2,1,lexicon,Ninašša
+GN,pu-ru-uš-ha-tim,2,1,lexicon,Purušḫattu
+GN,bu-ru-dim,2,1,lexicon,Buruddu
+GN,kà-ra-ah-na,2,1,lexicon,Karaḫna
+GN,za-al-pá-a,1,1,lexicon,Zalpa
+GN,na-hu-ur,1,1,lexicon,Naḫur
+GN,e-lu-hu-ut,1,1,lexicon,Eluḫḫut
+GN,bu-ru-uš-ha-tum,1,1,lexicon,Purušḫattu
+GN,na-wa-ar,1,1,lexicon,Nawar
+GN,a-šùr{ki},1,1,lexicon,Assur
+GN,ù-la-ma,1,1,lexicon,Ulama
+GN,ú-ùh-šu-ša-na,1,1,lexicon,Waḫšušana
+GN,ùh-šu-ša-na,1,1,lexicon,Waḫšušana
+GN,dur4-hu-mì-iš,1,1,lexicon,Durḫumit
+GN,tí-ša-mu-ur-na,1,1,lexicon,Tišmurna
+GN,bu-ur-uš-ha-dim,1,1,lexicon,Purušḫattu
+GN,ša-la-ah-šu-wa,1,1,lexicon,"Salaḫsuwa, Sallaḫsuwa; Šalaḫšuwa"
+GN,ni-na-ša,1,1,lexicon,Ninašša
+GN,ú-na-ap-sé,1,1,lexicon,Unapse; Unapše; Unipsum
+GN,ú-na-áp-šé,1,1,lexicon,Unapse; Unapše; Unipsum
+GN,ša-da-ha-ar,1,1,lexicon,Šadaḫar
+GN,ha-ra-be-et,1,1,lexicon,Ḫarabet
+GN,wa-ṣí,1,1,lexicon,Azzi
+GN,wa-zi-da,1,1,lexicon,Wazida
+GN,ha-ni-ga,1,1,lexicon,Ḫannikwa
+GN,ta-pá-kà-áš,1,1,lexicon,Tapakaš
+GN,ku-ša-ra-a,1,1,lexicon,"Kušara, Kussara; Kuššara"
+GN,ur-šu-ú,1,1,lexicon,"Ursa'um, Ursu, Urussa, Warsuwa; Uršu"
+GN,na-ší-lá-an,1,1,lexicon,Našilan
+GN,ta-pá-ša-ta-i-am,1,1,lexicon,Tapašatta
+GN,ma-ri,1,1,lexicon,Mari
+GN,lá-hu-ta,1,1,lexicon,Laḫuta
+GN,ha-qá,1,1,lexicon,Ḫaqa
+GN,ša-lá-ah-šu-wa,1,1,lexicon,"Salaḫsuwa, Sallaḫsuwa; Šalaḫšuwa"
+GN,ni-na-ša-a,1,1,lexicon,Ninašša
+GN,ha-tù-uš,1,1,lexicon,Ḫattuša
+GN,ka-ni-iš,1,1,lexicon,Kaneš
+GN,uš-bu-ga-tim,1,1,lexicon,Ušbugattu
+GN,ša-lá-du-a-ar,1,1,lexicon,"Salatiwara, Šalladuwar; Šalatuwar"
+GN,bu-ru-lim,1,1,lexicon,Burallu
+GN,bu-ur-uš-ha-tum,1,1,lexicon,Purušḫattu
+GN,ha-hu-um,1,1,lexicon,"Ḫaḫḫu, Ḫaḫḫa; Ḫaḫḫum"
+GN,bu-ru-uš-ha-dum,1,1,lexicon,Purušḫattu
+GN,tí-iš-mu-ur-na,1,1,lexicon,Tišmurna
+GN,ha-ra-bi4-iš,1,1,lexicon,Ḫarabiš
+GN,dur4-hu-mì-it-ma,1,1,lexicon,Durḫumit
+GN,qá-ṭá-ra,1,1,lexicon,Qaṭṭara
+GN,ha-tí-kà-it-ra,1,1,lexicon,Ḫatikaitra
+GN,tù-ma-li-a,1,1,lexicon,Tumeliya; Tumliya
+GN,ku-na-na-mì-it,1,1,lexicon,Kunanamit
