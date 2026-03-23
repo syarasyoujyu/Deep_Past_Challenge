@@ -90,6 +90,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-hint-words", type=int, default=6)
     parser.add_argument("--max-gloss-variants", type=int, default=4)
     parser.add_argument("--preview-count", type=int, default=3)
+    parser.add_argument("--dry-run", type=parse_bool, default=False)
     parser.add_argument("--val-size", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-source-length", type=int, default=768)
@@ -416,6 +417,37 @@ def preview_augmented_examples(frame: pd.DataFrame, preview_count: int) -> None:
         print()
 
 
+def preview_prompt_length_extremes(frame: pd.DataFrame, tokenizer, top_k: int = 5) -> None:
+    if frame.empty:
+        return
+
+    prompt_lengths = frame["augmented_source"].map(
+        lambda text: len(
+            tokenizer(
+                str(text),
+                add_special_tokens=True,
+                truncation=False,
+            )["input_ids"]
+        )
+    )
+    scored = frame.loc[:, ["augmented_source"]].copy()
+    scored["prompt_token_count"] = prompt_lengths
+
+    print(f"Prompt length extremes (tokenized, top {top_k} / bottom {top_k}):")
+
+    print("[longest prompts]")
+    for _, row in scored.nlargest(top_k, "prompt_token_count").iterrows():
+        print(f"[tokens] {int(row['prompt_token_count'])}")
+        print(f"[prompt] {row['augmented_source']}")
+        print()
+
+    print("[shortest prompts]")
+    for _, row in scored.nsmallest(top_k, "prompt_token_count").iterrows():
+        print(f"[tokens] {int(row['prompt_token_count'])}")
+        print(f"[prompt] {row['augmented_source']}")
+        print()
+
+
 def build_arrow_ready_frame(frame: pd.DataFrame) -> pd.DataFrame:
     columns = ["transliteration", "translation", "augmented_source", "dictionary_hint_count"]
     available_columns = [column for column in columns if column in frame.columns]
@@ -487,6 +519,15 @@ def main() -> None:
         f"have at least one hint."
     )
 
+    model_source = resolve_model_source(args)
+    print(f"Loading ByT5 from: {model_source}")
+    tokenizer = load_tokenizer(model_source)
+
+    if args.dry_run:
+        preview_prompt_length_extremes(frame, tokenizer, top_k=5)
+        print("Dry run enabled; exiting before dataset tokenization / training.")
+        return
+
     train_frame, val_frame = split_frame(frame, args.val_size, args.seed)
     dataset_dict = {
         "train": Dataset.from_pandas(
@@ -502,9 +543,6 @@ def main() -> None:
         )
     dataset = DatasetDict(dataset_dict)
 
-    model_source = resolve_model_source(args)
-    print(f"Loading ByT5 from: {model_source}")
-    tokenizer = load_tokenizer(model_source)
     model = load_model(args)
     if args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
