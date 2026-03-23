@@ -359,6 +359,36 @@ def resolve_interval_strategy(
     return requested_strategy
 
 
+class TrainMetricsSeq2SeqTrainer(Seq2SeqTrainer):
+    def __init__(self, *args, train_metrics_dataset=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.train_metrics_dataset = train_metrics_dataset
+        self._running_train_metrics_eval = False
+
+    def evaluate(self, eval_dataset=None, ignore_keys=None, metric_key_prefix: str = "eval"):
+        metrics = super().evaluate(
+            eval_dataset=eval_dataset,
+            ignore_keys=ignore_keys,
+            metric_key_prefix=metric_key_prefix,
+        )
+        if (
+            metric_key_prefix == "eval"
+            and self.train_metrics_dataset is not None
+            and not self._running_train_metrics_eval
+        ):
+            self._running_train_metrics_eval = True
+            try:
+                train_metrics = super().evaluate(
+                    eval_dataset=self.train_metrics_dataset,
+                    ignore_keys=ignore_keys,
+                    metric_key_prefix="train_eval",
+                )
+            finally:
+                self._running_train_metrics_eval = False
+            metrics.update(train_metrics)
+        return metrics
+
+
 def main() -> None:
     args = parse_args()
     seed_everything(args.seed)
@@ -498,11 +528,12 @@ def main() -> None:
         seed=args.seed,
     )
 
-    trainer = Seq2SeqTrainer(
+    trainer = TrainMetricsSeq2SeqTrainer(
         model=model,
         args=training_args,
         train_dataset=tokenized["train"],
         eval_dataset=tokenized["validation"] if eval_strategy != "no" else None,
+        train_metrics_dataset=tokenized["train"],
         processing_class=tokenizer,
         data_collator=data_collator,
         compute_metrics=compute_metrics if eval_strategy != "no" else None,

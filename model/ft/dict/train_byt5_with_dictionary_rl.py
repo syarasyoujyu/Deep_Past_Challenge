@@ -430,9 +430,15 @@ def main() -> None:
                     running_rl_loss = 0.0
 
         if val_records:
+            train_eval_metrics = evaluate_model(model, tokenizer, train_records, args, device)
+            print(f"[train_eval] epoch={epoch_index + 1} metrics={train_eval_metrics}")
             eval_metrics = evaluate_model(model, tokenizer, val_records, args, device)
             print(f"[eval] epoch={epoch_index + 1} metrics={eval_metrics}")
             if wandb_run is not None:
+                wandb_run.log(
+                    {f"train_eval/{key}": value for key, value in train_eval_metrics.items()} | {"train_eval/epoch": epoch_index + 1},
+                    step=global_step,
+                )
                 wandb_run.log(
                     {f"eval/{key}": value for key, value in eval_metrics.items()} | {"eval/epoch": epoch_index + 1},
                     step=global_step,
@@ -441,6 +447,14 @@ def main() -> None:
             if current_metric > best_metric:
                 best_metric = current_metric
                 save_model(args.output_dir / "best_model", model, tokenizer, eval_metrics)
+        else:
+            train_eval_metrics = evaluate_model(model, tokenizer, train_records, args, device)
+            print(f"[train_eval] epoch={epoch_index + 1} metrics={train_eval_metrics}")
+            if wandb_run is not None:
+                wandb_run.log(
+                    {f"train_eval/{key}": value for key, value in train_eval_metrics.items()} | {"train_eval/epoch": epoch_index + 1},
+                    step=global_step,
+                )
 
         checkpoint_dir = args.output_dir / f"checkpoint-epoch-{epoch_index + 1}"
         save_model(checkpoint_dir, model, tokenizer)
